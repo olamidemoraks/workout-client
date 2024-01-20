@@ -169,6 +169,9 @@ const Weight: React.FC<WeightProps> = ({ handleUpdate, isLoading }) => {
                 : height
                 ? (Number(height) * 2.54).toFixed(2)
                 : 0,
+              weightMeasure: isKG ? "kg" : "lb",
+              heightMeasure: isCM ? "cm" : "ft",
+
               steps: "done",
             })
           }

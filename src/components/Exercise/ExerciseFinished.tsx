@@ -6,7 +6,7 @@ import { cn } from "@/libs/utils";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 
 type ExerciseFinishedProps = {
@@ -15,7 +15,7 @@ type ExerciseFinishedProps = {
   exerciseLength: number;
   workoutName: string;
   workoutId: string;
-  isChallenge?: boolean;
+  workoutType: "default" | "challenge" | "customize";
 };
 
 const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
@@ -24,11 +24,13 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
   startTime,
   workoutName,
   workoutId,
-  isChallenge,
+  workoutType,
 }) => {
   const router = useRouter();
   const [mood, setMood] = useState(2);
   const { profile } = useProfile();
+  const [isKG, setIsKG] = useState(true);
+  const [weight, setWeight] = useState<any>();
 
   const { mutate, isLoading } = useMutation({
     mutationFn: createActivity,
@@ -46,12 +48,31 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
   );
 
   const handleEndWorkout = (totalTime: number) => {
-    if (!isChallenge) {
-      mutate({ workoutId, totalTime });
+    const data = {
+      workoutId,
+      totalTime,
+      weight,
+      workoutType,
+      feedback: mood,
+    };
+    if (workoutType === "challenge") {
+      challegeMutate({
+        challengeId: workoutId,
+        workoutName,
+        totalTime,
+        weight,
+      });
     } else {
-      challegeMutate({ challengeId: workoutId, workoutName, totalTime });
+      mutate({ data });
     }
   };
+
+  useEffect(() => {
+    if (profile) {
+      setWeight(profile?.weight ?? 0);
+      setIsKG(profile?.weightMeasure === "kg" ? true : false);
+    }
+  }, [profile]);
 
   const hours =
     new Date(endTime.getTime() - startTime.getTime()).getUTCHours() * 60;
@@ -147,11 +168,72 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
               <span className="text-3xl">😄</span> <p>Too easy</p>
             </div>
           </div>
+          <div className="w-full flex flex-col justify-start items-start gap-2 my-4  ">
+            <label htmlFor="weight" className=" font-semibold">
+              Weight
+            </label>
+            <div className="flex gap-1 w-full">
+              <input
+                type="text"
+                className="pb-2 focus:outline-none border-b border-zinc-400 w-full  bg-transparent"
+                id="weight"
+                placeholder={isKG ? "KG" : "LB"}
+                value={weight}
+                onChange={(e) => {
+                  if (isNaN(Number(e.target.value))) {
+                    return;
+                  }
+                  setWeight(e.target.value);
+                }}
+              />
+              <div className="flex gap-2 border border-blue-700 rounded-lg  items-center">
+                <div
+                  className={cn(
+                    " px-2 transition duration-200 cursor-pointer",
+                    {
+                      " bg-blue-700 h-full rounded-lg": isKG,
+                    }
+                  )}
+                  onClick={() => {
+                    setWeight((prev: any) => {
+                      if (!isKG && prev) {
+                        return Math.floor(prev / 2.205).toFixed(0);
+                      }
+                      return prev;
+                    });
+                    setIsKG(true);
+                  }}
+                >
+                  KG
+                </div>
+
+                <div
+                  className={cn(
+                    " px-2 transition duration-200 cursor-pointer",
+                    {
+                      " bg-blue-700 h-full rounded-lg": !isKG,
+                    }
+                  )}
+                  onClick={() => {
+                    setWeight((prev: any) => {
+                      if (isKG && prev) {
+                        return (prev * 2.205).toFixed(2);
+                      }
+                      return prev;
+                    });
+                    setIsKG(false);
+                  }}
+                >
+                  LB
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="w-full items-center justify-center flex mt-12 px-5">
           <button
-            className="sm:w-[70%] w-full  p-2 bg-zinc-800 text-emerald-600 hover:bg-emerald-500 hover:text-white rounded-lg flex items-center justify-center gap-5"
+            className="sm:w-[70%] w-full  p-2  bg-emerald-500  text-white rounded-lg flex items-center justify-center gap-5"
             onClick={() => handleEndWorkout(totalTime)}
           >
             Next{" "}

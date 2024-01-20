@@ -1,11 +1,14 @@
 import { ResponsivePie } from "@nivo/pie";
+import { ResponsiveRadar } from "@nivo/radar";
 import { useMemo } from "react";
 import useRecentWorkout from "@/hooks/useRecentWorkout";
+import { cn } from "@/libs/utils";
 const RecentWorkoutChart = () => {
   const { data, isLoading } = useRecentWorkout();
 
   const recentActivities = useMemo(() => {
     return data?.activities
+      ?.filter((activity: any) => activity?.workoutType === "default")
       ?.reduce((accumalator: any[], currentValue: any) => {
         const label = (currentValue.workoutName as string).toLowerCase();
         const sameLabel = accumalator.find(
@@ -28,9 +31,69 @@ const RecentWorkoutChart = () => {
       }));
   }, [data]);
 
+  const focusPoint = useMemo(() => {
+    const points = [
+      "abs",
+      "legs",
+      "arms",
+      "back_&_shoulder",
+      "chest",
+      "cardio",
+    ];
+    const serverFocusPoint = data?.activities
+      ?.filter((activity: any) =>
+        points.includes((activity.workoutName as string).toLowerCase())
+      )
+      ?.reduce((accumalator: any[], currentValue: any) => {
+        const label = (currentValue.workoutName as string).toLowerCase();
+        const sameLabel = accumalator.find(
+          (activities) => activities?.label === label
+        );
+        if (sameLabel) {
+          sameLabel.value += currentValue?.totalTime;
+        } else {
+          accumalator.push({
+            id: label,
+            label: label,
+            value: currentValue?.totalTime,
+          });
+        }
+
+        return accumalator;
+      }, []);
+
+    const mainFocusPoint = [...(serverFocusPoint ?? [])];
+    points.map((item: any) => {
+      serverFocusPoint?.map(
+        (point: { id: string; label: string; value: number }) => {
+          if (point.id !== item) {
+            mainFocusPoint?.push({
+              id: item,
+              label: item,
+              value: 100,
+            });
+          }
+        }
+      );
+      // if (!point?.includes(item?.id)) {
+      //   mainFocusPoint?.push({
+      //     id: item,
+      //     label: item,
+      //     value: 0,
+      //   });
+      // }
+    });
+    return mainFocusPoint;
+  }, [data]);
+
+  console.log({ focusPoint });
   return (
-    <div className="w-[100%] h-[250px] flex flex-col justify-center items-center lg:col-span-1">
-      <ResponsivePie
+    <div
+      className={cn(
+        "w-[100%] md:h-[400px] sm:h-[250px] flex flex-col justify-center items-center lg:col-span-1"
+      )}
+    >
+      {/* <ResponsivePie
         data={recentActivities ?? []}
         margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
         innerRadius={0.4}
@@ -87,83 +150,71 @@ const RecentWorkoutChart = () => {
             },
           },
         }}
-        // fill={[
-        //   {
-        //     match: {
-        //       id: "ruby",
-        //     },
-        //     id: "dots",
-        //   },
-        //   {
-        //     match: {
-        //       id: "c",
-        //     },
-        //     id: "dots",
-        //   },
-        //   {
-        //     match: {
-        //       id: "go",
-        //     },
-        //     id: "dots",
-        //   },
-        //   {
-        //     match: {
-        //       id: "python",
-        //     },
-        //     id: "dots",
-        //   },
-        //   {
-        //     match: {
-        //       id: "scala",
-        //     },
-        //     id: "lines",
-        //   },
-        //   {
-        //     match: {
-        //       id: "lisp",
-        //     },
-        //     id: "lines",
-        //   },
-        //   {
-        //     match: {
-        //       id: "elixir",
-        //     },
-        //     id: "lines",
-        //   },
-        //   {
-        //     match: {
-        //       id: "javascript",
-        //     },
-        //     id: "lines",
-        //   },
-        // ]}
+       
+      /> */}
+      <ResponsiveRadar
+        data={focusPoint}
+        keys={["value"]}
+        indexBy="label"
+        valueFormat=">.0f"
+        margin={{ top: 70, right: 80, bottom: 40, left: 80 }}
+        borderColor={{ from: "color" }}
+        gridShape="linear"
+        gridLabelOffset={11}
+        gridLevels={4}
+        enableDots={false}
+        dotSize={10}
+        dotColor={{ theme: "background" }}
+        dotBorderWidth={2}
+        ariaLabel=""
+        colors={{ scheme: "set2" }}
+        blendMode="multiply"
+        motionConfig="wobbly"
+        theme={{
+          axis: {
+            ticks: {
+              text: {
+                fill: "#fff",
+                fontSize: 14,
+                textTransform: "capitalize",
+              },
+            },
+          },
+          grid: {
+            line: {
+              stroke: "#cacacacf",
+            },
+          },
+          tooltip: {
+            container: {
+              background: "#1e1e20",
+              textEmphasisColor: "#000",
+              textTransform: "capitalize",
+            },
+          },
+        }}
         // legends={[
         //   {
-        //     anchor: "bottom",
-        //     direction: "row",
-        //     justify: false,
-        //     translateX: 0,
-        //     translateY: 56,
-        //     itemsSpacing: 0,
-        //     itemWidth: 100,
-        //     itemHeight: 18,
-        //     itemTextColor: "#999",
-        //     itemDirection: "left-to-right",
-        //     itemOpacity: 1,
-        //     symbolSize: 18,
+        //     anchor: "top-left",
+        //     direction: "column",
+        //     translateX: -50,
+        //     translateY: -40,
+        //     itemWidth: 80,
+        //     itemHeight: 20,
+        //     itemTextColor: "#b3b3b3",
+        //     symbolSize: 12,
         //     symbolShape: "circle",
         //     effects: [
         //       {
         //         on: "hover",
         //         style: {
-        //           itemTextColor: "#fff",
+        //           itemTextColor: "#ffffff",
         //         },
         //       },
         //     ],
         //   },
         // ]}
       />
-      <p className=" text-green-400 -mt-7 font-semibold">Workout Per/Min</p>
     </div>
   );
 };

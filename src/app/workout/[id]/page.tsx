@@ -1,17 +1,17 @@
 import Layout from "@/components/Layout/Layout";
-import ExerciseDisplay from "@/components/Workout/ExerciseDisplay";
+import PersonalWorkoutPreview from "@/components/PersonalizeWorkout/PersonalWorkoutPreview";
 import React from "react";
 
-type pageProps = {
-  params: { id: string };
+type PageProps = {
+  params: {
+    id: string;
+  };
 };
 
-const Page: React.FC<pageProps> = ({ params: { id } }) => {
+const Page: React.FC<PageProps> = ({ params }) => {
   return (
     <Layout>
-      <div className="mx-auto w-full">
-        <ExerciseDisplay id={id} />
-      </div>
+      <PersonalWorkoutPreview id={params.id} />
     </Layout>
   );
 };

@@ -56,15 +56,17 @@ export const completedChallenge = async ({
   challengeId,
   workoutName,
   totalTime,
+  weight,
 }: {
   challengeId: string;
   workoutName: string;
   totalTime: number;
+  weight: number;
 }) => {
   try {
     const response = await axios.post(
       `${baseUrl}/completed-challenge`,
-      { challengeId, workoutName, totalTime },
+      { challengeId, workoutName, totalTime, weight },
       {
         withCredentials: true,
         headers,

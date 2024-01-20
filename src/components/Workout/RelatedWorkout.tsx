@@ -19,10 +19,7 @@ const RelatedWorkout: React.FC<RelatedWorkoutProps> = ({ name }) => {
   const workouts: IWorkout[] = data?.workouts;
   return (
     <div className="p-4 px-10 w-full h-full overflow-x-hidden">
-      <p className=" text-3xl text-center font-bold uppercase">
-        {name} Workouts
-      </p>
-      <div className=" grid md:grid-cols-3 grid-cols-1  mt-10 gap-8">
+      <div className=" grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1  mt-10 gap-8">
         {workouts?.map((workout) => (
           <div className="flex gap-5" key={workout._id}>
             {/* <div className="flex flex-col gap-4 items-center">

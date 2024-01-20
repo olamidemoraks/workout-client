@@ -1,14 +1,12 @@
 import Layout from "@/components/Layout/Layout";
-import Reports from "@/components/Report/Reports";
+import Profile from "@/components/Profile/Profile";
 import React from "react";
 
 const Page = () => {
   return (
-    <>
-      <Layout>
-        <Reports />
-      </Layout>
-    </>
+    <Layout>
+      <Profile />
+    </Layout>
   );
 };
 

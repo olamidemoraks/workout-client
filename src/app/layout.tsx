@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className=" bg-zinc-950 overflow-x-hidden">
-        <Toaster position="bottom-center" />
+        <Toaster position="top-center" />
         <ReactQueryProvider>
           <Loader>{children}</Loader>
         </ReactQueryProvider>

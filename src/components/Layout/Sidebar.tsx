@@ -7,17 +7,18 @@ import {
   Star,
   User2,
 } from "lucide-react";
-import { BiCaretLeft, BiCaretRight, BiDumbbell, BiHome } from "react-icons/bi";
+import { BiCaretLeft, BiCaretRight, BiDumbbell } from "react-icons/bi";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { GiCutDiamond } from "react-icons/gi";
 
 const navData = [
   {
     title: "Home",
     Icon: <LayoutDashboard size={23} />,
-    navLink: "/",
+    navLink: "",
   },
   {
     title: "Workout",
@@ -29,11 +30,7 @@ const navData = [
     Icon: <Star size={22} />,
     navLink: "challenge",
   },
-  {
-    title: "Report",
-    Icon: <BarChart2 size={23} />,
-    navLink: "report",
-  },
+
   {
     title: "My Profile",
     Icon: <User2 size={22} />,
@@ -43,22 +40,23 @@ const navData = [
 
 type SideBarProps = {
   setSideDrawer: (value: boolean) => void;
-  sideDrawer: boolean;
+  sideDrawer?: boolean;
+  openMenu?: boolean;
 };
-const Sidebar = ({ setSideDrawer, sideDrawer }: SideBarProps) => {
+const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
   const pathName = usePathname()?.split("/")[1];
-
   return (
     <div
       className={cn(
-        " min-h-screen border-r border-zinc-900 hidden sm:flex flex-col justify-between min-w-[200px] relative transition duration-200",
+        " min-h-screen border-r border-zinc-900 md:translate-x-0 -translate-x-[100%] flex flex-col justify-between  min-w-[200px] absolute top-0 left-0 md:relative transition duration-200 bg-zinc-950 ",
         {
           "min-w-[55px] transition duration-200": sideDrawer,
+          "translate-x-0": openMenu,
         }
       )}
     >
       <div
-        onClick={() => setSideDrawer(true)}
+        onClick={() => setSideDrawer(openMenu ? false : true)}
         className={cn(
           "absolute top-3 right-0 bg-zinc-900 p-3 rounded-l-full hover:bg-zinc-800 cursor-pointer",
           {
@@ -128,30 +126,39 @@ const Sidebar = ({ setSideDrawer, sideDrawer }: SideBarProps) => {
       <div className=" w-full flex justify-center relative">
         <div
           className={cn(
-            "w-[90%] border h-[150px] border-zinc-900 rounded-t-2xl flex items-end justify-center pb-5",
+            "w-[90%] h-[70px] rounded-t-2xl flex items-center justify-center",
             { "h-[100px]": sideDrawer }
           )}
         >
-          <div className=" -z-10 h-full w-full absolute left-0 -bottom-6">
-            <Image
-              src={"/assets/ccchaos.svg"}
-              alt="chaos"
-              fill
-              className=" motion-safe:animate-spin opacity-40 "
+          <div className="pointer-events-none absolute -bottom-5  transform-gpu  -z-20 h-[80%] w-[80%] ">
+            <div
+              style={{
+                clipPath:
+                  "polygon(7.1% 44.1%, 100% 10.6%, 97.5% 26.9%, 85.5% 0.1%, 7.1% 44.1%, 100% 10.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 12.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+              }}
+              className="h-[80%] w-[80%] bg-gradient-to-tr from-purple-500 to-green-600 opacity-100 animate-pulse"
             />
           </div>
+
           <Link
             href={""}
-            className="flex items-center justify-center gap-1 bg-gradient-to-r from-indigo-600 to-blue-600 p-2 rounded-lg z-10 absolute"
+            className="flex group items-center justify-center backdrop-blur-md h-[100%]   w-[100%] p-2  z-10 border-t border-zinc-800"
           >
             <p
-              className={cn("", {
+              className={cn(" font-semibold uppercase  ", {
                 hidden: sideDrawer,
               })}
             >
-              Upgrade Pro
+              Go Pro
             </p>{" "}
-            <Star className=" rotate-45 mb-1 fill-zinc-950" size={17} />
+            {/* <GiCutDiamond className="text-2xl  fill-purple-400 transition-colors duration-700 group-hover:fill-emerald-400" /> */}
+            <Image
+              src={"/assets/premium.gif"}
+              alt="purple diamond"
+              height={150}
+              width={150}
+              className="h-[50px] w-[50px] object-cover  mb-7"
+            />
           </Link>
         </div>
       </div>

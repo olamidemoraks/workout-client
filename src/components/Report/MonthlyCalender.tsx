@@ -11,6 +11,7 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
   const { data, isLoading } = useQuery({
     queryFn: activityReport,
     queryKey: "activity-reports",
+    refetchOnWindowFocus: false,
   });
 
   const [screenWidth, setScreenWidth] = useState<number>(1040);
@@ -21,6 +22,8 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
       day: report?.createdAt.split("T")?.[0],
     }));
   }, [data]);
+
+  console.log({ reports });
 
   useEffect(() => {
     function handleResize() {
@@ -34,27 +37,26 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
   }, []);
 
   const currentDate = new Date();
-  currentDate.getMonth();
 
   const endDate = new Date(
     currentDate.getFullYear(),
-    currentDate.getMonth() +
+    currentDate.getMonth() -
       (screenWidth <= 420
-        ? 10
+        ? 1
         : screenWidth <= 738
-        ? 8
+        ? 3
         : screenWidth <= 900
         ? 6
         : screenWidth <= 1200
-        ? 3
-        : 1) -
-      currentDate.getMonth(),
+        ? 8
+        : 10),
     currentDate.getDate()
   ).toLocaleDateString("en-CA", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
   });
+
   const startDate = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth(),
@@ -64,8 +66,16 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
     month: "2-digit",
     day: "2-digit",
   });
+
+  console.log({
+    endDate,
+    startDate,
+    month: currentDate.getMonth(),
+    currentDate,
+  });
+
   return (
-    <div className=" w-[100%] lg:col-span-2 h-[200px] text-white ">
+    <div className=" w-[100%] lg:col-span-2 h-[180px] text-white mx-auto">
       <ResponsiveTimeRange
         data={reports ?? []}
         from={endDate}
@@ -100,7 +110,7 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
 
           tooltip: {
             container: {
-              background: "#0b0b13",
+              background: "#1e1e20",
               textEmphasisColor: "#000",
             },
           },
@@ -108,7 +118,6 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
       />
       {/* #0d2a1fc9", "#063e24de", "#195B2B", "#227234" */}
       <div className="flex items-center gap-1 justify-between w-full md:pr-12 pl-4 pb-4">
-        <p>History</p>
         <div className="flex items-center gap-1 ">
           <p className=" text-sm pr-1">Less</p>
           <div className="h-3 w-3 rounded-sm bg-[#1e1e206b]" />

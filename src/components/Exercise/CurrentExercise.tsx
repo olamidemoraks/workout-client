@@ -11,12 +11,12 @@ import Resting from "./Resting";
 
 type CurrentExerciseProps = {
   workout: IWorkout;
-  isChallenge?: boolean;
+  workoutType: "default" | "challenge" | "customize";
 };
 
 const CurrentExercise: React.FC<CurrentExerciseProps> = ({
   workout,
-  isChallenge,
+  workoutType,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isResting, setIsResting] = useState(false);
@@ -361,7 +361,7 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
                 exerciseLength={exercises?.length}
                 workoutName={workout?.name}
                 workoutId={workout?._id}
-                isChallenge={isChallenge}
+                workoutType={workoutType}
               />
             </>
           )}

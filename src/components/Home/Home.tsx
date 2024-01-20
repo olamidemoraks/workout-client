@@ -1,0 +1,36 @@
+"use client";
+import Link from "next/link";
+import React from "react";
+import { BiCaretLeft, BiCaretRight } from "react-icons/bi";
+import HomeChallenge from "../Challenges/HomeChallenge";
+import MonthlyCalender from "../Report/MonthlyCalender";
+import RecentWorkoutChart from "../Report/RecentWorkoutChart";
+import FeatureCategories from "../Workout/FeatureCategories";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+import HomeSection from "./HomeSection";
+import HomePersonalizeWorkouts from "../PersonalizeWorkout/HomePersonalizeWorkouts";
+
+const Home = () => {
+  return (
+    <div className="p-4 md:px-10 flex flex-col gap-10 w-full overflow-hidden overflow-x-hidden">
+      <HomeSection title="X Days Challenge" seeMoreLink="/challenge">
+        <HomeChallenge />
+      </HomeSection>
+
+      <HomeSection title="Personalize Workouts" seeMoreLink="">
+        <HomePersonalizeWorkouts />
+      </HomeSection>
+
+      <HomeSection title="Focus Areas" seeMoreLink="/workouts">
+        <div className="  w-full relative flex overflow-x-scroll pb-4 scrollbar-thumb-transparent scrollbar-thin scrollbar-track-transparent">
+          <ul className="md:flex md:flex-row grid sm:grid-cols-2 grid-cols-1  flex-nowrap gap-4 lg:w-full max-md:w-full">
+            <FeatureCategories />
+          </ul>
+        </div>
+      </HomeSection>
+    </div>
+  );
+};
+
+export default Home;

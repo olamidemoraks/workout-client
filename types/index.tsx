@@ -12,6 +12,11 @@ interface IUser {
   height: string;
   weight: string;
   age: Date;
+  streak: number;
+  weightMeasure: "kg" | "lb";
+  heightMeasure: "cm" | "ft";
+  followers: number;
+  following: number;
 }
 
 interface IWorkout {
@@ -22,6 +27,18 @@ interface IWorkout {
   location: string;
   name: string;
   premium: false;
+  image: {
+    public_id: string;
+    url: string;
+  };
+}
+
+interface ICustomWorkout {
+  _id: string;
+  creatorId: string;
+  exercises: [IExercise];
+  location: string;
+  name: string;
   image: {
     public_id: string;
     url: string;
@@ -48,6 +65,7 @@ interface IExercise {
   time_base: boolean;
   repetition: number;
   rest: number;
+  sets: number;
 }
 
 interface Challenge {

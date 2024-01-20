@@ -7,9 +7,9 @@ import ReportTotal from "./ReportTotal";
 
 const Reports = () => {
   return (
-    <div className="flex flex-col gap-12 px-10 mb-10 ">
-      <div className="w-full flex lg:flex-row flex-col items-center gap-5">
-        <div className="p-3 pb-20 rounded-md bg-zinc-900/30 w-full">
+    <>
+      <div className="w-full  flex lg:flex-row flex-col items-center gap-2">
+        <div className="p-3 pb-12 rounded-md w-full">
           <MonthlyCalender />
         </div>
         <ReportTotal />
@@ -17,11 +17,14 @@ const Reports = () => {
 
       <div className=" gap-6 grid grid-cols-1 md:grid-cols-2">
         <RecentWorkouts />
-        <div className="flex items-center justify-center   w-full bg-zinc-900/30 rounded-md mt-6">
-          <RecentWorkoutChart />
+        <div className="flex flex-col h-full  ">
+          <p className=" uppercase font-semibold mb-4">Activity</p>
+          <div className="flex items-center justify-center  h-full w-full  rounded-md ">
+            <RecentWorkoutChart />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

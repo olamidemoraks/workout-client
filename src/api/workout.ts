@@ -28,3 +28,26 @@ export const getWorkout = async (id: string) => {
     throw new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
+
+export const getCategory = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/get-all-category`, {
+      headers,
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
+
+export const getExercise = async ({ params }: { params: any }) => {
+  try {
+    const query = new URLSearchParams(params ?? {});
+    const response = await axios.get(`${baseUrl}/get-exercises?${query}`, {
+      headers,
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};

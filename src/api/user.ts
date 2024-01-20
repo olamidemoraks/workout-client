@@ -77,6 +77,17 @@ export const updateProfile = async ({ value }: { value: any }) => {
     throw new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
+export const updateProfileImage = async ({ value }: { value: any }) => {
+  try {
+    const response = await axios.put(`${baseUrl}/update-profile-image`, value, {
+      withCredentials: true,
+      headers,
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
 
 export const userProfile = async () => {
   try {

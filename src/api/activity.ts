@@ -6,17 +6,11 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-export const createActivity = async ({
-  workoutId,
-  totalTime,
-}: {
-  workoutId: string;
-  totalTime: number;
-}) => {
+export const createActivity = async ({ data }: { data: any }) => {
   try {
     const response = await axios.post(
       `${baseUrl}/create-activity`,
-      { workoutId, totalTime },
+      { ...data },
       { withCredentials: true, headers }
     );
 
