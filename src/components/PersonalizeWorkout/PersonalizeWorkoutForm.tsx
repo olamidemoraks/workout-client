@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SelectedExerciseList from "./SelectedExerciseList";
 import {
+  Check,
   ChevronLeft,
   ChevronRight,
   Loader2,
@@ -15,7 +16,10 @@ import Preview from "./Preview";
 import SelectExercise from "./SelectExercise";
 import TitleAndImage from "./TitleAndImage";
 import { useMutation } from "react-query";
-import { createCustomWorkout } from "@/api/custom.workout";
+import { createCustomWorkout, editCustomWorkout } from "@/api/custom.workout";
+import { getCustomWorkout } from "@/api/custom.workout";
+import { useQuery } from "react-query";
+import { useRouter } from "next/navigation";
 
 const images = [
   "/assets/Abs3.jpg",
@@ -23,7 +27,7 @@ const images = [
   "/assets/fullfemale.jpg",
   "/assets/male.png",
 ];
-const PersonalizeWorkoutForm = () => {
+const PersonalizeWorkoutForm = ({ id }: { id?: string }) => {
   const [workouts, setWorkouts] = useState<IExercise[]>([]);
   const [image, setImage] = useState<any>("");
   const [steps, setSteps] = useState(1);
@@ -31,7 +35,45 @@ const PersonalizeWorkoutForm = () => {
   const [isLeftSideCollapsed, setIsLeftSideCollapsed] = useState(true);
   const { mutate, isLoading } = useMutation({
     mutationFn: createCustomWorkout,
+    onError: (error: { message: string }) => {
+      console.log({ error });
+      toast.error(error?.message);
+    },
+    onSuccess: () => {
+      toast.success("Workout created succesful");
+      router.back();
+    },
   });
+  const { mutate: update, isLoading: updating } = useMutation({
+    mutationFn: editCustomWorkout,
+    onError: (error: { message: string }) => {
+      console.log({ error });
+      toast.error(error?.message);
+    },
+    onSuccess: () => {
+      toast.success("Workout updated succesful");
+      router.back();
+    },
+  });
+  const router = useRouter();
+
+  const { data, isLoading: retrievingData } = useQuery({
+    queryFn: async () => await getCustomWorkout({ id: id! }),
+    queryKey: "Custom",
+    enabled: !!id,
+    refetchOnWindowFocus: false,
+    retry: true,
+    retryDelay: 2000,
+  });
+
+  useEffect(() => {
+    if (data) {
+      const editData: ICustomWorkout = data.workout;
+      setImage(editData?.image);
+      setTitle(editData?.name);
+      setWorkouts(editData?.exercises);
+    }
+  }, [data]);
 
   const handleSelectImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -56,11 +98,11 @@ const PersonalizeWorkoutForm = () => {
       setSteps(2);
     }
     if (steps === 2) {
-      if (workouts.length === 0) {
+      if (workouts?.length === 0) {
         return toast.error("Please add exercises to workout");
       }
-      if (workouts.some((workout) => workout.repetition <= 0)) {
-        const workout = workouts.find((workout) => workout.repetition <= 0);
+      if (workouts?.some((workout) => workout.repetition <= 0)) {
+        const workout = workouts?.find((workout) => workout.repetition <= 0);
         return toast.error(
           `Enter ${workout?.name} ${
             workout?.time_base ? "duration" : "repetition"
@@ -82,12 +124,12 @@ const PersonalizeWorkoutForm = () => {
       setSteps(1);
     }
     if (steps === 1) {
-      return;
+      router.back();
     }
   };
 
   const removeWorkout = (index: number) => {
-    const filterWorkouts = workouts.filter((_, idx) => idx !== index);
+    const filterWorkouts = workouts?.filter((_, idx) => idx !== index);
     setWorkouts(filterWorkouts);
   };
 
@@ -95,7 +137,7 @@ const PersonalizeWorkoutForm = () => {
     const data = {
       image,
       name: title,
-      exercises: workouts.map((workout) => ({
+      exercises: workouts?.map((workout) => ({
         exercise_id: workout.exercise_id,
         repetition: workout.repetition,
         sets: workout.sets,
@@ -104,32 +146,41 @@ const PersonalizeWorkoutForm = () => {
       })),
     };
 
-    mutate({ data });
+    if (id) {
+      update({ data, id });
+    } else {
+      mutate({ data });
+    }
   };
 
   return (
     <form className="w-full flex items-center flex-col min-h-[calc(100vh-200px)] mb-6 ">
-      <div className="md:w-[90%] w-full  flex justify-between mb-7">
+      <div className="md:w-[90%] w-full  flex justify-between mb-7 mx-3">
         <button
           onClick={handleBack}
           type="button"
-          className="p-1 px-3 bg-zinc-900 rounded lg:text-lg"
+          className="p-3 bg-zinc-900 rounded lg:text-lg"
         >
-          Back
+          <ChevronLeft />
         </button>
         <button
           onClick={handleNext}
           type="button"
-          className="p-1 px-3 bg-emerald-500 rounded lg:text-lg flex items-center gap-2"
+          className=" p-3 bg-emerald-500 hover:bg-emerald-400 rounded lg:text-lg flex items-center gap-2"
         >
-          {steps === 3 ? "Save " : "Continue "}{" "}
-          {isLoading ? <Loader2 className=" animate-spin" size={15} /> : null}
+          {isLoading || updating ? (
+            <Loader2 className=" animate-spin" size={22} />
+          ) : steps === 3 ? (
+            <Check />
+          ) : (
+            <ChevronRight />
+          )}
         </button>
       </div>
       {steps === 1 && (
         <TitleAndImage
           handleSelectImage={handleSelectImage}
-          image={image}
+          image={typeof image === "string" ? image : image.url}
           setTitle={setTitle}
           title={title}
         />
@@ -173,7 +224,7 @@ const PersonalizeWorkoutForm = () => {
 
               <div className="relative translate-x-6 -translate-y-8 ">
                 <div className="h-5 w-5 rounded-full bg-emerald-500 absolute  flex items-center justify-center">
-                  {workouts.length ?? 0}
+                  {workouts?.length ?? 0}
                 </div>
               </div>
             </div>
@@ -185,7 +236,7 @@ const PersonalizeWorkoutForm = () => {
       {steps === 3 && (
         <Preview
           setSteps={() => setSteps(1)}
-          image={image}
+          image={typeof image === "string" ? image : image.url}
           title={title}
           removeWorkout={removeWorkout}
           workouts={workouts}

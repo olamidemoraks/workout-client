@@ -48,7 +48,7 @@ const FeatureCategories = () => {
       {featureCategory?.map((item: any, index: number) => (
         <li
           key={item?._id}
-          className=" h-[140px] lg:h-[160px] lg:w-full md:w-[230px]  w-full relative bg-gradient-to-br to-zinc-950 from-zinc-900 rounded-xl cursor-pointer ease-linear duration-200"
+          className=" border border-zinc-900 snap-start min-w-[300px]  h-[170px] relative bg-gradient-to-br to-zinc-950 from-zinc-900 rounded-lg cursor-pointer ease-linear duration-200"
         >
           <Link href={`/workouts/${item?._id}`}>
             <Image
@@ -65,7 +65,6 @@ const FeatureCategories = () => {
                 </p>
               </div>
             </div>
-            <div className={`h-1 w-full absolute ${colors[index]} bottom-0`} />
           </Link>
         </li>
       ))}

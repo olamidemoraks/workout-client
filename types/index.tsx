@@ -80,4 +80,5 @@ interface Challenge {
   location: string;
   challenges: [];
   progress: number;
+  isCompleted: boolean;
 }

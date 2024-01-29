@@ -12,13 +12,15 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import { updateProfile } from "@/api/user";
 import useProfile from "@/hooks/useProfile";
-import { Loader2, Save } from "lucide-react";
+import { Check, ChevronLeft, Loader2, Save } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type EditProfileProps = {
   id: string;
 };
 
 const EditProfile: React.FC<EditProfileProps> = ({ id }) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { mutate, isLoading: updating } = useMutation({
     mutationFn: updateProfile,
@@ -79,14 +81,33 @@ const EditProfile: React.FC<EditProfileProps> = ({ id }) => {
   return (
     <div className="flex justify-center md:px-10 px-3 ">
       <div className="xl:w-[60%] md:w-[80%] w-full">
-        <p className=" text-2xl">Edit Profile</p>
-
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className=" hover:bg-emerald-500 flex items-center gap-2 rounded-md  p-2 mb-2 bg-zinc-900"
+        >
+          <ChevronLeft size={23} />
+        </button>
+        <div className="flex items-center justify-between">
+          <p className=" text-lg font-bold">Edit Profile</p>
+          <button
+            type="submit"
+            className=" hover:bg-emerald-500 flex items-center gap-2 rounded-md  p-3 border border-neutral-600"
+          >
+            {updating ? (
+              <Loader2 className="animate-spin" size={20} />
+            ) : (
+              <Check size={23} />
+            )}
+          </button>
+        </div>
         <form
           onSubmit={handleSubmit(handleSignup)}
           className="flex flex-col gap-4 mt-3 w-full"
+          autoFocus
         >
-          <div className="flex flex-col gap-3 w-full">
-            <label htmlFor="name" className=" text-lg">
+          <>
+            <label htmlFor="name" className=" ">
               Name
             </label>
             <input
@@ -101,9 +122,9 @@ const EditProfile: React.FC<EditProfileProps> = ({ id }) => {
             {errors.name && (
               <p className=" text-red-500 -mt-2">{errors.name.message}</p>
             )}
-          </div>
+          </>
           <div className="flex flex-col gap-3 w-full">
-            <label htmlFor="username" className=" text-lg">
+            <label htmlFor="username" className=" ">
               Username
             </label>
             <input
@@ -120,7 +141,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ id }) => {
             )}
           </div>
           <div className="flex flex-col gap-3 w-full">
-            <label htmlFor="gender" className=" text-lg">
+            <label htmlFor="gender" className=" ">
               Gender
             </label>
             <select
@@ -149,20 +170,20 @@ const EditProfile: React.FC<EditProfileProps> = ({ id }) => {
           </div>
 
           <div className="flex flex-col gap-3">
-            <h2 className=" text-lg ">Date of birth</h2>
+            <h2 className="  ">Date of birth</h2>
             <div className="flex gap-3">
               <DatePicker
                 className=" bg-transparent w-full focus:outline-none border-[1px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]   "
                 selected={startDate}
                 onChange={(date: Date) => setStartDate(date)}
               />
-              <p className=" capitalize font-bold text-xl   flex items-center justify-center mt-2 ">
+              <p className=" capitalize font-bold  flex items-center justify-center mt-2 ">
                 {moment().diff(startDate, "year")} years
               </p>
             </div>
           </div>
 
-          <div className="mt-10 flex flex-col gap-5 items-start w-full">
+          <div className=" flex flex-col gap-5 items-start w-full">
             <div className="w-full">
               <label htmlFor="weight" className=" font-semibold">
                 Weight
@@ -288,19 +309,6 @@ const EditProfile: React.FC<EditProfileProps> = ({ id }) => {
                 </div>
               </div>
             </div>
-          </div>
-          <div className="mb-5">
-            <button
-              type="submit"
-              className=" bg-emerald-400 flex items-center gap-2 rounded-md p-2 px-3"
-            >
-              Update Profile{" "}
-              {updating ? (
-                <Loader2 className="animate-spin" size={20} />
-              ) : (
-                <Save size={20} />
-              )}
-            </button>
           </div>
         </form>
       </div>

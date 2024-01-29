@@ -31,7 +31,7 @@ export const editCustomWorkout = async ({
 }) => {
   try {
     const response = await axios.put(
-      `${baseUrl}/update-custom-workouts/${id}`,
+      `${baseUrl}/update-custom-workout/${id}`,
       data,
       {
         withCredentials: true,
@@ -46,7 +46,7 @@ export const editCustomWorkout = async ({
 export const deleteCustomWorkout = async ({ id }: { id: string }) => {
   try {
     const response = await axios.delete(
-      `${baseUrl}/delete-custom-workouts/${id}`,
+      `${baseUrl}/delete-custom-workout/${id}`,
 
       {
         withCredentials: true,
@@ -75,6 +75,7 @@ export const getUserCustomWorkouts = async ({ userId }: { userId: string }) => {
 export const getCustomWorkout = async ({ id }: { id: string }) => {
   try {
     const response = await axios.get(`${baseUrl}/get-custom-workout/${id}`, {
+      withCredentials: true,
       headers,
     });
     return response.data;

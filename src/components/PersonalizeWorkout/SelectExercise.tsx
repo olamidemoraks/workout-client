@@ -3,7 +3,7 @@ import { cn } from "@/libs/utils";
 import { Expand, Plus } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import { useQuery } from "react-query";
 
 const focus = [
@@ -36,6 +36,7 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({ setWorkouts }) => {
         params: searchParams,
       });
     },
+    queryKey: "Exercises",
   });
   const exercises: IExercise[] = data?.exercises;
 
@@ -45,7 +46,7 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({ setWorkouts }) => {
   const handleAddWorkouts = (exercise: IExercise) => {
     const data = {
       ...exercise,
-      exercise_id: exercise._id,
+      exercise_id: exercise?._id,
       repetition: 0,
       sets: 1,
       time_base: false,
@@ -65,9 +66,13 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({ setWorkouts }) => {
 
     replace(`${pathname}?${query}`);
   };
+
   return (
     <>
       <p className=" text-lg font-semibold mb-3 text-center ">Muscle group</p>
+      <p className=" text-neutral-300 text-center leading-5">
+        Filter exercise base on muscle group available to you below
+      </p>
       <div className=" overflow-x-auto w-full scrollbar-thumb-zinc-900 scrollbar-thin scrollbar-track-transparent">
         <div className="flex sm:grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-4 max-sm:w-fit max-sm:overflow-x-auto w-full gap-2 p-2  ">
           {focus.map((group, index) => (
@@ -94,9 +99,14 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({ setWorkouts }) => {
           ))}
         </div>
       </div>
+
+      <p className=" text-neutral-300 text-center leading-5">
+        Click an exercise to add to your workout routine.
+      </p>
       <div className="flex flex-col rounded mt-3 gap-2">
         {exercises?.map((exercise) => (
           <div
+            onClick={() => handleAddWorkouts(exercise)}
             key={exercise?._id}
             className={cn(
               "flex w-full justify-between p-2 px-3 items-center transition hover:bg-zinc-900 bg-zinc-900/40 cursor-pointer "
@@ -104,19 +114,19 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({ setWorkouts }) => {
           >
             <div
               className="flex gap-2 items-center w-full"
-              onClick={() => handleAddWorkouts(exercise)}
+              // onClick={() => handleAddWorkouts(exercise)}
             >
               <div className="w-[60px] h-[50px] relative">
                 <Image
-                  src={exercise.image?.url}
-                  alt={exercise.name}
+                  src={exercise?.image?.url}
+                  alt={exercise?.name}
                   fill
                   loading="lazy"
                   className=" object-cover rounded-sm absolute"
                 />
               </div>
               <div className="flex items-start w-[50%] truncate ">
-                <p>{exercise.name}</p>
+                <p>{exercise?.name}</p>
               </div>
             </div>
             <div className=" hover:bg-zinc-800 rounded p-2 cursor-pointer transition duration-200">
@@ -128,4 +138,4 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({ setWorkouts }) => {
     </>
   );
 };
-export default SelectExercise;
+export default memo(SelectExercise);

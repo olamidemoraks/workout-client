@@ -24,7 +24,7 @@ const Home = () => {
 
       <HomeSection title="Focus Areas" seeMoreLink="/workouts">
         <div className="  w-full relative flex overflow-x-scroll pb-4 scrollbar-thumb-transparent scrollbar-thin scrollbar-track-transparent">
-          <ul className="md:flex md:flex-row grid sm:grid-cols-2 grid-cols-1  flex-nowrap gap-4 lg:w-full max-md:w-full">
+          <ul className="flex flex-row  flex-nowrap gap-4 w-full snap-x">
             <FeatureCategories />
           </ul>
         </div>

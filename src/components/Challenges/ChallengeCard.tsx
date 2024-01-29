@@ -10,7 +10,10 @@ type ChallengeCardProps = {
 };
 
 const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
-  const percentageCompleted = (challenge?.progress / challenge?.days) * 100; // calculate the percentage complete
+  const percentageCompleted =
+    ((challenge?.progress + (challenge?.isCompleted ? 0 : -1)) /
+      challenge?.days) *
+    100; // calculate the percentage complete
   const strokeDashOffset = 158 + (240 * (100 - percentageCompleted)) / 100;
   return (
     <div className="sm:h-[250px] h-[200px] w-full relative bg-gradient-to-br to-zinc-950 from-zinc-900 rounded-xl">
@@ -21,10 +24,12 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
         width={550}
         className="absolute object-cover rounded-lg h-full w-full "
       />
-      <div className="flex flex-col justify-between h-full w-full bg-gradient-to-br from-zinc-950/60 to-zinc-950/20 absolute p-6">
+      <div className="flex flex-col justify-between h-full w-full bg-gradient-to-br from-zinc-950/60 to-zinc-950/20 absolute md:p-6 p-2">
         <div>
-          <p className="font-bold uppercase text-3xl ">{challenge?.title}</p>
-          <p className=" font-semibold uppercase text-lg ">
+          <p className="font-bold uppercase md:text-3xl text-2xl ">
+            {challenge?.title}
+          </p>
+          <p className=" font-semibold uppercase md:text-lg text-base ">
             {challenge?.days} Day Challenge
           </p>
         </div>
@@ -56,15 +61,18 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
             <div className="mt-4 flex justify-between items-center w-full">
               <Link
                 href={`/challenge/${challenge?._id}`}
-                className="  py-1 px-1 pl-3 flex items-center gap-2 backdrop-blur-md bg-white/20 hover:bg-emerald-400/40 text-white rounded-full w-fit  text-sm font-bold"
+                className="  py-1 px-1 pl-3 flex items-center gap-2 backdrop-blur-md bg-neutral-600/30 hover:bg-neutral-500/40 text-white rounded-full w-fit  text-sm font-bold"
               >
-                <p className="items-center flex gap-1">Continue the workout</p>
+                <p className="items-center hidden sm:block gap-1">
+                  Continue the workout
+                </p>
+                <p className="items-center sm:hidden block gap-1">Continue</p>
                 <div className="p-2 rounded-full bg-white">
                   <ArrowRight color="#000" size={16} />
                 </div>
               </Link>
 
-              <div className="  relative w-[60px] h-[60px] top-0  rounded-md p-1 z-[3]">
+              <div className="  relative md:w-[60px] md:h-[60px] w-[50px] h-[50px] top-0  rounded-md p-1 z-[3]">
                 {/* <Image
                   src={"./wave.svg"}
                   alt="wave"
@@ -73,7 +81,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
                 /> */}
                 <svg className="w-full h-full z-10" viewBox="0 0 100 100">
                   <circle
-                    className="text-white/30 backdrop-blur-sm stroke-current"
+                    className="text-white/20 backdrop-blur-sm stroke-current"
                     stroke-width="9"
                     cx="50"
                     cy="50"
@@ -82,7 +90,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
                   ></circle>
 
                   <circle
-                    className="text-emerald-300  progress-ring__circle stroke-current"
+                    className="text-indigo-500  progress-ring__circle stroke-current"
                     stroke-width="9"
                     stroke-linecap="round"
                     cx="50"
@@ -98,13 +106,15 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
                     fill="#ffffff"
                     font-family="Verdana"
                     font-size="25"
-                    fontWeight="700"
+                    fontWeight="500"
                     text-anchor="middle"
                     alignment-baseline="middle"
                   >
-                    {(challenge?.progress * (100 / challenge?.days))?.toFixed(
-                      0
-                    )}
+                    {(
+                      (challenge?.progress +
+                        (challenge?.isCompleted ? 0 : -1)) *
+                      (100 / challenge?.days)
+                    )?.toFixed(0)}
                     %
                   </text>
                 </svg>
@@ -115,7 +125,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
           <div className="w-full flex justify-between items-end">
             <Link
               href={`/challenge/${challenge?._id}`}
-              className=" py-1 px-1 pl-3 flex items-center gap-5 backdrop-blur-md bg-white/20 hover:bg-emerald-400/40 text-white rounded-full w-fit  text-sm font-bold"
+              className=" py-1 px-1 pl-3 flex items-center gap-5 backdrop-blur-md bg-neutral-600/30 hover:bg-neutral-500/40 text-white rounded-full w-fit  text-sm font-bold"
             >
               <div className="items-center flex gap-1">
                 Start workout

@@ -8,6 +8,7 @@ import { BiMenu } from "react-icons/bi";
 import Sidebar from "./Sidebar";
 import { cn } from "@/libs/utils";
 import Image from "next/image";
+import NavbarMenu from "./NavbarMenu";
 
 const Navbar = () => {
   const { profile, isLoading } = useProfile();
@@ -54,30 +55,16 @@ const Navbar = () => {
           <Sidebar setSideDrawer={setOpenSidebar} openMenu={openSidebar} />
         </div>
 
-        <UserStreak streak={profile?.streak ?? 0} />
+        <div className="md:block hidden">
+          <UserStreak streak={profile?.streak ?? 0} />
+        </div>
       </div>
       <div className="flex justify-between items-center gap-5">
         <div className="relative hidden sm:block">
           <Bell className="" />
           <div className="h-2 w-2 bg-emerald-600 ring-4 ring-emerald-600/20 absolute rounded-full top-0 right-0" />
         </div>
-        <div className="flex items-center gap-1">
-          {profile?.avatar ? (
-            <div className="md:h-10 md:w-10 h-8 w-8 relative">
-              <Image
-                src={profile?.avatar.url}
-                alt="avatar"
-                fill
-                className=" rounded-full absolute object-cover"
-              />
-            </div>
-          ) : (
-            <div className=" bg-zinc-800 md:h-10 md:w-10 h-8 w-8 flex items-center justify-center rounded-full font-semibold uppercase text-lg">
-              {profile?.username?.substring(0, 1)}
-            </div>
-          )}
-          <FaCaretDown />
-        </div>
+        <NavbarMenu profile={profile} />
       </div>
     </div>
   );

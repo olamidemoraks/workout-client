@@ -2,6 +2,7 @@ import { cn } from "@/libs/utils";
 import {
   ActivityIcon,
   BarChart2,
+  Compass,
   Dumbbell,
   LayoutDashboard,
   Star,
@@ -13,6 +14,8 @@ import Link from "next/link";
 import React from "react";
 import { usePathname } from "next/navigation";
 import { GiCutDiamond } from "react-icons/gi";
+import useProfile from "@/hooks/useProfile";
+import UserStreak from "../Report/UserStreak";
 
 const navData = [
   {
@@ -30,7 +33,11 @@ const navData = [
     Icon: <Star size={22} />,
     navLink: "challenge",
   },
-
+  {
+    title: "Explore",
+    Icon: <Compass size={23} />,
+    navLink: "explore",
+  },
   {
     title: "My Profile",
     Icon: <User2 size={22} />,
@@ -44,6 +51,7 @@ type SideBarProps = {
   openMenu?: boolean;
 };
 const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
+  const { profile } = useProfile();
   const pathName = usePathname()?.split("/")[1];
   return (
     <div
@@ -55,6 +63,9 @@ const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
         }
       )}
     >
+      <div className="block md:hidden mt-3 absolute top-7">
+        <UserStreak streak={profile?.streak ?? 0} />
+      </div>
       <div
         onClick={() => setSideDrawer(openMenu ? false : true)}
         className={cn(

@@ -19,16 +19,17 @@ const Preview: React.FC<PreviewProps> = ({
   removeWorkout,
   setSteps,
 }) => (
-  <div className="flex flex-col gap-4 w-full items-center lg:w-[80%] ">
+  <div className="flex flex-col gap-4 w-full items-center lg:w-[70%] ">
     <div className=" h-[200px] w-full relative mb-4 flex items-center justify-center">
       <div
         onClick={setSteps}
-        className="absolute top-3 right-4 z-10 hover:bg-zinc-900 rounded p-2 cursor-pointer"
+        className="absolute top-3 right-4 z-10 hover:bg-blue-500 rounded p-2 cursor-pointer"
       >
         <Edit3 />
       </div>
       <img
         src={image}
+        alt=""
         className="absolute h-full w-full object-cover brightness-75"
       />
       <p className=" text-3xl absolute font-semibold capitalize ">
@@ -41,11 +42,11 @@ const Preview: React.FC<PreviewProps> = ({
       </p>
     </div>
 
-    {workouts.map((workout, index) => (
+    {workouts?.map((workout, index) => (
       <div
         key={index}
         className={cn(
-          "flex  justify-between gap-2   px-3  items-center transition  bg-zinc-900/50 rounded w-full h-[65px]"
+          "flex  justify-between gap-2   px-3  items-center transition  bg-zinc-900/50 backdrop-blur-sm rounded w-full h-[65px]"
         )}
       >
         <div className=" flex gap-2 items-center w-[50%] ">

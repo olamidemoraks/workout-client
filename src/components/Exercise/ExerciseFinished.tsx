@@ -35,7 +35,7 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
   const { mutate, isLoading } = useMutation({
     mutationFn: createActivity,
     onSuccess: () => {
-      router.push("/");
+      // router.push("/");
     },
   });
   const { mutate: challegeMutate, isLoading: isLoadingChallenge } = useMutation(
@@ -86,7 +86,7 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
   const totalTime = hours + minutes + seconds;
   return (
     <div className=" w-full flex flex-col  items-center justify-center">
-      <div className="xl:w-[60%] w-full ">
+      <div className="lg:w-[60%] w-full ">
         <div className="relative w-full z-10">
           <Image
             src={"/assets/gears.jpg"}

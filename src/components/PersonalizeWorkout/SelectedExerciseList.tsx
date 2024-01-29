@@ -22,7 +22,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 
 import type { DropAnimation } from "@dnd-kit/core";
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 
 const dropAnimationConfig: DropAnimation = {
   sideEffects: defaultDropAnimationSideEffects({
@@ -45,15 +45,16 @@ const SelectedExerciseList: React.FC<SelectedExerciseListProps> = ({
   workouts,
   removeWorkout,
 }) => {
+  console.log({ workouts });
   const [active, setActive] = useState<Active | null>(null);
 
   const activeItem: any = useMemo(() => {
     let activeElement = workouts?.find(
       (item, index) =>
-        item.exercise_id === active?.data?.current?.exercise_id &&
+        item?.exercise_id === active?.data?.current?.exercise_id &&
         index === Number(active?.id) - 1
     );
-    if (activeElement! == undefined)
+    if (activeElement !== undefined)
       return { ...(activeElement ?? {}), index: active?.id };
 
     return activeElement;
@@ -116,7 +117,7 @@ const SelectedExerciseList: React.FC<SelectedExerciseListProps> = ({
             }}
           >
             <SortableContext
-              items={workouts as any[]}
+              items={(workouts as any[]) ?? []}
               strategy={rectSortingStrategy}
             >
               <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1  gap-8">
@@ -136,7 +137,7 @@ const SelectedExerciseList: React.FC<SelectedExerciseListProps> = ({
                 <SortableItem
                   workout={activeItem}
                   handleRemoveExercise={(value: number) => {}}
-                  index={activeItem.index}
+                  index={activeItem?.index}
                   grabbed={true}
                 />
               ) : null}
@@ -149,7 +150,7 @@ const SelectedExerciseList: React.FC<SelectedExerciseListProps> = ({
 };
 
 type ISortableItem = {
-  workout: any;
+  workout?: any;
   handleRemoveExercise: (exercise: number) => void;
   index: number;
   setExerciseList?: React.Dispatch<React.SetStateAction<any[]>>;
@@ -173,7 +174,7 @@ const SortableItem = ({
   } = useSortable({
     id: index + 1,
     data: {
-      exercise_id: workout.exercise_id,
+      exercise_id: workout?.exercise_id,
     },
   });
 
@@ -241,20 +242,21 @@ const SortableItem = ({
             src={`${workout?.image?.url}`}
             alt=""
             fill
-            className="absolute object-cover rounded"
+            sizes="100px"
+            className="absolute h-full w-full object-cover rounded"
           />
         </div>
         <p className=" truncate">{workout?.name}</p>
         <button
           onClick={() => handleRemoveExercise(index)}
           type="button"
-          className="hover:bg-red-800 rounded p-2 ml-1 cursor-pointer justify-center flex w-fit"
+          className="hover:bg-red-600 bg-red-800 rounded p-2 ml-1 cursor-pointer justify-center flex w-fit"
         >
           <Trash2 size={17} />
         </button>
       </div>
 
-      <div className="flex flex-col justify-end items-end gap-2">
+      <div className="flex flex-col justify-start items-start gap-2">
         <div className="flex items-center gap-[4px]">
           <div
             onClick={() => handleTimebaseChange(true)}
@@ -285,7 +287,7 @@ const SortableItem = ({
         </div>
 
         <div className="flex items-center gap-2">
-          <label htmlFor="name" className=" text-sm">
+          <label htmlFor="name" className=" text-sm text-neutral-300">
             {!workout?.time_base ? "Reps:" : "Secs:"}
           </label>
           <input
@@ -295,12 +297,12 @@ const SortableItem = ({
             onChange={handleChange}
             maxLength={3}
             className={
-              "bg-transparent text-center focus:outline-none focus:border p-1 border-zinc-700 focus:border-zinc-500  w-[50px] rounded  bg-zinc-950"
+              "bg-transparent text-center focus:outline-none focus:border text-neutral-300 focus:text-white p-1 border-zinc-700 focus:border-zinc-500  w-[50px] rounded  bg-zinc-950"
             }
           />
         </div>
         <div className="flex items-center gap-2">
-          <label htmlFor="name" className=" text-sm">
+          <label htmlFor="name" className=" text-sm text-neutral-300">
             Sets:
           </label>
           <input
@@ -310,13 +312,13 @@ const SortableItem = ({
             onChange={handleChange}
             maxLength={3}
             className={
-              "bg-transparent text-center focus:outline-none focus:border p-1 border-zinc-700 focus:border-zinc-500  w-[50px] rounded  bg-zinc-950"
+              "bg-transparent text-center focus:outline-none focus:border text-neutral-300 focus:text-white p-1 border-zinc-700 focus:border-zinc-500  w-[50px] rounded  bg-zinc-950"
             }
           />
         </div>
         <div className="flex items-center gap-2">
-          <label htmlFor="name" className=" text-sm">
-            Rest:
+          <label htmlFor="name" className=" text-sm text-neutral-300">
+            Rest: <br /> (secs)
           </label>
           <input
             type="text"
@@ -324,8 +326,9 @@ const SortableItem = ({
             value={workout?.rest}
             onChange={handleChange}
             maxLength={3}
+            prefix="secs"
             className={
-              "bg-transparent text-center focus:outline-none focus:border p-1 border-zinc-700 focus:border-zinc-500  w-[50px] rounded  bg-zinc-950"
+              "bg-transparent text-center focus:outline-none focus:border text-neutral-300 focus:text-white p-1 border-zinc-700 focus:border-zinc-500  w-[50px] rounded  bg-zinc-950"
             }
           />
         </div>
@@ -333,4 +336,4 @@ const SortableItem = ({
     </li>
   );
 };
-export default SelectedExerciseList;
+export default memo(SelectedExerciseList);

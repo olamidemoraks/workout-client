@@ -19,11 +19,13 @@ const Workouts = () => {
 
   return (
     <div className="px-10 mb-10">
-      <p className=" text-2xl font-semibold uppercase">Workout Category</p>
+      <p className=" text-2xl font-semibold uppercase mb-5">Workout Category</p>
 
-      <ul className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-4 gap-y-8 lg:w-full mt-5">
-        <FeatureCategories />
-      </ul>
+      <div className="  w-full relative flex overflow-x-scroll pb-4 scrollbar-thumb-transparent scrollbar-thin scrollbar-track-transparent">
+        <ul className="flex flex-row  flex-nowrap gap-4 w-full snap-x">
+          <FeatureCategories />
+        </ul>
+      </div>
     </div>
   );
 };
