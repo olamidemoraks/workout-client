@@ -2,6 +2,7 @@ import { ResponsiveTimeRange } from "@nivo/calendar";
 import { useQuery } from "react-query";
 import { activityReport } from "@/api/activity";
 import { useEffect, useMemo, useState } from "react";
+import { Loader2 } from "lucide-react";
 
 type IMonthlyCalender = {
   isDashboard?: boolean;
@@ -14,48 +15,57 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
     refetchOnWindowFocus: false,
   });
 
-  const [screenWidth, setScreenWidth] = useState<number>(1040);
+  const [screenWidth, setScreenWidth] = useState<any>(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth;
+    }
+  });
 
-  const reports = useMemo(() => {
+  const reports: { value: number; day: any }[] = useMemo(() => {
     return data?.activityReport?.map((report: any) => ({
-      value: (report?.totalTime / 60).toFixed(0),
+      value: (report?.count).toFixed(0),
       day: report?.createdAt.split("T")?.[0],
     }));
   }, [data]);
 
   console.log({ reports });
 
-  useEffect(() => {
-    function handleResize() {
-      if (typeof window !== "undefined") {
-        setScreenWidth(window.innerWidth);
-      }
+  function handleResize() {
+    if (typeof window !== "undefined") {
+      setScreenWidth(window.innerWidth);
     }
-
+  }
+  useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const currentDate = new Date();
+  const endDate = useMemo(() => {
+    const date = new Date();
 
-  const endDate = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth() -
-      (screenWidth <= 420
-        ? 1
-        : screenWidth <= 738
-        ? 3
-        : screenWidth <= 900
-        ? 6
-        : screenWidth <= 1200
-        ? 8
-        : 10),
-    currentDate.getDate()
-  ).toLocaleDateString("en-CA", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
+    return new Date(
+      date.getFullYear(),
+      date.getMonth() -
+        (screenWidth <= 420
+          ? 2
+          : screenWidth <= 738
+          ? 5
+          : screenWidth <= 900
+          ? 6
+          : screenWidth <= 1000
+          ? 7
+          : screenWidth <= 1200
+          ? 8
+          : 10),
+      date.getDate()
+    ).toLocaleDateString("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  }, [screenWidth]);
+
+  const currentDate = new Date();
 
   const startDate = new Date(
     currentDate.getFullYear(),
@@ -74,6 +84,14 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
     currentDate,
   });
 
+  if (isLoading) {
+    return (
+      <div>
+        <Loader2 className=" animate-spin" size={18} />
+      </div>
+    );
+  }
+
   return (
     <div className=" w-[100%] lg:col-span-2 h-[180px] text-white mx-auto">
       <ResponsiveTimeRange
@@ -82,7 +100,7 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
         to={startDate}
         emptyColor="#1e1e206b"
         firstWeekday="monday"
-        colors={["#063d3ede", "#195b4c", "#2f9454", "#4ADE80"]}
+        colors={["#0e4723", "#1d6b3a", "#2f9454", "#4ADE80"]}
         margin={{ top: 40, right: 40, bottom: 10, left: 0 }}
         daySpacing={1}
         dayBorderWidth={1}
@@ -100,7 +118,6 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
             itemDirection: "right-to-left",
           },
         ]}
-        square={isDashboard ? true : false}
         isInteractive={isDashboard ? false : true}
         theme={{
           text: {

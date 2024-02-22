@@ -24,6 +24,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useRouter } from "next/navigation";
 import { cn } from "@/libs/utils";
 import DeleteModal from "../Modal/DeleteModal";
+import PersonalizeWorkoutCard from "./PersonalizeWorkoutCard";
 
 const HomePersonalizeWorkouts = () => {
   const { profile } = useProfile();
@@ -67,47 +68,11 @@ const HomePersonalizeWorkouts = () => {
       )}
       <div className="flex overflow-x-auto w-full gap-4 scrollbar-thumb-zinc-900 scrollbar-thin scrollbar-track-transparent pb-4 relative snap-x">
         {workouts?.map((workout) => (
-          <div className="flex flex-col" key={workout?._id}>
-            <div className=" cursor-pointer group snap-start min-w-[300px] h-[160px]  relative  p-3 flex flex-col items-center justify-center border  border-zinc-900 rounded-lg  transition duration-200">
-              <Image
-                src={`${workout?.image?.url}`}
-                alt={workout?.name}
-                fill
-                className=" w-full h-full  object-cover rounded-md opacity-70 -z-[2]"
-              />
-              {/* <div className="absolute top-3 right-3 flex gap-2 items-center">
-              <small className="font-semibold">Owner</small>
-            </div> */}
-              <Link
-                href={`/workout/${workout?._id}`}
-                className="flex flex-row items-center justify-center w-full"
-              >
-                <div className="h-[35px] w-[35px] flex items-center justify-center bg-zinc-700 group-hover:bg-blue-500 rounded-[13px] transition-colors duration-200 ">
-                  <Play size={17} fill="#fff" />
-                </div>
-              </Link>
-            </div>
-            <div className="h-fit w-full flex justify-between mt-3 px-2">
-              <div className="flex gap-3 items-center">
-                <div className="relative h-[30px] min-w-[30px] ">
-                  <Image
-                    src={`${profile?.avatar?.url}`}
-                    fill
-                    className="h-full w-full  rounded-full ring-2 ring-emerald-400"
-                    alt="profile image"
-                  />
-                </div>
-                <p className="font-bold md:text-lg text-base  uppercase  text-center">
-                  {workout?.name}
-                </p>
-              </div>
-
-              <Menu
-                id={workout?._id}
-                owner={workout.creatorId === profile._id}
-              />
-            </div>
-          </div>
+          <PersonalizeWorkoutCard
+            workout={workout}
+            key={workout._id}
+            userId={profile?._id}
+          />
         ))}
       </div>
       {/* <Link
@@ -122,123 +87,3 @@ const HomePersonalizeWorkouts = () => {
 };
 
 export default HomePersonalizeWorkouts;
-
-const Menu = ({ id, owner }: { id: string; owner: boolean }) => {
-  const queryClient = useQueryClient();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const router = useRouter();
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  const { mutateAsync, isLoading } = useMutation({
-    mutationFn: deleteCustomWorkout,
-    onSuccess: () => {
-      queryClient.invalidateQueries("custom-workout");
-    },
-    onSettled: () => {
-      setIsOpen(false);
-    },
-  });
-
-  const handleDeleteWorkout = async () => {
-    await mutateAsync({ id });
-  };
-
-  return (
-    <div>
-      <button
-        id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        onClick={handleClick}
-        className={cn(
-          " hover:bg-zinc-900 w-fit text-neutral-200 cursor-pointer rounded-full p-1 transition duration-150",
-          {
-            " hidden": !owner,
-          }
-        )}
-      >
-        <BiDotsVerticalRounded size={22} />
-      </button>
-
-      <MuiMenu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-        sx={{
-          "& .MuiPaper-root": {
-            bgcolor: "#18181b",
-          },
-        }}
-      >
-        <MenuItem
-          sx={{
-            "&:hover": {
-              bgcolor: "#27272a",
-            },
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            fontSize: 12,
-          }}
-          onClick={() => {
-            handleClose();
-            router.push(`/workouts/edit/${id}`);
-          }}
-        >
-          <Edit size={17} /> Edit
-        </MenuItem>
-        <MenuItem
-          sx={{
-            "&:hover": {
-              bgcolor: "#27272a",
-            },
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            fontSize: 12,
-          }}
-          onClick={handleClose}
-        >
-          <BiSolidBarChartSquare /> Analytics
-        </MenuItem>
-        <MenuItem
-          sx={{
-            "&:hover": {
-              bgcolor: "#27272a",
-              color: "rose",
-            },
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            fontSize: 12,
-          }}
-          onClick={() => {
-            handleClose();
-            setIsOpen(true);
-          }}
-        >
-          <Trash2 size={17} /> Delete
-        </MenuItem>
-      </MuiMenu>
-
-      <DeleteModal
-        setClose={() => setIsOpen(false)}
-        open={isOpen}
-        handleAction={handleDeleteWorkout}
-        isLoading={isLoading}
-      />
-    </div>
-  );
-};

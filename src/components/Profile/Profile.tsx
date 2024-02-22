@@ -1,21 +1,25 @@
 "use client";
 import { cn } from "@/libs/utils";
-import { Edit2, Loader2, Smile } from "lucide-react";
+import {
+  Edit2,
+  HeartPulse,
+  LineChart,
+  Loader2,
+  Smile,
+  Trophy,
+} from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
-import Reports from "../Report/Reports";
-import MonthlyCalender from "../Report/MonthlyCalender";
-import ReportTotal from "../Report/ReportTotal";
-import RecentWorkouts from "../Report/RecentWorkouts";
-import RecentWorkoutChart from "../Report/RecentWorkoutChart";
+import Reports from "./Report/Reports";
+import Workouts from "./Workouts/Index";
 import useProfile from "@/hooks/useProfile";
 import { alphabetsColor } from "@/utils/data";
 import { useMutation, useQueryClient } from "react-query";
 import { updateProfileImage } from "@/api/user";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import Achievements from "../Achievements/Achievements";
+import Achievements from "./Achievements/Achievements";
 
 type ProfileProps = {};
 
@@ -106,26 +110,28 @@ const Profile: React.FC<ProfileProps> = () => {
           </label>
         </div>
         <hr />
-        <div className="text-center leading-6">
-          <p className=" text-xl font-semibold capitalize flex items-center gap-3">
-            {profile?.name ?? "-"}
+        <div className="text-center leading-6 flex items-start gap-3">
+          <div className="  flex flex-col items-center gap-1">
+            <p className=" text-xl  font-semibold ">{profile?.name ?? "-"}</p>
+            <p className="text-lg  font-semibold">
+              @{profile?.username ?? "-"}
+            </p>
+          </div>
 
-            <Link
-              href={`/profile/${profile?._id}`}
-              className="p-2 rounded-lg bg-zinc-900/40 hover:bg-zinc-900 cursor-pointer"
-            >
-              <Edit2 size={18} />
-            </Link>
-          </p>
-          <p className="text-lg font-semibold">@{profile?.username ?? "-"}</p>
+          <Link
+            href={`/profile/${profile?._id}`}
+            className="p-2 rounded-lg bg-zinc-900/40 hover:bg-zinc-900 cursor-pointer"
+          >
+            <Edit2 size={18} />
+          </Link>
         </div>
         <div>
-          <div className="flex   flex-row items-center justify-evenly px-5 gap-5 mt-3">
-            <div className="flex flex-col text-center">
+          <div className="flex   flex-row items-center justify-evenly px-5 md:gap-5 gap-2  mt-3">
+            <div className="flex flex-col text-center ">
               <p className=" text-2xl font-semibold text-emerald-400">
                 {profile?.streak ?? 0}
               </p>
-              <p className=" text-neutral-300">Day Streaks</p>
+              <p className=" text-neutral-300 ">Day Streaks</p>
             </div>
             <div className="h-6 w-[1px] bg-zinc-800" />
             <div className="flex flex-col text-center">
@@ -145,28 +151,50 @@ const Profile: React.FC<ProfileProps> = () => {
         </div>
         <div className="w-full border-b border-zinc-900 flex items-center justify-center gap-2 mt-7">
           <div
-            className={cn(" p-3 font-semibold tracking-wide  cursor-pointer", {
-              "border-b-[4px] border-b-emerald-500":
-                search === "report" || search === null,
-            })}
+            className={cn(
+              " p-3 font-semibold tracking-wide  cursor-pointer flex gap-2 w-full sm:w-fit items-center justify-center",
+              {
+                "border-b-[4px] border-b-emerald-500":
+                  search === "report" || search === null,
+              }
+            )}
             onClick={() => handleNavigation("report")}
           >
-            My Stats
+            <span className="sm:block hidden">My Stats</span>{" "}
+            <LineChart size={15} />
           </div>
           <div
-            className={cn(" p-3 font-semibold tracking-wide  cursor-pointer", {
-              "border-b-[4px] border-b-emerald-500": search === "achievements",
-            })}
+            className={cn(
+              " p-3 font-semibold tracking-wide  cursor-pointer flex gap-2 w-full sm:w-fit items-center justify-center",
+              {
+                "border-b-[4px] border-b-emerald-500":
+                  search === "achievements",
+              }
+            )}
             onClick={() => handleNavigation("achievements")}
           >
-            Achievements
+            <span className="sm:block hidden">Achievements</span>{" "}
+            <Trophy size={15} />
+          </div>
+          <div
+            className={cn(
+              " p-3 font-semibold tracking-wide   cursor-pointer flex gap-2 w-full sm:w-fit items-center justify-center",
+              {
+                "border-b-[4px] border-b-emerald-500": search === "workouts",
+              }
+            )}
+            onClick={() => handleNavigation("workouts")}
+          >
+            <span className="sm:block hidden">Workouts</span>{" "}
+            <HeartPulse size={15} />
           </div>
         </div>
       </div>
 
-      <div className="w-full bg-zinc-900/30 backdrop-blur-md px-10 py-4 flex flex-col gap-5 min-h-[240px]">
+      <div className="w-full bg-zinc-900/30 backdrop-blur-md lg:p-10 md:p-3 p-1 py-4 flex flex-col gap-5 min-h-[240px]">
         {(search === "report" || search === null) && <Reports />}
         {search === "achievements" && <Achievements />}
+        {search === "workouts" && <Workouts />}
       </div>
     </div>
   );

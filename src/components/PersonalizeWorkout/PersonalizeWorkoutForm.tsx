@@ -20,6 +20,8 @@ import { createCustomWorkout, editCustomWorkout } from "@/api/custom.workout";
 import { getCustomWorkout } from "@/api/custom.workout";
 import { useQuery } from "react-query";
 import { useRouter } from "next/navigation";
+import { BiUserCheck, BiUserPlus } from "react-icons/bi";
+import AddUserToWorkout from "./AddUserToWorkout";
 
 const images = [
   "/assets/Abs3.jpg",
@@ -32,6 +34,8 @@ const PersonalizeWorkoutForm = ({ id }: { id?: string }) => {
   const [image, setImage] = useState<any>("");
   const [steps, setSteps] = useState(1);
   const [title, setTitle] = useState("");
+  const [open, setOpen] = useState(false);
+  const [openExercise, setOpenExercise] = useState(false);
   const [isLeftSideCollapsed, setIsLeftSideCollapsed] = useState(true);
   const { mutate, isLoading } = useMutation({
     mutationFn: createCustomWorkout,
@@ -102,12 +106,24 @@ const PersonalizeWorkoutForm = ({ id }: { id?: string }) => {
         return toast.error("Please add exercises to workout");
       }
       if (workouts?.some((workout) => workout.repetition <= 0)) {
-        const workout = workouts?.find((workout) => workout.repetition <= 0);
-        return toast.error(
-          `Enter ${workout?.name} ${
-            workout?.time_base ? "duration" : "repetition"
-          }`
-        );
+        // const workout = workouts?.find((workout) => workout.repetition <= 0);
+        // return toast.error(
+        //   `Enter ${workout?.name} ${
+        //     workout?.time_base ? "duration" : "repetition"
+        //   }`
+        // );
+
+        workouts.map((workout) => {
+          if (workout.repetition <= 0) {
+            return toast.error(
+              `Enter ${workout?.name} ${
+                workout?.time_base ? "duration" : "repetition"
+              }`
+            );
+          }
+        });
+
+        return;
       }
       setSteps(3);
     }
@@ -155,6 +171,18 @@ const PersonalizeWorkoutForm = ({ id }: { id?: string }) => {
 
   return (
     <form className="w-full flex items-center flex-col min-h-[calc(100vh-200px)] mb-6 ">
+      <AddUserToWorkout
+        open={open}
+        setClose={() => {
+          setOpen(false);
+        }}
+      />
+      <div
+        onClick={() => setOpen(true)}
+        className=" flex justify-center items-center fixed bg-gradient-to-l from-blue-500 to-indigo-500 sm:h-[80px] h-[60px] md:w-[80px] w-[60px] rounded-full bottom-10 sm:right-10 right-5 cursor-pointer z-40 "
+      >
+        <BiUserPlus size={25} />
+      </div>
       <div className="md:w-[90%] w-full  flex justify-between mb-7 mx-3">
         <button
           onClick={handleBack}
@@ -186,19 +214,16 @@ const PersonalizeWorkoutForm = ({ id }: { id?: string }) => {
         />
       )}
       {steps === 2 && (
-        <div className="flex md:grid xl:grid-cols-[1fr,.4fr] lg:grid-cols-[1fr,.5fr] grid-cols-[1fr,.8fr] min-h-[100vh-200px] lg:w-[90%] w-full">
+        <div className="flex min-h-[100vh-200px] lg:w-[90%] w-full">
           <div
             className={cn(
-              " h-full flex  flex-col gap-3 px-4 relative max-sm:flex-1 w-full items-center",
-              {
-                "max-md:hidden": isLeftSideCollapsed,
-              }
+              " h-full flex  flex-col gap-3 px-4 relative max-sm:flex-1 w-full items-center"
             )}
           >
             <button
               type="button"
-              onClick={() => setIsLeftSideCollapsed(true)}
-              className=" md:hidden bg-zinc-700/75 cursor-pointer w-fit px-4 py-1 flex items-center gap-3 bg-zinc-900 hover:bg-zinc-800 rounded-full backdrop-blur-md"
+              onClick={() => setOpenExercise(true)}
+              className="  bg-zinc-700/75 cursor-pointer w-fit px-4 py-1 flex items-center gap-3 bg-zinc-900 hover:bg-zinc-800 rounded-full backdrop-blur-md"
             >
               Select Exercise <Plus />
             </button>
@@ -208,28 +233,13 @@ const PersonalizeWorkoutForm = ({ id }: { id?: string }) => {
               workouts={workouts}
             />
           </div>
-          <div
-            className={cn(
-              "border-l pl-4 border-zinc-900 h-full relative max-sm:flex-1 w-full flex flex-col ",
-              {
-                "max-md:hidden": !isLeftSideCollapsed,
-              }
-            )}
-          >
-            <div
-              onClick={() => setIsLeftSideCollapsed(false)}
-              className="md:hidden bg-zinc-700/75 cursor-pointer w-fit px-2 py-1 absolute left-0 rounded-r-full backdrop-blur-md"
-            >
-              <ChevronRight />
 
-              <div className="relative translate-x-6 -translate-y-8 ">
-                <div className="h-5 w-5 rounded-full bg-emerald-500 absolute  flex items-center justify-center">
-                  {workouts?.length ?? 0}
-                </div>
-              </div>
-            </div>
-            <SelectExercise setWorkouts={setWorkouts} />
-          </div>
+          <SelectExercise
+            open={openExercise}
+            setClose={() => setOpenExercise(false)}
+            workouts={workouts}
+            setWorkouts={setWorkouts}
+          />
         </div>
       )}
 

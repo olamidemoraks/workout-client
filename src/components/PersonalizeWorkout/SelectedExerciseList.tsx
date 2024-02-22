@@ -120,7 +120,7 @@ const SelectedExerciseList: React.FC<SelectedExerciseListProps> = ({
               items={(workouts as any[]) ?? []}
               strategy={rectSortingStrategy}
             >
-              <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1  gap-8">
+              <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1  gap-8">
                 {workouts?.map((workout, index) => (
                   <SortableItem
                     index={index}
@@ -223,7 +223,7 @@ const SortableItem = ({
       ref={setNodeRef}
       {...attributes}
       className={cn(
-        "w-full flex gap-4 justify-between group p-3 rounded-md border-2 border-zinc-700 backdrop-blur-sm bg-zinc-950/50 relative",
+        "w-full flex gap-4 justify-between group p-3 rounded-md   backdrop-blur-sm bg-zinc-900 relative",
         {
           "border-emerald-500/60 border-4": grabbed,
         }
@@ -256,7 +256,7 @@ const SortableItem = ({
         </button>
       </div>
 
-      <div className="flex flex-col justify-start items-start gap-2">
+      <div className="flex flex-col justify-start items-start gap-2 ">
         <div className="flex items-center gap-[4px]">
           <div
             onClick={() => handleTimebaseChange(true)}
@@ -301,7 +301,7 @@ const SortableItem = ({
             }
           />
         </div>
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <label htmlFor="name" className=" text-sm text-neutral-300">
             Sets:
           </label>
@@ -315,7 +315,7 @@ const SortableItem = ({
               "bg-transparent text-center focus:outline-none focus:border text-neutral-300 focus:text-white p-1 border-zinc-700 focus:border-zinc-500  w-[50px] rounded  bg-zinc-950"
             }
           />
-        </div>
+        </div> */}
         <div className="flex items-center gap-2">
           <label htmlFor="name" className=" text-sm text-neutral-300">
             Rest: <br /> (secs)

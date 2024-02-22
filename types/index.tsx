@@ -61,7 +61,7 @@ interface IExercise {
   body_part: string;
   equipment: string;
   location: string;
-  focus: string;
+  focus: string[];
   time_base: boolean;
   repetition: number;
   rest: number;

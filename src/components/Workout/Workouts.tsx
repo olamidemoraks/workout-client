@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { workoutsPart } from "../Report/date";
+import { workoutsPart } from "../Profile/Report/date";
 import Link from "next/link";
 import Image from "next/image";
 import { useQuery } from "react-query";

@@ -8,39 +8,68 @@ import {
   Star,
   User2,
 } from "lucide-react";
+import { IoGrid } from "react-icons/io5";
 import { BiCaretLeft, BiCaretRight, BiDumbbell } from "react-icons/bi";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { usePathname } from "next/navigation";
 import { GiCutDiamond } from "react-icons/gi";
+import { FaCompass } from "react-icons/fa";
+import { GiBodyBalance } from "react-icons/gi";
+import { FaUser } from "react-icons/fa6";
 import useProfile from "@/hooks/useProfile";
-import UserStreak from "../Report/UserStreak";
+import UserStreak from "../Profile/Report/UserStreak";
 
 const navData = [
   {
     title: "Home",
-    Icon: <LayoutDashboard size={23} />,
+    Icon: (
+      <IoGrid
+        size={21}
+        className=" opacity-70 group-hover:opacity-100 group-hover:text-emerald-400"
+      />
+    ),
     navLink: "",
   },
   {
-    title: "Workout",
-    Icon: <BiDumbbell size={23} />,
+    title: "Workouts",
+    Icon: (
+      <BiDumbbell
+        size={25}
+        className=" opacity-70 group-hover:opacity-100 group-hover:text-emerald-400"
+      />
+    ),
     navLink: "workouts",
   },
   {
     title: "Challenges",
-    Icon: <Star size={22} />,
+    Icon: (
+      <GiBodyBalance
+        size={24}
+        className=" opacity-70 group-hover:opacity-100 group-hover:text-emerald-400"
+      />
+    ),
     navLink: "challenge",
   },
   {
     title: "Explore",
-    Icon: <Compass size={23} />,
+    Icon: (
+      <FaCompass
+        size={21}
+        className=" opacity-70 group-hover:opacity-100 group-hover:text-emerald-400"
+      />
+    ),
     navLink: "explore",
   },
   {
-    title: "My Profile",
-    Icon: <User2 size={22} />,
+    title: "Profile",
+    Icon: (
+      <FaUser
+        size={20}
+        className=" opacity-70 group-hover:opacity-100 group-hover:text-emerald-400"
+      />
+    ),
     navLink: "profile",
   },
 ];
@@ -100,37 +129,73 @@ const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
         </div>
         <div className=" flex flex-col gap-2 mt-10">
           {navData.map(({ Icon, navLink, title }) => (
-            <Link
-              href={`/${navLink}`}
-              key={title}
-              className={cn(
-                "flex items-center px-5  gap-3   hover:bg-zinc-900  py-3",
-                {
-                  "bg-zinc-900 border-l-4 border-emerald-500  ":
-                    navLink === pathName,
-                }
-              )}
-            >
-              <div className="relative">
-                <div className="z-10 relative">{Icon}</div>
-                <div
+            <>
+              {navLink === "profile" ? (
+                <Link
+                  href={`/${navLink}?id=${profile?._id}`}
+                  key={title}
                   className={cn(
-                    "h-full bg-gradient-to-r  from-emerald-500 w-full absolute top-0 z-0 blur-sm opacity-0 rounded-md ",
+                    "flex items-center px-5  gap-3 group hover:bg-zinc-900  py-3",
                     {
-                      "opacity-50": navLink === pathName,
+                      "bg-zinc-900 border-l-4 border-emerald-500  ":
+                        navLink === pathName,
                     }
                   )}
-                />
-              </div>
-              <p
-                className={cn("text-neutral-400", {
-                  " hidden": sideDrawer,
-                  "text-white": navLink === pathName,
-                })}
-              >
-                {title}
-              </p>
-            </Link>
+                >
+                  <div className="relative">
+                    <div className="z-10 relative">{Icon}</div>
+                    <div
+                      className={cn(
+                        "h-full bg-gradient-to-r  from-emerald-500 w-full absolute top-0 z-0 blur-sm opacity-0 rounded-md ",
+                        {
+                          "opacity-50": navLink === pathName,
+                        }
+                      )}
+                    />
+                  </div>
+                  <p
+                    className={cn("text-neutral-400", {
+                      " hidden": sideDrawer,
+                      "text-white": navLink === pathName,
+                    })}
+                  >
+                    {title}
+                  </p>
+                </Link>
+              ) : (
+                <Link
+                  href={`/${navLink}`}
+                  key={title}
+                  className={cn(
+                    "flex items-center px-5  gap-3  group hover:bg-zinc-900  py-3",
+                    {
+                      "bg-zinc-900 border-l-4 border-emerald-500  ":
+                        navLink === pathName,
+                    }
+                  )}
+                >
+                  <div className="relative group">
+                    <div className="z-10 relative">{Icon}</div>
+                    <div
+                      className={cn(
+                        "h-full bg-gradient-to-r  from-emerald-500 w-full absolute top-0 z-0 blur-sm opacity-0 rounded-md ",
+                        {
+                          "opacity-50": navLink === pathName,
+                        }
+                      )}
+                    />
+                  </div>
+                  <p
+                    className={cn("text-neutral-400", {
+                      " hidden": sideDrawer,
+                      "text-white": navLink === pathName,
+                    })}
+                  >
+                    {title}
+                  </p>
+                </Link>
+              )}
+            </>
           ))}
         </div>
       </div>

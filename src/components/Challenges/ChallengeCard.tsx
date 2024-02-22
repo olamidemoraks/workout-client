@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -59,18 +59,34 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
             </div> */}
 
             <div className="mt-4 flex justify-between items-center w-full">
-              <Link
-                href={`/challenge/${challenge?._id}`}
-                className="  py-1 px-1 pl-3 flex items-center gap-2 backdrop-blur-md bg-neutral-600/30 hover:bg-neutral-500/40 text-white rounded-full w-fit  text-sm font-bold"
-              >
-                <p className="items-center hidden sm:block gap-1">
-                  Continue the workout
-                </p>
-                <p className="items-center sm:hidden block gap-1">Continue</p>
-                <div className="p-2 rounded-full bg-white">
-                  <ArrowRight color="#000" size={16} />
-                </div>
-              </Link>
+              {challenge.progress === challenge.days &&
+              challenge.isCompleted ? (
+                <Link
+                  href={`/challenge/${challenge?._id}`}
+                  className="  py-1 px-1 pl-3 flex items-center gap-2 backdrop-blur-md bg-neutral-600/30 hover:bg-neutral-500/40 text-white rounded-full w-fit  text-sm font-bold"
+                >
+                  <p className="items-center hidden sm:block gap-1">
+                    Completed
+                  </p>
+                  <p className="items-center sm:hidden block gap-1">Continue</p>
+                  <div className="p-2 rounded-full bg-emerald-500">
+                    <Check color="#fff" size={18} />
+                  </div>
+                </Link>
+              ) : (
+                <Link
+                  href={`/challenge/${challenge?._id}`}
+                  className="  py-1 px-1 pl-3 flex items-center gap-2 backdrop-blur-md bg-neutral-600/30 hover:bg-neutral-500/40 text-white rounded-full w-fit  text-sm font-bold"
+                >
+                  <p className="items-center hidden sm:block gap-1">
+                    Continue the workout
+                  </p>
+                  <p className="items-center sm:hidden block gap-1">Continue</p>
+                  <div className="p-2 rounded-full bg-white">
+                    <ArrowRight color="#000" size={16} />
+                  </div>
+                </Link>
+              )}
 
               <div className="  relative md:w-[60px] md:h-[60px] w-[50px] h-[50px] top-0  rounded-md p-1 z-[3]">
                 {/* <Image
@@ -79,6 +95,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
                   fill
                   className=" absolute rounded-md w-[60px] h-[30px] object-cover z-[-1]"
                 /> */}
+
                 <svg className="w-full h-full z-10" viewBox="0 0 100 100">
                   <circle
                     className="text-white/20 backdrop-blur-sm stroke-current"

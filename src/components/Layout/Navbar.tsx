@@ -2,7 +2,7 @@ import useProfile from "@/hooks/useProfile";
 import { Bell, Menu } from "lucide-react";
 import { FaCaretDown } from "react-icons/fa6";
 import React, { useEffect, useRef, useState } from "react";
-import UserStreak from "../Report/UserStreak";
+import UserStreak from "../Profile/Report/UserStreak";
 import { useQuery } from "react-query";
 import { BiMenu } from "react-icons/bi";
 import Sidebar from "./Sidebar";

@@ -8,6 +8,7 @@ import { cn } from "@/libs/utils";
 import moment from "moment";
 import ExerciseFinished from "./ExerciseFinished";
 import Resting from "./Resting";
+import ExerciseInfo from "./ExerciseInfo";
 
 type CurrentExerciseProps = {
   workout: IWorkout;
@@ -28,6 +29,7 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
   const [workoutCompleted, setWorkoutCompleted] = useState(false);
   const [workoutStarted, setWorkoutStarted] = useState(false);
   const [readyCount, setReadyCount] = useState(15);
+  const [open, setOpen] = useState(false);
   const [bellAudio] = useState<HTMLAudioElement>(
     new Audio("/audio/mixkit-achievement-bell-600.wav")
   );
@@ -157,7 +159,11 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
   return (
     <div className="lg:w-[80%]  w-full flex flex-col items-center justify-center gap-10 mb-8">
       {/* {endTime.toTimeString() + " & " + startTime.toTimeString()} */}
-
+      <ExerciseInfo
+        exercise={currentExercise!}
+        open={open}
+        setClose={() => setOpen(false)}
+      />
       {!isResting ? (
         <>
           {!workoutCompleted ? (
@@ -223,21 +229,33 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
                         width={500}
                         className=" object-cover sm:w-full sm:h-full rounded-xl "
                       />
-                      <div className="h-1 w-full rounded-full  absolute  -bottom-2 px-2">
+                      <div className="h-[4px] flex items-center w-full outline outline-zinc-600/70 rounded-full  absolute  -bottom-3 px-1 mt-1">
                         <div
                           style={{
                             width: `${
                               currentIndex * (100 / exercises?.length)
                             }%`,
                           }}
-                          className="h-full bg-gradient-to-r  rounded-full relative from-emerald-900 to-emerald-600 "
+                          className="h-[1px] bg-gradient-to-r  rounded-full relative from-emerald-600 to-emerald-400 "
                         />
+
+                        <div className=" h-full w-full absolute ">
+                          <div className=" h-full w-full relative ">
+                            <div className="h-full w-[2px] bg-zinc-600/70 absolute left-10" />
+                            <div className="h-full w-[2px] bg-zinc-600/70 absolute right-[30%]" />
+                            <div className="h-full w-[2px] bg-zinc-600/70 absolute right-10" />
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div className=" flex flex-col items-center justify-evenly bg-zinc-900  rounded-xl  p-8 xl:w-[50%] lg:w-[65%] w-full gap-5">
                       <p className=" md:text-2xl  text-base uppercase font-bold flex items-center gap-2">
                         {currentExercise?.name}{" "}
-                        <Info color="#656565dd" className=" cursor-pointer" />
+                        <Info
+                          color="#656565dd"
+                          className=" cursor-pointer"
+                          onClick={() => setOpen(true)}
+                        />
                       </p>
                       <div>
                         {currentExercise?.time_base ? (
@@ -282,7 +300,7 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
                             {!isPlayed ? (
                               <>
                                 <span>Play</span>
-                                <Play />
+                                <Play size={15} />
                               </>
                             ) : (
                               <>

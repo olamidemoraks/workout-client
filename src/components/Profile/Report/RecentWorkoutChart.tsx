@@ -50,12 +50,12 @@ const RecentWorkoutChart = () => {
           (activities) => activities?.label === label
         );
         if (sameLabel) {
-          sameLabel.value += currentValue?.totalTime;
+          sameLabel.value += 1;
         } else {
           accumalator.push({
             id: label,
             label: label,
-            value: currentValue?.totalTime,
+            value: 1,
           });
         }
 
@@ -69,8 +69,8 @@ const RecentWorkoutChart = () => {
           if (point.id !== item) {
             mainFocusPoint?.push({
               id: item,
-              label: item,
-              value: 100,
+              label: item === "back_&_shoulder" ? "Back & Shoulder" : item,
+              value: 0.5,
             });
           }
         }

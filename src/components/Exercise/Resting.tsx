@@ -55,20 +55,20 @@ const Resting: React.FC<RestingProps> = ({
           <div className="flex items-center justify-center gap-10 w-full">
             <button
               onClick={() => setRestTime((prev) => prev + 20)}
-              className="sm:py-2 py-1 sm:px-5 px-2 justify-center text-lg bg-emerald-500  rounded-md   transition duration-200 flex items-center gap-2"
+              className="h-[50px] w-[100px] justify-center text-lg bg-emerald-500  rounded-md   transition duration-200 flex items-center gap-2"
             >
-              <Plus />
               20s
+              <Plus />
             </button>
             <button
               onClick={handleSkip}
-              className="sm:py-2 py-1 sm:px-5 px-2 justify-center text-lg hover:bg-zinc-700 bg-zinc-800 text-emerald-500  rounded-md   transition duration-200 flex items-center gap-2"
+              className="h-[50px] w-[100px] justify-center text-lg hover:bg-zinc-700 bg-zinc-800 text-emerald-500  rounded-md   transition duration-200 flex items-center gap-2"
             >
               Skip
             </button>
           </div>
         </div>
-        <div className=" opacity-60">
+        {/* <div className=" opacity-60">
           <Image
             src={"/assets/stability-ball.svg"}
             alt=""
@@ -76,9 +76,9 @@ const Resting: React.FC<RestingProps> = ({
             width={250}
             className=""
           />
-        </div>
+        </div> */}
 
-        <div className="w-full rounded-md bg-zinc-800 p-3 flex items-center justify-between">
+        <div className="w-full rounded-md bg-zinc-800 p-3 flex items-center justify-between mt-5">
           <div>
             <p className=" text-neutral-400">
               Up Next {currentIndex + 1}/{exerciseLength}

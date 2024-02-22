@@ -1,5 +1,5 @@
 import { cn } from "@/libs/utils";
-import { padTo2Digits } from "@/utils/data";
+import { difficultyColor, padTo2Digits } from "@/utils/data";
 import { AlarmCheck, ArrowLeft, Dot, Play, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,7 +21,7 @@ const ExercisePreview: React.FC<ExercisePreviewProps> = ({
       <div className=" flex w-full px-3 justify-between sm:flex-row flex-col gap-2">
         <div
           onClick={() => router.back()}
-          className="sm:ml-2 ml-3 bg-zinc-900 rounded-lg h-[40px] w-[40px] flex items-center justify-center cursor-pointer hover:bg-emerald-700"
+          className="sm:ml-2 ml-3 bg-zinc-900 rounded-lg h-[40px] w-[40px] flex items-center justify-center cursor-pointer hover:bg-emerald-600"
         >
           <ArrowLeft />
         </div>
@@ -41,33 +41,38 @@ const ExercisePreview: React.FC<ExercisePreviewProps> = ({
               </div>
               {type === "default" && (
                 <>
-                  <div className="md:h-[70px] md:w-[2px] w-[120px] h-[1px] bg-white/75" />
+                  <div className="md:h-[70px] md:w-[2px] w-[120px] h-[1px] bg-white/40 backdrop-blur-md rounded-full md:block hidden" />
                   <div className="flex flex-col gap-1 md:items-start items-center">
-                    <div className="flex  items-center gap-2">
+                    <div className="flex items-center">
                       {Array(3)
                         .fill(0)
                         .map((_, index) => (
                           <Zap
                             key={index}
-                            className={cn(" ", {
-                              "fill-emerald-600 ":
-                                index < workout?.difficult_level,
-                            })}
-                            size={25}
+                            // className={cn(" fill-neutral-600", {
+                            //  "": index < workout?.difficult_level,
+                            // })}
+                            className={`${
+                              index < workout?.difficult_level
+                                ? difficultyColor[workout?.difficult_level].fill
+                                : "fill-neutral-600"
+                            }`}
+                            size={22}
                             color={
                               index < workout?.difficult_level
-                                ? "#059669"
-                                : "#ffffffa4"
+                                ? difficultyColor[workout?.difficult_level]
+                                    .border
+                                : "#525252"
                             }
                           />
                         ))}
                     </div>
-                    <div className="flex  flex-col items-center md:items-start font-semibold">
+                    <div className="flex items-center gap-1 md:items-start font-semibold mt-1">
                       <div className="flex items-center gap-1 text-neutral-300">
-                        {workout?.estimate_time} minutes
                         <AlarmCheck />
+                        {workout?.estimate_time} min
                       </div>
-
+                      <Dot />
                       <p className=" text-base  text-neutral-300">
                         {workout?.exercises?.length} Varient
                       </p>
@@ -83,7 +88,7 @@ const ExercisePreview: React.FC<ExercisePreviewProps> = ({
               <p className=" md:text-2xl text-xl font-semibold">Exercises</p>
               <Link
                 href={`/exercise/${workout?._id}?type=${type}`}
-                className="flex items-center gap-1 bg-emerald-700 p-2 px-4 rounded-lg w-fit text-base uppercase"
+                className="flex items-center gap-1 bg-emerald-600 p-2 px-4 rounded-lg w-fit text-base uppercase"
               >
                 Start <Play className="fill-white" size={17} />
               </Link>

@@ -28,3 +28,26 @@ export const alphabetsColor: { [key: string]: string } = {
 export function padTo2Digits(num: number) {
   return num.toString().padStart(2, "0");
 }
+
+export const difficultyColor: {
+  [key: number]: { border: string; fill: string };
+} = {
+  1: { border: "#3b82f6", fill: "fill-blue-500" },
+  2: { border: "#f97316", fill: "fill-orange-500" },
+  3: { border: "#f43f5e", fill: "fill-rose-500" },
+};
+
+export const focus = [
+  { title: "abs", imageUrl: "/assets/groups/abs.png" },
+  { title: "chest", imageUrl: "/assets/groups/chest.png" },
+  { title: "back", imageUrl: "/assets/groups/back.webp" },
+  { title: "traps", imageUrl: "/assets/groups/traps.png" },
+  { title: "shoulders", imageUrl: "/assets/groups/shoulder.webp" },
+  { title: "biceps", imageUrl: "/assets/groups/arms.webp" },
+  { title: "triceps", imageUrl: "/assets/groups/triceps.webp" },
+  { title: "forearms", imageUrl: "/assets/groups/arms.webp" },
+  { title: "calves", imageUrl: "/assets/groups/calves.png " },
+  { title: "hamstrings", imageUrl: "/assets/groups/hamstrings.webp" },
+  { title: "quads", imageUrl: "/assets/groups/quads1.webp" },
+  { title: "glutes", imageUrl: "/assets/groups/glutes.webp" },
+];
