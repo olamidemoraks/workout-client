@@ -36,7 +36,6 @@ const PersonalizeWorkoutForm = ({ id }: { id?: string }) => {
   const [title, setTitle] = useState("");
   const [open, setOpen] = useState(false);
   const [openExercise, setOpenExercise] = useState(false);
-  const [isLeftSideCollapsed, setIsLeftSideCollapsed] = useState(true);
   const { mutate, isLoading } = useMutation({
     mutationFn: createCustomWorkout,
     onError: (error: { message: string }) => {
@@ -171,18 +170,13 @@ const PersonalizeWorkoutForm = ({ id }: { id?: string }) => {
 
   return (
     <form className="w-full flex items-center flex-col min-h-[calc(100vh-200px)] mb-6 ">
-      <AddUserToWorkout
+      {/* <AddUserToWorkout
         open={open}
         setClose={() => {
           setOpen(false);
         }}
-      />
-      <div
-        onClick={() => setOpen(true)}
-        className=" flex justify-center items-center fixed bg-gradient-to-l from-blue-500 to-indigo-500 sm:h-[80px] h-[60px] md:w-[80px] w-[60px] rounded-full bottom-10 sm:right-10 right-5 cursor-pointer z-40 "
-      >
-        <BiUserPlus size={25} />
-      </div>
+      /> */}
+
       <div className="md:w-[90%] w-full  flex justify-between mb-7 mx-3">
         <button
           onClick={handleBack}
@@ -244,13 +238,22 @@ const PersonalizeWorkoutForm = ({ id }: { id?: string }) => {
       )}
 
       {steps === 3 && (
-        <Preview
-          setSteps={() => setSteps(1)}
-          image={typeof image === "string" ? image : image.url}
-          title={title}
-          removeWorkout={removeWorkout}
-          workouts={workouts}
-        />
+        <>
+          <Preview
+            setSteps={() => setSteps(1)}
+            image={typeof image === "string" ? image : image.url}
+            title={title}
+            removeWorkout={removeWorkout}
+            workouts={workouts}
+          />
+
+          {/* <div
+            onClick={() => setOpen(true)}
+            className=" flex justify-center items-center fixed bg-gradient-to-l from-blue-500 to-indigo-500 sm:h-[80px] h-[60px] md:w-[80px] w-[60px] rounded-full bottom-10 sm:right-10 right-5 cursor-pointer z-40 "
+          >
+            <BiUserPlus size={25} />
+          </div> */}
+        </>
       )}
     </form>
   );

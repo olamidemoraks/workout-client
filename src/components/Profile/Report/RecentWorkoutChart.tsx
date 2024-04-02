@@ -3,49 +3,50 @@ import { ResponsiveRadar } from "@nivo/radar";
 import { useMemo } from "react";
 import useRecentWorkout from "@/hooks/useRecentWorkout";
 import { cn } from "@/libs/utils";
+import Empty from "@/components/Common/Empty";
 const RecentWorkoutChart = () => {
   const { data, isLoading } = useRecentWorkout();
 
-  const recentActivities = useMemo(() => {
-    return data?.activities
-      ?.filter((activity: any) => activity?.workoutType === "default")
-      ?.reduce((accumalator: any[], currentValue: any) => {
-        const label = (currentValue.workoutName as string).toLowerCase();
-        const sameLabel = accumalator.find(
-          (activities) => activities.label === label
-        );
-        if (sameLabel) {
-          sameLabel.value += currentValue?.totalTime;
-        } else {
-          accumalator.push({
-            id: label,
-            label: label,
-            value: currentValue?.totalTime,
-          });
-        }
-        return accumalator;
-      }, [])
-      .map((item: any) => ({
-        ...item,
-        value: (item.value / 60).toFixed(1),
-      }));
-  }, [data]);
+  // const recentActivities = useMemo(() => {
+  //   return data?.activities
+  //     ?.filter((activity: any) => activity?.workoutType === "default")
+  //     ?.reduce((accumalator: any[], currentValue: any) => {
+  //       const label = (currentValue.workoutName as string).toLowerCase();
+  //       const sameLabel = accumalator.find(
+  //         (activities) => activities.label === label
+  //       );
+  //       if (sameLabel) {
+  //         sameLabel.value += currentValue?.totalTime;
+  //       } else {
+  //         accumalator.push({
+  //           id: label,
+  //           label: label,
+  //           value: currentValue?.totalTime,
+  //         });
+  //       }
+  //       return accumalator;
+  //     }, [])
+  //     .map((item: any) => ({
+  //       ...item,
+  //       value: (item.value / 60).toFixed(1),
+  //     }));
+  // }, [data]);
 
   const focusPoint = useMemo(() => {
-    const points = [
-      "abs",
-      "legs",
-      "arms",
-      "back_&_shoulder",
-      "chest",
-      "cardio",
-    ];
+    const points = ["abs", "legs", "arms", "back", "chest", "cardio"];
+
+    console.log({ activity: data?.activities });
+
     const serverFocusPoint = data?.activities
       ?.filter((activity: any) =>
-        points.includes((activity.workoutName as string).toLowerCase())
+        points.includes(
+          (activity.workoutName.split(" ")?.[0] as string).toLowerCase()
+        )
       )
       ?.reduce((accumalator: any[], currentValue: any) => {
-        const label = (currentValue.workoutName as string).toLowerCase();
+        const label = (
+          currentValue.workoutName.split(" ")?.[0] as string
+        ).toLowerCase();
         const sameLabel = accumalator.find(
           (activities) => activities?.label === label
         );
@@ -69,7 +70,7 @@ const RecentWorkoutChart = () => {
           if (point.id !== item) {
             mainFocusPoint?.push({
               id: item,
-              label: item === "back_&_shoulder" ? "Back & Shoulder" : item,
+              label: item === "back" ? "Back & Shoulder" : item,
               value: 0.5,
             });
           }
@@ -93,6 +94,7 @@ const RecentWorkoutChart = () => {
         "w-[100%] md:h-[400px] sm:h-[250px] flex flex-col justify-center items-center lg:col-span-1"
       )}
     >
+      {focusPoint?.length === 0 && <Empty />}
       {/* <ResponsivePie
         data={recentActivities ?? []}
         margin={{ top: 40, right: 80, bottom: 80, left: 80 }}

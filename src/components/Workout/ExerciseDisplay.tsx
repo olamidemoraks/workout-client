@@ -27,14 +27,14 @@ const ExerciseDisplay: React.FC<ExerciseDisplayProps> = ({ id }) => {
     refetchOnReconnect: false,
   });
 
-  if (isLoading) {
+  const workout: IWorkout = data?.workout;
+  if (!workout || isLoading) {
     return (
       <div className="w-full flex justify-center items-center">
         <Loader2 className=" text-3xl text-white animate-spin" />
       </div>
     );
   }
-  const workout: IWorkout = data?.workout;
   return <ExercisePreview workout={workout} />;
 };
 export default ExerciseDisplay;

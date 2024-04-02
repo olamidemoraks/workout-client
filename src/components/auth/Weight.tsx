@@ -106,6 +106,7 @@ const Weight: React.FC<WeightProps> = ({ handleUpdate, isLoading }) => {
                   setHeight(e.target.value);
                 }}
               />
+
               <div className="flex gap-2 border border-blue-700 rounded-lg  items-center">
                 <div
                   className={cn(
@@ -154,6 +155,8 @@ const Weight: React.FC<WeightProps> = ({ handleUpdate, isLoading }) => {
         </div>
       </div>
 
+      <br />
+      <br />
       <div className=" text-center space-y-4 w-full flex-col items-center flex">
         <button
           type="button"

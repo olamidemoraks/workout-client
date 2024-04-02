@@ -26,9 +26,9 @@ const Goals: React.FC<GoalsProps> = ({ handleUpdate, isLoading }) => {
           <div
             onClick={() => setGoals(goal)}
             className={cn(
-              "capitalize relative px-3 py-2 border-4 border-zinc-800 w-full lg:w-[500px] rounded-[.6rem] h-[100px] cursor-pointer flex items-start",
+              "capitalize hover:border-white relative transition-all px-3 py-2 border-4 border-zinc-800 w-full lg:w-[500px] rounded-[.6rem] h-[100px] cursor-pointer flex items-start",
               {
-                " border-primary": goal === goals,
+                " border-yellow-500 hover:border-yellow-500": goal === goals,
               }
             )}
             key={goal}

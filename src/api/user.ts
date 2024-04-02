@@ -42,6 +42,22 @@ export const signupUser = async ({
   }
 };
 
+export const logout = async (): Promise<void> => {
+  try {
+    const response = await axios.post(
+      `${baseUrl}/logout`,
+      {},
+      {
+        withCredentials: true,
+        headers,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
 export const verifyCode = async ({
   activation_code,
   activation_token,
@@ -112,6 +128,18 @@ export const checkUser = async ({ value }: any) => {
     throw new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
+export const findUser = async ({ params }: { params: any }) => {
+  try {
+    const query = new URLSearchParams(params ?? {});
+    const response = await axios.get(`${baseUrl}/find-user?${query}`, {
+      withCredentials: true,
+      headers,
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
 
 export const socialAuthentication = async ({
   name,
@@ -131,6 +159,53 @@ export const socialAuthentication = async ({
         headers,
       }
     );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
+
+export const followUser = async ({ id }: { id: string }) => {
+  try {
+    const response = await axios.put(
+      `${baseUrl}/follow-user`,
+      { id },
+      { withCredentials: true, headers }
+    );
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
+export const unfollowUser = async ({ id }: { id: string }) => {
+  try {
+    const response = await axios.put(
+      `${baseUrl}/unfollow-user`,
+      { id },
+      { withCredentials: true, headers }
+    );
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
+export const getFollowing = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/get-following`, {
+      withCredentials: true,
+      headers,
+    });
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
+export const getFollower = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/get-follower`, {
+      withCredentials: true,
+      headers,
+    });
+
     return response.data;
   } catch (error: any) {
     throw new Error(error?.response?.data?.message ?? "Something went wrong");

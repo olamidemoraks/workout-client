@@ -16,15 +16,15 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
     100; // calculate the percentage complete
   const strokeDashOffset = 158 + (240 * (100 - percentageCompleted)) / 100;
   return (
-    <div className="sm:h-[250px] h-[200px] w-full relative bg-gradient-to-br to-zinc-950 from-zinc-900 rounded-xl">
+    <div className="group border border-zinc-800 sm:h-[250px] h-[200px] w-full relative bg-gradient-to-br to-zinc-950 from-zinc-900 rounded-xl">
       <Image
         src={challenge?.image?.url}
         alt={challenge?.title}
         height={700}
         width={550}
-        className="absolute object-cover rounded-lg h-full w-full "
+        className=" absolute object-cover rounded-xl h-full w-full brightness-[.6] transition-all group-hover:brightness-90 "
       />
-      <div className="flex flex-col justify-between h-full w-full bg-gradient-to-br from-zinc-950/60 to-zinc-950/20 absolute md:p-6 p-2">
+      <div className="flex flex-col justify-between h-full w-full  absolute md:p-6 p-2">
         <div>
           <p className="font-bold uppercase md:text-3xl text-2xl ">
             {challenge?.title}
@@ -79,7 +79,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
                   className="  py-1 px-1 pl-3 flex items-center gap-2 backdrop-blur-md bg-neutral-600/30 hover:bg-neutral-500/40 text-white rounded-full w-fit  text-sm font-bold"
                 >
                   <p className="items-center hidden sm:block gap-1">
-                    Continue the workout
+                    Continue workout
                   </p>
                   <p className="items-center sm:hidden block gap-1">Continue</p>
                   <div className="p-2 rounded-full bg-white">

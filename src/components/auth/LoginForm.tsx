@@ -46,8 +46,8 @@ const LoginForm = () => {
   });
 
   useEffect(() => {
-    if (data) {
-      checkUserExist({ value: { email: data.user?.email } });
+    if (data?.user) {
+      checkUserExist({ value: { email: data?.user?.email } });
     }
   }, [data]);
 
@@ -95,7 +95,7 @@ const LoginForm = () => {
               <Loader2 className=" animate-spin" size={24} />
             </div>
 
-            <p className=" text-lg font-semibold">Preparing...</p>
+            <p className=" text-lg font-semibold">loading account...</p>
           </div>
         </div>
       ) : null}
@@ -169,7 +169,7 @@ const LoginForm = () => {
           className=" flex items-center justify-center px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 min-w-[350px] text-lg font-medium gap-2 "
         >
           {!isLoading ? (
-            "Create Account"
+            "Login"
           ) : (
             <>
               Loading.. <Loader2 className=" animate-spin" color="black" />

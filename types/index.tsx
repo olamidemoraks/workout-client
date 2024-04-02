@@ -15,8 +15,8 @@ interface IUser {
   streak: number;
   weightMeasure: "kg" | "lb";
   heightMeasure: "cm" | "ft";
-  followers: number;
-  following: number;
+  followers: [string];
+  following: [string];
 }
 
 interface IWorkout {
@@ -31,6 +31,7 @@ interface IWorkout {
     public_id: string;
     url: string;
   };
+  day?: number;
 }
 
 interface ICustomWorkout {

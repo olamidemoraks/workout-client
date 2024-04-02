@@ -68,8 +68,7 @@ const Preview: React.FC<PreviewProps> = ({
             <p className="md:text-base sm:text-base text-[10px]">
               {!workout?.time_base ? "Reps" : "Duration"} {workout?.repetition}
             </p>
-            <div className="h-[10px] w-1 sm:block hidden bg-zinc-800" />
-            <p className="sm:text-base text-[10px]">Sets {workout?.sets}</p>
+
             <div className="h-[10px] w-1 sm:block hidden bg-zinc-800" />
             <p className="sm:text-base text-[10px]">Rest {workout?.rest}</p>
           </div>

@@ -17,8 +17,8 @@ const ExercisePreview: React.FC<ExercisePreviewProps> = ({
 }) => {
   const router = useRouter();
   return (
-    <div className="flex gap-2 flex-col justify-center items-center  w-full">
-      <div className=" flex w-full px-3 justify-between sm:flex-row flex-col gap-2">
+    <div className="flex gap-2 flex-col justify-center items-center  w-full mt-4">
+      <div className=" flex w-full px-3 justify-between md:flex-row flex-col gap-2">
         <div
           onClick={() => router.back()}
           className="sm:ml-2 ml-3 bg-zinc-900 rounded-lg h-[40px] w-[40px] flex items-center justify-center cursor-pointer hover:bg-emerald-600"
@@ -39,6 +39,7 @@ const ExercisePreview: React.FC<ExercisePreviewProps> = ({
                   {workout?.name}
                 </p>
               </div>
+              {type === "challenge" && <p>{workout?.day}</p>}
               {type === "default" && (
                 <>
                   <div className="md:h-[70px] md:w-[2px] w-[120px] h-[1px] bg-white/40 backdrop-blur-md rounded-full md:block hidden" />

@@ -23,6 +23,7 @@ const Exercise: React.FC<ExerciseProps> = ({ id }) => {
 
   const { data, isLoading } = useQuery({
     queryFn: async () => await getWorkout(id),
+    queryKey: "exercise",
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: false,
@@ -31,6 +32,7 @@ const Exercise: React.FC<ExerciseProps> = ({ id }) => {
 
   const { data: challengeData, isLoading: challengeLoading } = useQuery({
     queryFn: async () => await startChallenge(id),
+    queryKey: "exercise",
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: false,
@@ -39,6 +41,7 @@ const Exercise: React.FC<ExerciseProps> = ({ id }) => {
 
   const { data: customizeData, isLoading: customizeLoading } = useQuery({
     queryFn: async () => await getCustomWorkout({ id }),
+    queryKey: "exercise",
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: false,

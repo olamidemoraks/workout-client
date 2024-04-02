@@ -1,4 +1,5 @@
 import { getUserCustomWorkouts } from "@/api/custom.workout";
+import Empty from "@/components/Common/Empty";
 import PersonalizeWorkoutCard from "@/components/PersonalizeWorkout/PersonalizeWorkoutCard";
 import { Play } from "lucide-react";
 import Image from "next/image";
@@ -16,8 +17,9 @@ const Workouts = () => {
     enabled: !!id,
   });
 
-  const workouts: ICustomWorkout[] = data?.workouts;
+  const workouts: ICustomWorkout[] = data?.workouts ?? [];
 
+  if (workouts?.length === 0) return <Empty />;
   return (
     <div className="grid sm:grid-cols-3 grid-cols-2 w-full gap-1 md:gap-3  min-h-[60vh]">
       {workouts?.map((workout) => (

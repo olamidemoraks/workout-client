@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "react-datepicker/dist/react-datepicker-cssmodules.css";
+import toast from "react-hot-toast";
 
 type AgeProps = {
   handleUpdate: (value: any) => void;
@@ -13,6 +14,15 @@ type AgeProps = {
 
 const Age: React.FC<AgeProps> = ({ handleUpdate, isLoading }) => {
   const [startDate, setStartDate] = useState(new Date());
+
+  const handleNext = () => {
+    if (moment().diff(startDate, "year") < 15) {
+      toast.error("You are below the required age.");
+      return;
+    } else {
+      handleUpdate({ age: startDate, steps: "goal" });
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-between h-[calc(100vh-200px)]">
@@ -33,7 +43,7 @@ const Age: React.FC<AgeProps> = ({ handleUpdate, isLoading }) => {
       <div className=" text-center space-y-4 w-full flex-col items-center flex">
         <button
           type="button"
-          onClick={() => handleUpdate({ age: startDate, steps: "goal" })}
+          onClick={handleNext}
           className=" flex items-center justify-center px-8 disabled:bg-neutral-600 disabled:cursor-not-allowed bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 w-[200px] sm:min-w-[350px] text-lg font-medium gap-2 "
         >
           {isLoading ? (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "../Modal/Modal";
-import { Box } from "@mui/material";
+import { Avatar, Box } from "@mui/material";
 import { Search } from "lucide-react";
 import {
   BiCheckCircle,
@@ -10,6 +10,8 @@ import {
 } from "react-icons/bi";
 import useProfile from "@/hooks/useProfile";
 import Image from "next/image";
+import { useQuery } from "react-query";
+import { getFollowing } from "@/api/user";
 
 type AddUserToWorkoutProps = {
   open: boolean;
@@ -20,108 +22,13 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
   open,
   setClose,
 }) => {
-  const users = [
-    {
-      _id: "1",
-      name: "olamide moraks",
-      imageUrl: "/assets/fullmale.jpg",
-    },
-    {
-      _id: "2",
-      name: "Ola",
-      imageUrl: "/assets/fit.png",
-    },
-    {
-      _id: "3",
-      name: "David",
-      imageUrl: "/assets/fullfemale.jpg",
-    },
-    {
-      _id: "4",
-      name: "Samuel",
-      imageUrl: "/assets/female.png",
-    },
-    {
-      _id: "5",
-      name: "olamide moraks",
-      imageUrl: "/assets/fullmale.jpg",
-    },
-    {
-      _id: "6",
-      name: "Ola",
-      imageUrl: "/assets/fit.png",
-    },
-    {
-      _id: "7",
-      name: "David",
-      imageUrl: "/assets/fullfemale.jpg",
-    },
-    {
-      _id: "8",
-      name: "Samuel",
-      imageUrl: "/assets/female.png",
-    },
-    {
-      _id: "5",
-      name: "olamide moraks",
-      imageUrl: "/assets/fullmale.jpg",
-    },
-    {
-      _id: "6",
-      name: "Ola",
-      imageUrl: "/assets/fit.png",
-    },
-    {
-      _id: "7",
-      name: "David",
-      imageUrl: "/assets/fullfemale.jpg",
-    },
-    {
-      _id: "8",
-      name: "Samuel",
-      imageUrl: "/assets/female.png",
-    },
-    {
-      _id: "5",
-      name: "olamide moraks",
-      imageUrl: "/assets/fullmale.jpg",
-    },
-    {
-      _id: "6",
-      name: "Ola",
-      imageUrl: "/assets/fit.png",
-    },
-    {
-      _id: "7",
-      name: "David",
-      imageUrl: "/assets/fullfemale.jpg",
-    },
-    {
-      _id: "8",
-      name: "Samuel",
-      imageUrl: "/assets/female.png",
-    },
-    {
-      _id: "5",
-      name: "olamide moraks",
-      imageUrl: "/assets/fullmale.jpg",
-    },
-    {
-      _id: "6",
-      name: "Ola",
-      imageUrl: "/assets/fit.png",
-    },
-    {
-      _id: "7",
-      name: "David",
-      imageUrl: "/assets/fullfemale.jpg",
-    },
-    {
-      _id: "8",
-      name: "Samuel",
-      imageUrl: "/assets/female.png",
-    },
-  ];
+  const { data, isLoading } = useQuery({
+    queryFn: getFollowing,
+    queryKey: "friend",
+    enabled: open,
+  });
+
+  const users = data?.followings as IUser[];
 
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
@@ -137,6 +44,7 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
     }
   };
 
+  const addUserToWorkout = () => {};
   return (
     <Modal setClose={setClose} open={open}>
       <Box
@@ -147,7 +55,7 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
           transform: "translate(-50%, -50%)",
           p: 4,
         }}
-        className=" overflow-hidden bg-zinc-900 lg:w-[600px] sm:w-[80%] w-[99%] rounded-md   min-h-[200px] flex p-4 py-6 gap-3 flex-col"
+        className=" overflow-hidden bg-zinc-900 lg:w-[600px] sm:w-[80%] w-[99%] rounded-md   min-h-[500px] flex p-4 py-6 gap-3 flex-col"
       >
         <div className="flex items-center bg-zinc-800 rounded-md w-full p-2 gap-3">
           <BiSearch className="opacity-80" size={21} />
@@ -163,18 +71,23 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
           {users?.map((user, index) => (
             <div
               key={index}
-              className="flex flex-col gap-2 items-center text-center"
+              className="flex flex-col   gap-2 items-center text-center"
             >
               <div
-                className="md:h-[90px] md:w-[90px] h-[70px] w-[70px] relative cursor-pointer"
+                className="md:h-[70px] md:w-[70px] h-[60px] w-[60px] relative cursor-pointer"
                 onClick={() => handleSelectUser(user?._id)}
               >
-                <Image
-                  src={user?.imageUrl}
-                  alt={user.name}
-                  fill
-                  className="absolute rounded-full object-cover"
-                />
+                {user?.avatar?.url ? (
+                  <Image
+                    src={user?.avatar?.url}
+                    alt={user?.name}
+                    fill
+                    className="absolute rounded-full object-cover"
+                  />
+                ) : (
+                  <Avatar sx={{ height: "100%", width: "100%" }} />
+                )}
+
                 {selectedUsers?.includes(user?._id) ? (
                   <BiSolidCheckCircle
                     className=" absolute bottom-1 -right-2 fill-blue-700 "
@@ -194,7 +107,10 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
             selectedUsers.length > 0 ? "translate-y-0" : "translate-y-[100%]"
           } ease-linear duration-200 delay-100`}
         >
-          <div className="w-full p-3 bg-zinc-800/75 h-[70px]">
+          <div
+            className="w-full p-3 bg-zinc-800/75 h-[70px]"
+            onClick={addUserToWorkout}
+          >
             <button className=" flex gap-2 items-center justify-center w-full text-center bg-blue-600 rounded-md p-2">
               Invite friends <BiUserPlus />
             </button>

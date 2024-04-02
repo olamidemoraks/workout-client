@@ -15,6 +15,7 @@ const HomeChallenge: React.FC<HomeChallengeProps> = () => {
 
   const challenges: Challenge[] = data?.challenges?.slice(0, 2);
 
+  console.log({challenges})
   return (
     <div className="grid md:grid-cols-2 grid-cols-1 gap-10">
       {challenges?.map((challenge) => (

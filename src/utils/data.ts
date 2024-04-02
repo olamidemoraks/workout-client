@@ -32,9 +32,9 @@ export function padTo2Digits(num: number) {
 export const difficultyColor: {
   [key: number]: { border: string; fill: string };
 } = {
-  1: { border: "#3b82f6", fill: "fill-blue-500" },
-  2: { border: "#f97316", fill: "fill-orange-500" },
-  3: { border: "#f43f5e", fill: "fill-rose-500" },
+  1: { border: "#3b82f6", fill: "fill-white" },
+  2: { border: "#f97316", fill: "fill-white" },
+  3: { border: "#f43f5e", fill: "fill-white" },
 };
 
 export const focus = [

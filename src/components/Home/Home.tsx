@@ -10,16 +10,14 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import HomeSection from "./HomeSection";
 import HomePersonalizeWorkouts from "../PersonalizeWorkout/HomePersonalizeWorkouts";
+import DailyAttendance from "./DailyAttendance";
 
 const Home = () => {
   return (
     <div className="p-4 md:px-10 flex flex-col gap-10 w-full overflow-hidden overflow-x-hidden">
+      <DailyAttendance />
       <HomeSection title="X Days Challenge" seeMoreLink="/challenge">
         <HomeChallenge />
-      </HomeSection>
-
-      <HomeSection title="Personalize Workouts" seeMoreLink="">
-        <HomePersonalizeWorkouts />
       </HomeSection>
 
       <HomeSection title="Focus Areas" seeMoreLink="/workouts">
@@ -28,6 +26,10 @@ const Home = () => {
             <FeatureCategories />
           </ul>
         </div>
+      </HomeSection>
+
+      <HomeSection title="Personalize Workouts" seeMoreLink="">
+        <HomePersonalizeWorkouts />
       </HomeSection>
     </div>
   );

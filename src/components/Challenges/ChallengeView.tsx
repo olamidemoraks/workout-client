@@ -20,6 +20,10 @@ const ChallengeView: React.FC<ChallengeViewProps> = ({ id }) => {
     queryFn: async () => {
       return await getChallengeInfo(id);
     },
+    queryKey: "challengeDay",
+    enabled: !!id,
+    retry: true,
+    retryDelay: 6,
   });
 
   const challenge: Challenge = data?.challenge;
@@ -67,14 +71,14 @@ const ChallengeView: React.FC<ChallengeViewProps> = ({ id }) => {
 
   if (isLoading) {
     return (
-      <div className="w-full flex justify-center items-center">
+      <div className="w-full flex justify-center items-center h-[50vh]">
         <Loader2 className=" text-3xl text-white animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className=" flex flex-col items-center">
+    <div className=" flex flex-col items-center sm:mt-0 mt-3">
       <div className="lg:w-[720px] w-full relative">
         <div className="sm:h-[250px] h-[200px] w-full relative bg-gradient-to-br to-zinc-950 from-zinc-900 rounded-xl">
           <Image
@@ -92,9 +96,9 @@ const ChallengeView: React.FC<ChallengeViewProps> = ({ id }) => {
               </p>
             </div>
             <div>
-              <div className="flex justify-between w-full">
-                {progressInfo.currentDay === challenge.days &&
-                progressInfo.isCompleted ? (
+              <div className="flex justify-between w-full mb-2">
+                {progressInfo?.currentDay === challenge?.days &&
+                progressInfo?.isCompleted ? (
                   <p>Completed </p>
                 ) : (
                   <p>
@@ -140,7 +144,7 @@ const ChallengeView: React.FC<ChallengeViewProps> = ({ id }) => {
               <div className="flex flex-col items-center">
                 <div
                   className={cn(
-                    "min-h-[30px] w-[30px] rounded-full bg-zinc-700 flex items-center justify-center",
+                    "min-h-[30px] w-[30px]  rounded-full bg-zinc-700 flex items-center justify-center",
                     {
                       "bg-emerald-600": progressInfo.currentDay >= index[0],
                     }
@@ -163,7 +167,7 @@ const ChallengeView: React.FC<ChallengeViewProps> = ({ id }) => {
                 >
                   Week {week}
                 </p>
-                <ul className=" bg-zinc-900/50 backdrop-blur-sm rounded w-full grid grid-cols-4 gap-y-7 md:pl-7 pl-3 py-6 items-center h-full mb-2 ">
+                <ul className=" bg-zinc-900 mr-3 backdrop-blur-sm rounded w-full grid grid-cols-4 gap-y-7 md:pl-7 pl-3 py-6 items-center h-full mb-2 ">
                   {index.map((day, idx) => (
                     <li key={day} className="flex items-center justify-around">
                       <button
@@ -172,7 +176,7 @@ const ChallengeView: React.FC<ChallengeViewProps> = ({ id }) => {
                       >
                         <div
                           className={cn(
-                            "flex absolute -z-[1] items-center justify-center sm:h-8 sm:w-8 h-7 w-7 rounded-md  border-[3px] rotate-45 border-zinc-700 group cursor-no-drop transition duration-200",
+                            "flex absolute -z-[1] items-center justify-center sm:h-9 sm:w-9 h-8 w-8 rounded-md  border-[3px]  border-zinc-700 group cursor-no-drop transition duration-200",
                             {
                               " scale-105 bg-emerald-600 border-emerald-600 text-emerald-500 font-semibold ring-4 ring-emerald-500/10 cursor-pointer hover:scale-110":
                                 progressInfo.currentDay === day,

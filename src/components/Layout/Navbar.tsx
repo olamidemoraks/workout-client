@@ -9,6 +9,7 @@ import Sidebar from "./Sidebar";
 import { cn } from "@/libs/utils";
 import Image from "next/image";
 import NavbarMenu from "./NavbarMenu";
+import Battery from "../Common/Battery";
 
 const Navbar = () => {
   const { profile, isLoading } = useProfile();
@@ -35,11 +36,11 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="max-md:fixed top-0  w-full md:px-10  px-3 py-5 flex justify-between items-center bg-zinc-950/70 backdrop-blur-sm gap-5 z-20 border-b border-b-zinc-900">
-      <div className="flex gap-2 items-center  relative  max-[280px]:w-full max-sm:justify-evenly">
+    <div className="max-md:fixed top-0  w-full md:px-10  px-3 py-5 flex justify-between items-center bg-zinc-950/70 backdrop-blur-sm gap-5 z-20 border-b border-b-zinc-800">
+      <div className="flex gap-2 items-center  relative  max-[280px]:w-full ">
         <BiMenu
           onClick={() => setOpenSidebar((prev) => !prev)}
-          className=" fill-zinc-200 -mb-4 hover:p-1 hover:bg-zinc-900 rounded-full transition duration-300 cursor-pointer block md:hidden"
+          className=" fill-zinc-200  hover:bg-zinc-900 rounded-full transition duration-300 cursor-pointer block md:hidden"
           size={30}
         />
 
@@ -54,12 +55,12 @@ const Navbar = () => {
         >
           <Sidebar setSideDrawer={setOpenSidebar} openMenu={openSidebar} />
         </div>
-
         <div className="md:block hidden">
           <UserStreak streak={profile?.streak ?? 0} />
         </div>
       </div>
       <div className="flex justify-between items-center gap-5">
+        <Battery />
         <div className="relative hidden sm:block">
           <Bell className="" />
           <div className="h-2 w-2 bg-emerald-600 ring-4 ring-emerald-600/20 absolute rounded-full top-0 right-0" />

@@ -171,13 +171,13 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
               {!workoutStarted ? (
                 <>
                   <div className="flex flex-col w-full items-center justify-center gap-7">
-                    <div className="relative xl:w-[50%] lg:w-[65%] sm:h-[300px] h-fit  w-full">
+                    <div className="relative xl:w-[50%] lg:w-[65%]  h-fit sm:w-full   w-[100vw]">
                       <Image
                         src={currentExercise?.image?.url as string}
                         alt={currentExercise?.name as string}
                         height={200}
                         width={500}
-                        className=" object-cover sm:w-full sm:h-full rounded-xl "
+                        className=" object-cover w-full sm:h-full rounded-xl "
                       />
                     </div>
                     <div className=" flex flex-col items-center justify-evenly bg-zinc-900  rounded-xl  p-8 xl:w-[50%] lg:w-[65%] w-full gap-5">
@@ -221,15 +221,15 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
               ) : (
                 <>
                   <div className="flex flex-col w-[95%] items-center justify-center gap-7">
-                    <div className="relative xl:w-[50%] lg:w-[65%] sm:h-[300px] h-fit  w-full flex items-center justify-center">
+                    <div className="relative xl:w-[50%] lg:w-[65%] h-[300px] sm:w-full  w-[100vw] flex items-center justify-center">
                       <Image
                         src={currentExercise?.image?.url as string}
                         alt={currentExercise?.name as string}
                         height={200}
                         width={500}
-                        className=" object-cover sm:w-full sm:h-full rounded-xl "
+                        className=" object-cover w-full h-full rounded-xl "
                       />
-                      <div className="h-[4px] flex items-center w-full outline outline-zinc-600/70 rounded-full  absolute  -bottom-3 px-1 mt-1">
+                      <div className="h-[4px] flex items-center sm:w-full w-[90%] outline outline-zinc-600/70 rounded-full  absolute  -bottom-3 px-1 mt-1">
                         <div
                           style={{
                             width: `${

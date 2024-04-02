@@ -5,20 +5,19 @@ import { useQuery } from "react-query";
 import ChallengeCard from "./ChallengeCard";
 
 const Challenges = () => {
-  const { data, isLoading } = useQuery({
-    queryFn: currentChallenges,
-    queryKey: "recent-challenge",
-  });
-
   const { data: allData, isLoading: allLoading } = useQuery({
     queryFn: frontalChallenges,
     queryKey: "Home-challenge",
   });
 
-  const recentChallenges: Challenge[] = data?.challenges;
+  const recentChallenges: Challenge[] = allData?.challenges?.filter(
+    (challenge: Challenge) => challenge.progress !== null
+  );
   const allChallenges: Challenge[] = allData?.challenges?.filter(
     (challenge: Challenge) => challenge.progress === null
   );
+
+  console.log({ recentChallenges });
 
   return (
     <div className="px-10 mb-8">

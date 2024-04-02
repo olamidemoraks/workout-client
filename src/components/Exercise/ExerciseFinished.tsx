@@ -34,8 +34,8 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
 
   const { mutate, isLoading } = useMutation({
     mutationFn: createActivity,
-    onSuccess: () => {
-      // router.push("/");
+    onSettled: () => {
+      router.push("/");
     },
   });
   const { mutate: challegeMutate, isLoading: isLoadingChallenge } = useMutation(

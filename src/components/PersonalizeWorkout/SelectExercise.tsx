@@ -1,7 +1,7 @@
 import { getExercise } from "@/api/workout";
 import { cn } from "@/libs/utils";
 import { focus } from "@/utils/data";
-import { Expand, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { memo, useEffect } from "react";

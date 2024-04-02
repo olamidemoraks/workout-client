@@ -16,13 +16,14 @@ const ChallengesPreview: React.FC<ChallengesPreviewProps> = ({ id }) => {
   const router = useRouter();
   const { data, isLoading } = useQuery({
     queryFn: async () => await startChallenge(id),
+    queryKey: "challengeExercise",
   });
 
   const workout: IWorkout = data?.workout as IWorkout;
 
   if (isLoading) {
     return (
-      <div className="w-full flex justify-center items-center">
+      <div className="w-full flex justify-center items-center h-[60vh]">
         <Loader2 className=" text-3xl text-white animate-spin" />
       </div>
     );

@@ -1,5 +1,5 @@
 import { cn } from "@/libs/utils";
-import { Zap, Flame, Loader2 } from "lucide-react";
+import { Zap, Flame, Loader2, Diamond } from "lucide-react";
 import React, { useState } from "react";
 
 type LevelProps = {
@@ -11,7 +11,6 @@ const levels = [
   { name: "Beginner", value: 1 },
   { name: "Intermediate", value: 2 },
   { name: "Advance", value: 3 },
-  { name: "Extreme", value: 4 },
 ];
 const Level: React.FC<LevelProps> = ({ handleUpdate, isLoading }) => {
   const [level, setLevel] = useState<number>();
@@ -25,7 +24,7 @@ const Level: React.FC<LevelProps> = ({ handleUpdate, isLoading }) => {
           Choose a difficult level{" "}
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+      <div className="grid sm:grid-cols-3 grid-cols-1  gap-x-4 gap-y-6">
         {levels.map(({ name, value }) => (
           <div
             onClick={() => setLevel(value)}
@@ -55,7 +54,7 @@ const Level: React.FC<LevelProps> = ({ handleUpdate, isLoading }) => {
                             "absolute bg-white/10 h-full w-full rounded-full animate-pulse"
                           )}
                         />
-                        <Flame
+                        <Diamond
                           className={cn("p-1 fill-white/10", {
                             "fill-red-600 ": index < value,
                           })}

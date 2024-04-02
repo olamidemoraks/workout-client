@@ -16,12 +16,12 @@ const HomeSection: React.FC<HomeSectionProps> = ({
     <div className="flex flex-col w-full gap-4">
       <>
         <div className="flex items-center justify-between w-full">
-          <p className=" font-semibold uppercase sm:text-lg text-base ">
+          <p className=" font-semibold uppercase sm:text-lg text-base text-zinc-300">
             {title}
           </p>
           <Link
             href={seeMoreLink}
-            className="hover:underline-offset-2 bg-zinc-900 rounded-full p-2 px-3 text-zinc-300 hover:underline font-semibold text-xs mb-5"
+            className="hover:underline-offset-2 bg-zinc-900 rounded-full p-2 px-3 text-zinc-300 hover:underline font-semibold text-xs "
           >
             see all
           </Link>

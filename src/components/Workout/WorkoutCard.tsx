@@ -4,12 +4,13 @@ import { Zap, Skull, Clock, Play } from "lucide-react";
 import { cn } from "@/libs/utils";
 import Link from "next/link";
 import { difficultyColor } from "@/utils/data";
+import { BiSolidZap } from "react-icons/bi";
 type WorkoutCardProps = {
   workout: IWorkout;
 };
 
 const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
-  const levels: any = {
+  const levels: { [key: number]: string } = {
     1: "Beginner",
     2: "Intermediate",
     3: "Advanced",
@@ -55,7 +56,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
     //     </div>
     //   </div>
     // </Link>
-    <div className={cn("flex flex-col w-full")} key={workout?._id}>
+    <div className="flex flex-col w-full max-w-[500px]" key={workout?._id}>
       <div
         className={
           " cursor-pointer fill-rose-500 group snap-start w-full h-[200px]  relative  p-3 flex flex-col items-center justify-center border  border-zinc-900 rounded-lg  transition duration-200"
@@ -79,10 +80,10 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
           </div>
         </Link>
       </div>
-      <div className="h-fit w-full flex justify-between items-start md:mt-2 mt-1">
+      <div className="h-fit w-full flex justify-between items-center md:mt-2 mt-1">
         <div className="flex flex-col">
           <p className="font-semibold md:text-lg text-sm  uppercase  text-center">
-            {workout?.name}
+            {workout?.name} ({levels[workout?.difficult_level]})
           </p>
           {/* <div className="flex gap-1 items-center ">
             <Clock color="#3b82f6" size={15} />
@@ -94,7 +95,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
           {Array(3)
             .fill(0)
             .map((_, index) => (
-              <Zap
+              <BiSolidZap
                 key={index}
                 // className={cn(" fill-neutral-600", {
                 //  "": index < workout?.difficult_level,

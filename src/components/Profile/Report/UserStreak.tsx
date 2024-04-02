@@ -1,4 +1,3 @@
-import { userStreak } from "@/api/activity";
 import { cn } from "@/libs/utils";
 import { Zap } from "lucide-react";
 import Image from "next/image";

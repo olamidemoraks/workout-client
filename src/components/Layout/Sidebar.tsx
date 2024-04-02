@@ -15,7 +15,7 @@ import Link from "next/link";
 import React from "react";
 import { usePathname } from "next/navigation";
 import { GiCutDiamond } from "react-icons/gi";
-import { FaCompass } from "react-icons/fa";
+import { FaCompass, FaSearch } from "react-icons/fa";
 import { GiBodyBalance } from "react-icons/gi";
 import { FaUser } from "react-icons/fa6";
 import useProfile from "@/hooks/useProfile";
@@ -52,15 +52,25 @@ const navData = [
     ),
     navLink: "challenge",
   },
+  // {
+  //   title: "Explore",
+  //   Icon: (
+  //     <FaCompass
+  //       size={21}
+  //       className=" opacity-70 group-hover:opacity-100 group-hover:text-emerald-400"
+  //     />
+  //   ),
+  //   navLink: "explore",
+  // },
   {
-    title: "Explore",
+    title: "Search",
     Icon: (
-      <FaCompass
+      <FaSearch
         size={21}
         className=" opacity-70 group-hover:opacity-100 group-hover:text-emerald-400"
       />
     ),
-    navLink: "explore",
+    navLink: "search",
   },
   {
     title: "Profile",
@@ -85,14 +95,18 @@ const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
   return (
     <div
       className={cn(
-        " min-h-screen border-r border-zinc-900 md:translate-x-0 -translate-x-[100%] flex flex-col justify-between  min-w-[200px] absolute top-0 left-0 md:relative transition duration-200 bg-zinc-950 ",
+        " sm:min-h-screen h-screen overflow-hidden border-r border-zinc-800 md:translate-x-0 -translate-x-[100%] flex flex-col justify-between  min-w-[200px] absolute top-0 left-0 md:relative transition duration-200 bg-zinc-950 ",
         {
           "min-w-[55px] transition duration-200": sideDrawer,
           "translate-x-0": openMenu,
         }
       )}
     >
-      <div className="block md:hidden mt-3 absolute top-7">
+      <div
+        className={`block md:hidden ${
+          openMenu ? "opacity-100" : "opacity-0"
+        } mt-3 absolute top-7`}
+      >
         <UserStreak streak={profile?.streak ?? 0} />
       </div>
       <div
