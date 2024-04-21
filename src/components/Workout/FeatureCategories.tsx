@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import React from "react";
 import { useQuery } from "react-query";
+import CustomLoader from "../Common/CustomLoader";
 
 const colors = [
   "bg-[#B4BDFF]/70",
@@ -42,6 +43,16 @@ const FeatureCategories = () => {
   const featureCategory = data?.categories?.filter(
     (category: any) => category?.feature === true
   );
+
+  if (isLoading) {
+    return (
+      <CustomLoader
+        amount={4}
+        height="h-[170px]"
+        weight="sm:min-w-[300px] min-w-[200px]"
+      />
+    );
+  }
 
   return (
     <>

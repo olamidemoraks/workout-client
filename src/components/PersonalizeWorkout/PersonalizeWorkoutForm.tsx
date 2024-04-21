@@ -170,13 +170,6 @@ const PersonalizeWorkoutForm = ({ id }: { id?: string }) => {
 
   return (
     <form className="w-full flex items-center flex-col min-h-[calc(100vh-200px)] mb-6 ">
-      {/* <AddUserToWorkout
-        open={open}
-        setClose={() => {
-          setOpen(false);
-        }}
-      /> */}
-
       <div className="md:w-[90%] w-full  flex justify-between mb-7 mx-3">
         <button
           onClick={handleBack}

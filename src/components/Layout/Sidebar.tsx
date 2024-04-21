@@ -19,7 +19,8 @@ import { FaCompass, FaSearch } from "react-icons/fa";
 import { GiBodyBalance } from "react-icons/gi";
 import { FaUser } from "react-icons/fa6";
 import useProfile from "@/hooks/useProfile";
-import UserStreak from "../Profile/Report/UserStreak";
+import UserStreak from "../Common/UserStreak";
+import useStreak from "@/hooks/useStreak";
 
 const navData = [
   {
@@ -91,6 +92,7 @@ type SideBarProps = {
 };
 const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
   const { profile } = useProfile();
+  const { streak } = useStreak({ userId: profile?._id });
   const pathName = usePathname()?.split("/")[1];
   return (
     <div
@@ -107,7 +109,7 @@ const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
           openMenu ? "opacity-100" : "opacity-0"
         } mt-3 absolute top-7`}
       >
-        <UserStreak streak={profile?.streak ?? 0} />
+        <UserStreak streak={streak ?? 0} />
       </div>
       <div
         onClick={() => setSideDrawer(openMenu ? false : true)}

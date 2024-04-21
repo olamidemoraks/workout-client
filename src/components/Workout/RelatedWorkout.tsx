@@ -4,6 +4,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import WorkoutCard from "./WorkoutCard";
 import { cn } from "@/libs/utils";
+import CustomLoader from "../Common/CustomLoader";
 
 type RelatedWorkoutProps = {
   name: string;
@@ -17,14 +18,19 @@ const RelatedWorkout: React.FC<RelatedWorkoutProps> = ({ name }) => {
   });
 
   const workouts: IWorkout[] = data?.workouts;
+
   return (
     <div className="p-4 px-10 w-full h-full overflow-x-hidden">
       <div className=" grid  lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8">
-        {workouts?.map((workout) => (
-          <div className="flex gap-5" key={workout._id}>
-            <WorkoutCard workout={workout} />
-          </div>
-        ))}
+        {isLoading ? (
+          <CustomLoader height="h-[200px]" amount={3} weight="w-full" />
+        ) : (
+          <>
+            {workouts?.map((workout) => (
+              <WorkoutCard workout={workout} key={workout._id} />
+            ))}
+          </>
+        )}
       </div>
     </div>
   );

@@ -22,6 +22,7 @@ import Link from "next/link";
 import Achievements from "./Achievements/Achievements";
 import Following from "./Modal/Following";
 import Follower from "./Modal/Follower";
+import useStreak from "@/hooks/useStreak";
 
 type ProfileProps = {};
 
@@ -30,6 +31,7 @@ const Profile: React.FC<ProfileProps> = () => {
   const [openFollowers, setOpenFollowers] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const { profile } = useProfile();
+  const { streak } = useStreak({ userId: profile?._id });
   const { mutate, isLoading } = useMutation({
     mutationFn: updateProfileImage,
     onError: () => {
@@ -138,7 +140,7 @@ const Profile: React.FC<ProfileProps> = () => {
             <div className="flex   flex-row items-center justify-evenly px-5 md:gap-5 gap-2  mt-3">
               <div className="flex flex-col text-center ">
                 <p className=" text-2xl font-semibold text-emerald-400">
-                  {profile?.streak ?? 0}
+                  {streak ?? 0}
                 </p>
                 <p className=" text-neutral-300 ">Day Streaks</p>
               </div>
@@ -175,10 +177,18 @@ const Profile: React.FC<ProfileProps> = () => {
               )}
               onClick={() => handleNavigation("report")}
             >
-              <span className="sm:block hidden">My Stats</span>{" "}
+              <span
+                className={`sm:block hidden ${
+                  search === "report" ? "text-white" : "text-zinc-300"
+                }`}
+              >
+                My Stats
+              </span>{" "}
               <LineChart size={15} />
             </div>
-            <div
+
+            {/* achievement */}
+            {/* <div
               className={cn(
                 " p-3 font-semibold text-zinc-400 tracking-wide  cursor-pointer flex gap-2 w-full sm:w-fit items-center justify-center",
                 {
@@ -190,7 +200,7 @@ const Profile: React.FC<ProfileProps> = () => {
             >
               <span className="sm:block hidden">Achievements</span>{" "}
               <Trophy size={15} />
-            </div>
+            </div> */}
             <div
               className={cn(
                 " p-3 font-semibold tracking-wide text-zinc-400 cursor-pointer flex gap-2 w-full sm:w-fit items-center justify-center",
@@ -201,7 +211,13 @@ const Profile: React.FC<ProfileProps> = () => {
               )}
               onClick={() => handleNavigation("workouts")}
             >
-              <span className="sm:block hidden">Workouts</span>{" "}
+              <span
+                className={`sm:block hidden ${
+                  search === "workouts" ? "text-white" : "text-zinc-300"
+                }`}
+              >
+                Workouts
+              </span>{" "}
               <HeartPulse size={15} />
             </div>
           </div>
@@ -209,7 +225,7 @@ const Profile: React.FC<ProfileProps> = () => {
 
         <div className="w-full bg-zinc-900/30 backdrop-blur-md lg:p-10 md:p-3 p-1 py-4 flex flex-col gap-5 min-h-[240px]">
           {(search === "report" || search === null) && <Reports />}
-          {search === "achievements" && <Achievements />}
+          {/* {search === "achievements" && <Achievements />} */}
           {search === "workouts" && <Workouts />}
         </div>
       </div>

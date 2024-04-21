@@ -5,17 +5,19 @@ type HomeSectionProps = {
   children: ReactNode;
   seeMoreLink: string;
   title: string;
+  customStyle?: string;
 };
 
 const HomeSection: React.FC<HomeSectionProps> = ({
   children,
   seeMoreLink,
   title,
+  customStyle,
 }) => {
   return (
-    <div className="flex flex-col w-full gap-4">
+    <div className={`flex flex-col w-full gap-4`}>
       <>
-        <div className="flex items-center justify-between w-full">
+        <div className="flex items-center justify-between w-full px-4 md:px-10">
           <p className=" font-semibold uppercase sm:text-lg text-base text-zinc-300">
             {title}
           </p>
@@ -27,7 +29,7 @@ const HomeSection: React.FC<HomeSectionProps> = ({
           </Link>
         </div>
 
-        {children}
+        <div className={customStyle}>{children}</div>
       </>
     </div>
   );

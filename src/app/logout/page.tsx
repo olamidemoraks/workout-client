@@ -12,7 +12,6 @@ const Logout = () => {
     mutationFn: logout,
     onSuccess: () => {
       signOut();
-      redirect("/login");
     },
   });
 
@@ -23,10 +22,19 @@ const Logout = () => {
   return (
     <div className="h-screen w-full flex items-center justify-center">
       <div className="text-center space-y-2">
-        <p className=" text-3xl">
-          Signing out {isLoading && <Loader2 className=" animate-spin" />}
+        <p className=" text-3xl flex gap-2">
+          {isLoading && (
+            <>
+              {" "}
+              Signing out <Loader2 className=" animate-spin" />
+            </>
+          )}
+          {!isLoading && <>Signed Out</>}
         </p>
-        <Link href={"/login"} className=" text-blue-500 underline">
+        <Link
+          href={"/login"}
+          className=" text-zinc-400 mt-3 hover:text-white underline "
+        >
           {" "}
           click here to login
         </Link>

@@ -12,7 +12,6 @@ interface IUser {
   height: string;
   weight: string;
   age: Date;
-  streak: number;
   weightMeasure: "kg" | "lb";
   heightMeasure: "cm" | "ft";
   followers: [string];
@@ -82,4 +81,14 @@ interface Challenge {
   challenges: [];
   progress: number;
   isCompleted: boolean;
+}
+
+interface INotification {
+  _id: string;
+  userId: string;
+  from: IUser;
+  type: string;
+  content: string;
+  status: "read" | "unread";
+  workoutId?: string;
 }

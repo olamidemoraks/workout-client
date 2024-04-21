@@ -3,7 +3,11 @@ import { Edit, Play, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { BiDotsVerticalRounded, BiSolidBarChartSquare } from "react-icons/bi";
+import {
+  BiDotsVerticalRounded,
+  BiShareAlt,
+  BiSolidBarChartSquare,
+} from "react-icons/bi";
 import { Menu as MuiMenu } from "@mui/material";
 import DeleteModal from "../Modal/DeleteModal";
 import useProfile from "@/hooks/useProfile";
@@ -11,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "react-query";
 import { deleteCustomWorkout } from "@/api/custom.workout";
 import { cn } from "@/libs/utils";
+import AddUserToWorkout from "./AddUserToWorkout";
 
 type PersonalizeWorkoutCardProps = {
   workout: ICustomWorkout;
@@ -27,7 +32,7 @@ const PersonalizeWorkoutCard: React.FC<PersonalizeWorkoutCardProps> = ({
     <div
       className={cn("flex flex-col ", {
         "w-full": isProfile,
-        "w-[300px]": !isProfile,
+        "sm:w-[300px] w-[200px]": !isProfile,
       })}
       key={workout?._id}
     >
@@ -49,7 +54,7 @@ const PersonalizeWorkoutCard: React.FC<PersonalizeWorkoutCardProps> = ({
           href={`/workout/${workout?._id}`}
           className="flex flex-row items-center justify-center w-full"
         >
-          <div className="h-[35px] w-[35px] flex items-center justify-center bg-zinc-700 group-hover:bg-blue-500 rounded-[13px] transition-colors duration-200 ">
+          <div className="h-[35px] w-[35px] group-hover:flex items-center justify-center hidden bg-blue-500 rounded-[13px] transition-colors duration-200 ">
             <Play size={17} fill="#fff" />
           </div>
         </Link>
@@ -88,6 +93,7 @@ export const Menu = ({ id, owner }: { id: string; owner: boolean }) => {
   };
   const router = useRouter();
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isShareOpen, setIsShareOpen] = React.useState(false);
 
   const { mutateAsync, isLoading } = useMutation({
     mutationFn: deleteCustomWorkout,
@@ -162,9 +168,12 @@ export const Menu = ({ id, owner }: { id: string; owner: boolean }) => {
             gap: 1,
             fontSize: 12,
           }}
-          onClick={handleClose}
+          onClick={() => {
+            handleClose();
+            setIsShareOpen(true);
+          }}
         >
-          <BiSolidBarChartSquare /> Analytics
+          <BiShareAlt size={17} /> Invite
         </MenuItem>
         <MenuItem
           sx={{
@@ -191,6 +200,13 @@ export const Menu = ({ id, owner }: { id: string; owner: boolean }) => {
         open={isOpen}
         handleAction={handleDeleteWorkout}
         isLoading={isLoading}
+      />
+      <AddUserToWorkout
+        id={id}
+        open={isShareOpen}
+        setClose={() => {
+          setIsShareOpen(false);
+        }}
       />
     </div>
   );

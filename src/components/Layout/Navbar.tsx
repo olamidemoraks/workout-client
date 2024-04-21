@@ -1,20 +1,25 @@
 import useProfile from "@/hooks/useProfile";
-import { Bell, Menu } from "lucide-react";
-import { FaCaretDown } from "react-icons/fa6";
-import React, { useEffect, useRef, useState } from "react";
-import UserStreak from "../Profile/Report/UserStreak";
-import { useQuery } from "react-query";
-import { BiMenu } from "react-icons/bi";
-import Sidebar from "./Sidebar";
 import { cn } from "@/libs/utils";
-import Image from "next/image";
-import NavbarMenu from "./NavbarMenu";
+import { Bell } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { BiMenu } from "react-icons/bi";
 import Battery from "../Common/Battery";
+import UserStreak from "../Common/UserStreak";
+import NavbarMenu from "./NavbarMenu";
+import Sidebar from "./Sidebar";
+import useStreak from "@/hooks/useStreak";
+import Notification from "../Notification/Index";
+import useNotification from "@/hooks/useNotification";
+import { useDispatch } from "react-redux";
+import { readNotification } from "@/redux/feature/socketSlice";
 
 const Navbar = () => {
-  const { profile, isLoading } = useProfile();
-
+  const { profile } = useProfile();
+  const { streak } = useStreak({ userId: profile?._id });
   const [openSidebar, setOpenSidebar] = useState(false);
+  const [openNotificationbar, setOpenNotificationbar] = useState(false);
+  const { newNotification } = useNotification();
+  const dispatch = useDispatch();
 
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -35,8 +40,12 @@ const Navbar = () => {
     };
   }, []);
 
+  const handleNoficationBar = () => {
+    setOpenNotificationbar(true);
+    dispatch(readNotification({}));
+  };
   return (
-    <div className="max-md:fixed top-0  w-full md:px-10  px-3 py-5 flex justify-between items-center bg-zinc-950/70 backdrop-blur-sm gap-5 z-20 border-b border-b-zinc-800">
+    <div className="relative max-md:fixed top-0  w-full md:px-10  px-3 py-5 flex justify-between items-center bg-zinc-950/70 backdrop-blur-sm gap-5 z-20 border-b border-b-zinc-800">
       <div className="flex gap-2 items-center  relative  max-[280px]:w-full ">
         <BiMenu
           onClick={() => setOpenSidebar((prev) => !prev)}
@@ -56,16 +65,27 @@ const Navbar = () => {
           <Sidebar setSideDrawer={setOpenSidebar} openMenu={openSidebar} />
         </div>
         <div className="md:block hidden">
-          <UserStreak streak={profile?.streak ?? 0} />
+          <UserStreak streak={streak ?? 0} />
         </div>
       </div>
       <div className="flex justify-between items-center gap-5">
-        <Battery />
-        <div className="relative hidden sm:block">
-          <Bell className="" />
-          <div className="h-2 w-2 bg-emerald-600 ring-4 ring-emerald-600/20 absolute rounded-full top-0 right-0" />
+        <div onClick={handleNoficationBar} className="relative  cursor-pointer">
+          <Bell size={26} className="" />
+          {newNotification && (
+            <div className="h-2 w-2 bg-emerald-600 ring-4 ring-emerald-600/20 absolute rounded-full top-0 right-0" />
+          )}
         </div>
-        <NavbarMenu profile={profile} />
+        <div className="flex items-start gap-2 bg-zinc-900 px-3 py-2 rounded-lg">
+          <NavbarMenu profile={profile} />
+          <div>
+            <p className=" text-sm font-semibold">{profile?.name}</p>
+            <p className="text-sm text-zinc-200">{profile?.username}</p>
+          </div>
+        </div>
+        <Notification
+          open={openNotificationbar}
+          setClose={() => setOpenNotificationbar(false)}
+        />
       </div>
     </div>
   );

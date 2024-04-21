@@ -14,8 +14,8 @@ const Layout = ({ children }: PropsWithChildren) => {
         <Protected>
           <div className="w-full h-full absolute md:mt-[2rem]  mt-[5rem]">
             <div className="absolute -top-10 z-[-2] min-h-[89vh] h-full w-full bg-[#000000] bg-[radial-gradient(#ffffff1f_1px,#09090b_1px)] bg-[size:20px_20px]"></div>
-            <br className=" sm:hidden block" />
-            <br className=" sm:hidden block" />
+            <br className=" md:hidden block" />
+            <br className=" md:hidden block" />
             {children}
           </div>
         </Protected>

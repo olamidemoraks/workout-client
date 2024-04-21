@@ -1,5 +1,5 @@
 "use client";
-import { Check, Info, Pause, Play, Plus, Redo2 } from "lucide-react";
+import { Check, Info, Pause, Play, Plus, RefreshCwIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -156,6 +156,9 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
     return num.toString().padStart(2, "0");
   }
 
+  if (exercises.length < 1) {
+    return <div></div>;
+  }
   return (
     <div className="lg:w-[80%]  w-full flex flex-col items-center justify-center gap-10 mb-8">
       {/* {endTime.toTimeString() + " & " + startTime.toTimeString()} */}
@@ -316,7 +319,7 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
                               }
                               className="px-3 py-2 sm:text-lg texl-base bg-zinc-800 hover:bg-zinc-700  rounded-md transition duration-200 flex items-center gap-2"
                             >
-                              <Redo2 color="#06b07a" />
+                              <RefreshCwIcon color="#06b07a" />
                             </button>
                           )}
                         </div>
@@ -346,17 +349,20 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
                         <button
                           onClick={handleNext}
                           className={cn(
-                            " py-2 text-base bg-gradient-to-r  rounded-md  transition duration-200 flex sm:flex-row flex-col-reverse items-center gap-2 group",
-                            {
-                              "scale-0": currentIndex === exercises?.length - 1,
-                            }
+                            " py-2 text-base bg-gradient-to-r  rounded-md  transition duration-200 flex sm:flex-row flex-col-reverse items-center gap-2 group"
+                            // {
+                            //   "scale-0": currentIndex === exercises?.length - 1,
+                            // }
                           )}
                         >
-                          Skip
+                          {currentIndex === exercises?.length - 1
+                            ? "End"
+                            : "Skip"}
                           <div className="h-[40px] w-[60px] relative">
                             <Image
                               src={
-                                exercises?.[currentIndex + 1]?.image?.url ?? ""
+                                exercises?.[currentIndex + 1]?.image?.url ??
+                                "/assets/gears.jpg"
                               }
                               alt="previous"
                               fill

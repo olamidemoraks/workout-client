@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "../Modal/Modal";
 import { Avatar, Box } from "@mui/material";
-import { Search } from "lucide-react";
+import { BadgeCheck, Loader2, Search, X } from "lucide-react";
 import {
   BiCheckCircle,
   BiSearch,
@@ -10,31 +10,64 @@ import {
 } from "react-icons/bi";
 import useProfile from "@/hooks/useProfile";
 import Image from "next/image";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { getFollowing } from "@/api/user";
+import {
+  customWorkoutInvite,
+  getInvitedUserFromCustomWorkout,
+} from "@/api/custom.workout";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 type AddUserToWorkoutProps = {
+  id: string;
   open: boolean;
   setClose: () => void;
 };
 
 const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
+  id,
   open,
   setClose,
 }) => {
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const { socket } = useSelector((state: any) => state.socket);
   const { data, isLoading } = useQuery({
     queryFn: getFollowing,
     queryKey: "friend",
     enabled: open,
   });
+  const { data: userInvitedData, isLoading: loadingInvitedUser } = useQuery({
+    queryFn: async () => await getInvitedUserFromCustomWorkout({ id }),
+    queryKey: "invitedfriend",
+    enabled: open,
+  });
+  const { mutateAsync, isLoading: SavingUpdate } = useMutation({
+    mutationFn: customWorkoutInvite,
+    onSuccess: () => {
+      toast.success("User have been sent invite");
+      socket.current.emit("send-notification", [...selectedUsers]);
+      setSelectedUsers([]);
+      setClose();
+    },
+    onError: (data) => {
+      console.log(data);
+    },
+  });
 
   const users = data?.followings as IUser[];
+  const invitedUsersId = userInvitedData?.users as string[];
 
-  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  // populate selectedUser with previous invite
+  // useEffect(() => {
+  //   if (userInvitedData) {
+  //     setSelectedUsers((prev) => [...userInvitedData?.users, ...prev]);
+  //   }
+  // }, [userInvitedData]);
 
   const handleSelectUser = (id: string) => {
+    if (invitedUsersId?.includes(id)) return;
     const userId = selectedUsers?.find((user) => user === id);
-    console.log({ userId, id });
     let currentSelectedUser = selectedUsers;
     if (userId) {
       currentSelectedUser = currentSelectedUser?.filter((id) => id !== userId);
@@ -44,7 +77,12 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
     }
   };
 
-  const addUserToWorkout = () => {};
+  const addUserToWorkout = () => {
+    const data = {
+      invitedUser: selectedUsers,
+    };
+    mutateAsync({ data, id });
+  };
   return (
     <Modal setClose={setClose} open={open}>
       <Box
@@ -55,9 +93,9 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
           transform: "translate(-50%, -50%)",
           p: 4,
         }}
-        className=" overflow-hidden bg-zinc-900 lg:w-[600px] sm:w-[80%] w-[99%] rounded-md   min-h-[500px] flex p-4 py-6 gap-3 flex-col"
+        className="relative overflow-hidden bg-zinc-900 lg:w-[600px] sm:w-[80%] w-[99%] rounded-md   min-h-[500px] flex p-4 py-6 gap-3 flex-col"
       >
-        <div className="flex items-center bg-zinc-800 rounded-md w-full p-2 gap-3">
+        {/* <div className="flex items-center bg-zinc-800 rounded-md w-full p-2 gap-3">
           <BiSearch className="opacity-80" size={21} />
           <input
             placeholder="Search"
@@ -65,40 +103,100 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
             className=" bg-transparent outline-none flex-1 w-full"
           />
           <BiUserPlus size={25} className="opacity-80" />
-        </div>
+        </div> */}
+        <X
+          size={22}
+          className="absolute top-5 right-2 cursor-pointer"
+          onClick={setClose}
+        />
+        <p className=" text-center text-zinc-300 text-lg">Invite a friend</p>
+        <div className="h-[1px] w-full bg-zinc-700" />
+        {(isLoading || loadingInvitedUser) && (
+          <div className="h-full w-full flex items-center justify-center">
+            <Loader2 className="animate-spin" />
+          </div>
+        )}
 
-        <div className=" grid grid-cols-3 max-h-[400px] scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-blue-600/75  overflow-y-auto  gap-y-5 w-full my-3 pb-7 ">
-          {users?.map((user, index) => (
-            <div
-              key={index}
-              className="flex flex-col   gap-2 items-center text-center"
-            >
+        <p>Members</p>
+        <div className=" border-b border-zinc-700 flex gap-2 scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-blue-600/75  overflow-y-auto  w-full my-2 pb-2 ">
+          {/* already members */}
+
+          {users
+            ?.filter((u) => invitedUsersId?.includes(u._id))
+            ?.map((user, index) => (
               <div
-                className="md:h-[70px] md:w-[70px] h-[60px] w-[60px] relative cursor-pointer"
-                onClick={() => handleSelectUser(user?._id)}
+                key={index}
+                className="flex flex-col gap-2 items-center text-center"
               >
-                {user?.avatar?.url ? (
-                  <Image
-                    src={user?.avatar?.url}
-                    alt={user?.name}
-                    fill
-                    className="absolute rounded-full object-cover"
-                  />
-                ) : (
-                  <Avatar sx={{ height: "100%", width: "100%" }} />
-                )}
+                <div
+                  className="md:h-[40px] md:w-[40px] h-[35px] w-[35px] relative cursor-pointer"
+                  onClick={() => handleSelectUser(user?._id)}
+                >
+                  {user?.avatar?.url ? (
+                    <Image
+                      src={user?.avatar?.url}
+                      alt={user?.name}
+                      fill
+                      className="absolute rounded-full object-cover"
+                    />
+                  ) : (
+                    <Avatar sx={{ height: "100%", width: "100%" }} />
+                  )}
 
-                {selectedUsers?.includes(user?._id) ? (
-                  <BiSolidCheckCircle
-                    className=" absolute bottom-1 -right-2 fill-blue-700 "
-                    size={25}
-                  />
-                ) : null}
+                  {selectedUsers?.includes(user?._id) ||
+                  invitedUsersId?.includes(user?._id) ? (
+                    <BiSolidCheckCircle
+                      className=" absolute -bottom-1 -right-2 fill-blue-700 "
+                      size={17}
+                    />
+                  ) : null}
+                  {invitedUsersId?.includes(user?._id) ? (
+                    <BadgeCheck
+                      className=" absolute -bottom-1 -right-2 fill-blue-700 "
+                      size={17}
+                    />
+                  ) : null}
+                </div>
+
+                <p className="text-xs max-w-[70px] truncate">{user?.name}</p>
               </div>
+            ))}
+        </div>
+        <div className=" grid grid-cols-3 max-h-[400px] scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-blue-600/75  overflow-y-auto  gap-y-5 w-full my-3 pb-7 ">
+          {/* not members */}
+          {users
+            ?.filter((u) => !invitedUsersId?.includes(u._id))
+            ?.map((user, index) => (
+              <div
+                key={index}
+                className="flex flex-col   gap-2 items-center text-center"
+              >
+                <div
+                  className="md:h-[70px] md:w-[70px] h-[60px] w-[60px] relative cursor-pointer"
+                  onClick={() => handleSelectUser(user?._id)}
+                >
+                  {user?.avatar?.url ? (
+                    <Image
+                      src={user?.avatar?.url}
+                      alt={user?.name}
+                      fill
+                      className="absolute rounded-full object-cover"
+                    />
+                  ) : (
+                    <Avatar sx={{ height: "100%", width: "100%" }} />
+                  )}
 
-              <p className="">{user?.name}</p>
-            </div>
-          ))}
+                  {selectedUsers?.includes(user?._id) ? (
+                    <BiSolidCheckCircle
+                      className=" absolute bottom-1 -right-2 fill-blue-700 "
+                      size={25}
+                    />
+                  ) : null}
+                </div>
+
+                <p className="">{user?.name}</p>
+              </div>
+            ))}
         </div>
 
         <br />
@@ -111,8 +209,16 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
             className="w-full p-3 bg-zinc-800/75 h-[70px]"
             onClick={addUserToWorkout}
           >
-            <button className=" flex gap-2 items-center justify-center w-full text-center bg-blue-600 rounded-md p-2">
-              Invite friends <BiUserPlus />
+            <button
+              disabled={SavingUpdate === true ? true : false}
+              className="disabled:opacity-50 flex gap-2 items-center justify-center w-full text-center bg-blue-600 rounded-md p-2"
+            >
+              Invite friends{" "}
+              {SavingUpdate ? (
+                <Loader2 className=" animate-spin" />
+              ) : (
+                <BiUserPlus />
+              )}
             </button>
           </div>
         </div>

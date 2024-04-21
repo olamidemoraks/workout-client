@@ -14,6 +14,7 @@ const PersonalWorkoutPreview: React.FC<PersonalWorkoutPreviewProps> = ({
 }) => {
   const { data, isLoading } = useQuery({
     queryFn: async () => await getCustomWorkout({ id }),
+    queryKey: "preview",
     enabled: !!id,
   });
 

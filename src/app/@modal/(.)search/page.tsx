@@ -22,9 +22,9 @@ const Page = () => {
           width: 400,
           p: 4,
         }}
-        className=" bg-zinc-900 rounded-md w-fit    flex items-center justify-center p-4 py-6 gap-3 flex-col"
+        className=" bg-zinc-900 rounded-md w-full sm:w-[600px]   flex items-center justify-center p-4 py-6 gap-3 flex-col"
       >
-        <div className="w-[500px] h-full bg-zinc-900 p-2 min-h-[70vh] rounded ">
+        <div className="h-full w-full bg-zinc-900 p-2 min-h-[70vh] rounded ">
           <Users />
         </div>
       </Box>

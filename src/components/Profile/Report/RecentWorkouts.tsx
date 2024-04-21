@@ -1,11 +1,9 @@
+import CustomLoader from "@/components/Common/CustomLoader";
 import Empty from "@/components/Common/Empty";
 import useRecentWorkout from "@/hooks/useRecentWorkout";
-import { cn } from "@/libs/utils";
 import { alphabetsColor } from "@/utils/data";
-import { Dot } from "lucide-react";
 import Image from "next/image";
-import React, { useMemo } from "react";
-import { format } from "timeago.js";
+import { useMemo } from "react";
 
 const RecentWorkouts = () => {
   const { data, isLoading } = useRecentWorkout();
@@ -14,9 +12,24 @@ const RecentWorkouts = () => {
     return data?.activities?.slice(0, 5);
   }, [data]);
 
+  const icons: { [key: string]: string } = {
+    abs: "/assets/icons/abs.png",
+    arm: "/assets/icons/arm.png",
+    back: "/assets/icons/back.webp",
+    chest: "/assets/icons/chest.png",
+    leg: "/assets/icons/leg.png",
+    challenge: "/assets/icons/challenge.png",
+    custom: "/assets/icons/calender.png",
+  };
+
   return (
     <div className=" flex flex-col gap-4  w-full">
       <p className=" uppercase font-semibold">Recent activity</p>
+
+      {isLoading && (
+        <CustomLoader amount={5} height="h-[60px]" weight="w-full" />
+      )}
+
       {(recentWorkoutActivities?.length === 0 || !data?.activities) && (
         <Empty />
       )}
@@ -26,7 +39,7 @@ const RecentWorkouts = () => {
             <div
               key={activity}
               className={
-                "relative flex items-center justify-between w-full bg-zinc-900 p-3 px-6 rounded   "
+                "relative flex items-center justify-between w-full bg-zinc-900 p-3 px-4 rounded   "
               }
             >
               <div
@@ -39,10 +52,9 @@ const RecentWorkouts = () => {
                 }`}
               />
               <div>
-                <div className=" font-semibold capitalize flex items-center">
-                  Last workout <Dot />
+                <p className=" font-semibold capitalize flex items-center">
                   {activity?.workoutName}
-                </div>
+                </p>
                 <div className="flex items-center text-sm text-neutral-400">
                   <p className="text-neutral-400">
                     {new Date(activity?.createdAt).toLocaleString("default", {
@@ -53,16 +65,16 @@ const RecentWorkouts = () => {
                       minute: "numeric",
                     })}
                   </p>
-                  <Dot className="fill-neutral-400" color="#a3a3a3" />
-                  <p className="text-neutral-400">
-                    {(activity?.totalTime / 60).toFixed(0) +
-                      ":" +
-                      (activity?.totalTime % 60)}{" "}
-                    min
-                  </p>
                 </div>
+                <p className="text-neutral-400 text-sm">
+                  Duration{" "}
+                  {(activity?.totalTime / 60).toFixed(0) +
+                    ":" +
+                    (activity?.totalTime % 60)}
+                  min
+                </p>
               </div>
-              <div className="sm:block hidden">
+              {/* <div className="lg:block md:hidden sm:block hidden">
                 <p
                   className={` capitalize text-neutral-300 px-2 rounded-xl text-sm ${
                     alphabetsColor[
@@ -74,6 +86,25 @@ const RecentWorkouts = () => {
                 >
                   {activity?.workoutType}
                 </p>
+              </div> */}
+
+              <div className="h-[40px] rounded min-w-[40px] bg-white flex items-center justify-center relative">
+                <Image
+                  src={
+                    icons[
+                      activity?.workoutType === "default"
+                        ? `${(activity?.workoutName as string)
+                            .split(" ")?.[0]
+                            .toLowerCase()}`
+                        : activity?.workoutType === "challenge"
+                        ? "challenge"
+                        : "custom"
+                    ]
+                  }
+                  alt=""
+                  fill
+                  className=" absolute w-full h-full"
+                />
               </div>
             </div>
           ))}

@@ -9,6 +9,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { BiSearch, BiUserPlus } from "react-icons/bi";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
 
 type UsersProps = {};
 
@@ -17,7 +18,10 @@ const Users: React.FC<UsersProps> = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [name, setName] = useState("");
+  const { socket } = useSelector((state: any) => state.socket);
+  const [followingId, setFollowingId] = useState("");
 
+  console.log({ socket });
   const queryClient = useQueryClient();
   const {
     profile,
@@ -39,6 +43,9 @@ const Users: React.FC<UsersProps> = () => {
     mutationFn: followUser,
     onSuccess: () => {
       reloadProfile();
+      if (followingId) {
+        socket.current.emit("send-notification", [followingId]);
+      }
     },
     onError: (data: any) => {
       toast.error(data?.message);
@@ -67,6 +74,7 @@ const Users: React.FC<UsersProps> = () => {
   }, [search]);
 
   const handleFollowAndUnfollowAction = (id: string, following: boolean) => {
+    setFollowingId(id);
     if (following) {
       unfollow({ id });
     } else {

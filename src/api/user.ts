@@ -116,6 +116,17 @@ export const userProfile = async () => {
     throw new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
+export const getStreak = async ({ id }: { id: string }) => {
+  try {
+    const response = await axios.get(`${baseUrl}/get-streak/${id}`, {
+      withCredentials: true,
+      headers,
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
 
 export const checkUser = async ({ value }: any) => {
   try {

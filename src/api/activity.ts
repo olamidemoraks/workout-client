@@ -44,3 +44,31 @@ export const recentRctivity = async () => {
     throw new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
+export const getNotifications = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/notification`, {
+      withCredentials: true,
+      headers,
+    });
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
+export const updateNotifications = async ({ id }: { id: string }) => {
+  try {
+    const response = await axios.put(
+      `${baseUrl}/notification/${id}`,
+      {},
+      {
+        withCredentials: true,
+        headers,
+      }
+    );
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};

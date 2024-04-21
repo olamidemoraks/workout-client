@@ -22,7 +22,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
         alt={challenge?.title}
         height={700}
         width={550}
-        className=" absolute object-cover rounded-xl h-full w-full brightness-[.6] transition-all group-hover:brightness-90 "
+        className=" absolute object-cover rounded-xl h-full w-full brightness-[.6] transition-all  "
       />
       <div className="flex flex-col justify-between h-full w-full  absolute md:p-6 p-2">
         <div>

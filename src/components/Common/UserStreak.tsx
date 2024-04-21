@@ -1,17 +1,19 @@
 import { cn } from "@/libs/utils";
 import { Zap } from "lucide-react";
+import { BiSolidZap } from "react-icons/bi";
 import Image from "next/image";
 import React from "react";
-import { useQuery } from "react-query";
+import Battery from "./Battery";
 
 interface IUserStreak {
   streak: number;
   isProfile?: boolean;
   initials?: string;
 }
+
 const UserStreak = ({ streak, initials, isProfile }: IUserStreak) => {
   return (
-    <div className="flex items-end gap-1 flex-row z-10 group cursor-pointer relative ">
+    <div className="flex items-center gap-1 flex-row z-10 group cursor-pointer relative ">
       <div className="h-[50px] w-[50px] rounded-full  animate-pulse  p-1 flex items-center justify-center z-20">
         <div
           className={cn(
@@ -48,11 +50,10 @@ const UserStreak = ({ streak, initials, isProfile }: IUserStreak) => {
       <div>
         <div
           className={cn(
-            "bg-gradient-to-r transition-colors duration-300 group-hover:from-blue-700 group-hover:to-cyan-700 text-[9px] text-white w-fit p-[2px] px-1 rounded-t-sm -skew-x-12 font-semibold uppercase tracking-wider",
+            "transition-colors duration-300 from-blue-700 to-cyan-700 text-[9px] text-white w-fit p-[2px] px-1 rounded-t-sm -skew-x-12 font-semibold uppercase tracking-wider",
             {
-              "group-hover:from-red-700 group-hover:to-amber-700 text-[9px]":
-                streak >= 8,
-              "group-hover:from-orange-900 group-hover:to-orange-800 text-[12px]":
+              "from-red-700 to-amber-700 text-[9px]": streak >= 8,
+              "from-orange-900 to-orange-800 text-[12px]":
                 streak >= 6 && streak < 8,
             }
           )}
@@ -61,11 +62,10 @@ const UserStreak = ({ streak, initials, isProfile }: IUserStreak) => {
         </div>
         <div
           className={cn(
-            " relative h-[22px] min-w-[60px] transition-colors duration-300 bg-gradient-to-r group-hover:from-blue-700 group-hover:to-cyan-700 -skew-x-[16deg] mb-1 -ml-2  z-10  pl-1 p-[2px] pr-1 rounded-sm ",
+            " relative h-[22px] min-w-[60px] transition-colors duration-300 bg-gradient-to-r from-blue-700 to-cyan-700 -skew-x-[16deg] -ml-2  z-10  pl-1 p-[2px] pr-1 rounded-sm ",
             {
-              "group-hover:from-red-700 group-hover:to-amber-700 text-[9px]":
-                streak >= 8,
-              "group-hover:from-orange-900 group-hover:to-orange-800 text-[9px]":
+              "from-red-700 to-amber-700 text-[9px]": streak >= 8,
+              "from-orange-900 to-orange-800 text-[9px]":
                 streak >= 6 && streak < 8,
             }
           )}
@@ -89,6 +89,19 @@ const UserStreak = ({ streak, initials, isProfile }: IUserStreak) => {
                 />
               ))}
           </div>
+        </div>
+
+        <div
+          className={cn(
+            "h-fit w-[50%] items-center flex gap-1 text-[9px]p-[2px] -ml-2 px-1 rounded-full",
+            {
+              "from-red-700 to-amber-700 text-[9px]": streak >= 8,
+              "from-orange-900 to-orange-800 text-[12px]":
+                streak >= 6 && streak < 8,
+            }
+          )}
+        >
+          <Battery />
         </div>
       </div>
       <div

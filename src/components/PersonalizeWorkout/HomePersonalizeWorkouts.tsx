@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/libs/utils";
 import DeleteModal from "../Modal/DeleteModal";
 import PersonalizeWorkoutCard from "./PersonalizeWorkoutCard";
+import CustomLoader from "../Common/CustomLoader";
 
 const HomePersonalizeWorkouts = () => {
   const { profile } = useProfile();
@@ -38,13 +39,23 @@ const HomePersonalizeWorkouts = () => {
   return (
     <div className="flex gap-4 ">
       <div className="flex overflow-x-auto w-full gap-4 scrollbar-thumb-zinc-900 scrollbar-thin scrollbar-track-transparent pb-4 relative snap-x">
-        {workouts?.map((workout) => (
-          <PersonalizeWorkoutCard
-            workout={workout}
-            key={workout._id}
-            userId={profile?._id}
+        {isLoading ? (
+          <CustomLoader
+            amount={4}
+            height="h-[170px]"
+            weight="sm:min-w-[300px] min-w-[200px]"
           />
-        ))}
+        ) : (
+          <>
+            {workouts?.map((workout) => (
+              <PersonalizeWorkoutCard
+                workout={workout}
+                key={workout._id}
+                userId={profile?._id}
+              />
+            ))}
+          </>
+        )}
       </div>
       {/* <Link
         href={"/workouts/create"}

@@ -1,9 +1,10 @@
+import ReactQueryProvider from "@/components/Providers/ReactQueryProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import ReactQueryProvider from "@/components/Providers/ReactQueryProvider";
 import { Toaster } from "react-hot-toast";
-import Loader from "@/components/Providers/Loader";
+import "./globals.css";
+import Provider from "@/components/Providers/Provider";
+// import Loader from "@/components/Providers/Loader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,10 +25,10 @@ export default function RootLayout({
       <body className=" bg-zinc-950 overflow-x-hidden ">
         <Toaster position="top-center" />
         <ReactQueryProvider>
-          {/* <Loader> */}
-          {children}
-          {/* </Loader> */}
-          {modal}
+          <Provider>
+            {children}
+            {modal}
+          </Provider>
         </ReactQueryProvider>
       </body>
     </html>

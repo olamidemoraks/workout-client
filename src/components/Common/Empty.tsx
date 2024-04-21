@@ -10,13 +10,12 @@ const Empty: React.FC<EmptyProps> = ({ image, title }) => {
   return (
     <div className="w-full flex items-center flex-col gap-2">
       <Image
-        src={image ? image : "/assets/groups/abs.png"}
-        width={100}
-        height={100}
-        alt="anatomy"
-        className=" opacity-70"
+        src={image ? image : "/assets/empty.png"}
+        width={250}
+        height={250}
+        alt="empty"
       />
-      <p>{title ? title : "No records"}</p>
+      <p className=" text-2xl text-zinc-200">{title ? title : "No records"}</p>
     </div>
   );
 };

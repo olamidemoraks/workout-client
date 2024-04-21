@@ -17,14 +17,12 @@ const Challenges = () => {
     (challenge: Challenge) => challenge.progress === null
   );
 
-  console.log({ recentChallenges });
-
   return (
     <div className="px-10 mb-8">
       <p className=" text-2xl font-semibold uppercase">Challenges</p>
       <div className="mt-4 flex flex-col gap-3">
         <p className=" font-semibold text-neutral-300">Jump back in</p>
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
+        <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-10">
           {recentChallenges?.map((challenge) => (
             <ChallengeCard challenge={challenge} key={challenge?._id} />
           ))}

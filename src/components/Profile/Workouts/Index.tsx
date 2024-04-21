@@ -19,7 +19,8 @@ const Workouts = () => {
 
   const workouts: ICustomWorkout[] = data?.workouts ?? [];
 
-  if (workouts?.length === 0) return <Empty />;
+  if (workouts?.length === 0)
+    return <Empty title={`You haven't created any \n personal workout yet!`} />;
   return (
     <div className="grid sm:grid-cols-3 grid-cols-2 w-full gap-1 md:gap-3  min-h-[60vh]">
       {workouts?.map((workout) => (
