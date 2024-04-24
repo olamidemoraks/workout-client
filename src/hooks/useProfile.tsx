@@ -10,7 +10,7 @@ const useProfile = () => {
     queryKey: "profile",
     refetchOnWindowFocus: false,
     onError: (data: any) => {
-      toast.error(String(data?.message));
+      // toast.error(String(data?.message));
     },
   });
 
