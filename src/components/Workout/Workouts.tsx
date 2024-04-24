@@ -50,11 +50,17 @@ const Workouts = () => {
     <div className="md:px-10 px-5 mb-10 flex flex-col gap-10">
       <p className=" text-2xl font-semibold uppercase">Workouts</p>
       {workouts?.map((categoryWorkout, idx) => (
-        <WorkoutSection
+        <div
+          className={`${
+            idx <= workouts?.length - 1 ? "border-b border-zinc-800" : ""
+          } pb-8`}
           key={idx}
-          header={Object.keys(categoryWorkout)?.[0]}
-          workouts={Object.values(categoryWorkout)?.[0]}
-        />
+        >
+          <WorkoutSection
+            header={Object.keys(categoryWorkout)?.[0]}
+            workouts={Object.values(categoryWorkout)?.[0]}
+          />
+        </div>
       ))}
     </div>
   );

@@ -224,7 +224,7 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
               ) : (
                 <>
                   <div className="flex flex-col w-[95%] items-center justify-center gap-7">
-                    <div className="relative xl:w-[50%] lg:w-[65%] h-[300px] sm:w-full  w-[100vw] flex items-center justify-center">
+                    <div className="relative xl:w-[50%] lg:w-[65%] h-fit sm:w-full  w-[100vw] flex items-center justify-center">
                       <Image
                         src={currentExercise?.image?.url as string}
                         alt={currentExercise?.name as string}

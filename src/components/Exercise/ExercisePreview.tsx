@@ -55,20 +55,19 @@ const ExercisePreview: React.FC<ExercisePreviewProps> = ({
                             // })}
                             className={`${
                               index < workout?.difficult_level
-                                ? difficultyColor[workout?.difficult_level].fill
+                                ? "fill-white"
                                 : "fill-neutral-600"
                             }`}
                             size={22}
                             color={
                               index < workout?.difficult_level
-                                ? difficultyColor[workout?.difficult_level]
-                                    .border
+                                ? "#fff"
                                 : "#525252"
                             }
                           />
                         ))}
                     </div>
-                    <div className="flex items-center gap-1 md:items-start font-semibold mt-1">
+                    <div className="flex items-center  md:items-start font-semibold mt-1">
                       <div className="flex items-center gap-1 text-neutral-300">
                         <AlarmCheck />
                         {workout?.estimate_time} min

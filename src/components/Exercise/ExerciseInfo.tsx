@@ -30,14 +30,14 @@ const ExerciseInfo: React.FC<ExerciseInfoProps> = ({
         className=" bg-zinc-900 lg:w-[600px] sm:w-[80%] w-[99%] rounded-md   min-h-[200px] flex p-4 py-6 gap-3 flex-col"
       >
         <div className="w-full flex justify-between mb-2">
-          <p>Exercise Info</p>
+          <p className="text-xl">Exercise Info</p>
           <BiX
             className=" cursor-pointer text-emerald-500"
             size={27}
             onClick={setClose}
           />
         </div>
-        <div className="flex md:flex-row flex-col gap-2">
+        <div className="grid grid-cols-1 gap-2">
           <div className="md:w-fit w-full flex md:justify-start justify-center">
             <Image
               width={200}
