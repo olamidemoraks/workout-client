@@ -24,7 +24,7 @@ const ChallengeWorkout: React.FC<ChallengeWorkoutProps> = ({ id }) => {
     <div className="flex sm:flex-row flex-col gap-2  justify-center w-full">
       <div
         onClick={() => router.back()}
-        className="sm:ml-2 ml-1 bg-zinc-900 rounded-lg h-[40px] w-[40px] flex items-center justify-center cursor-pointer hover:bg-blue-700"
+        className="sm:ml-2 ml-[5px] bg-zinc-900 rounded-lg h-[40px] w-[40px] flex items-center justify-center cursor-pointer hover:bg-blue-700"
       >
         <ArrowLeft />
       </div>
