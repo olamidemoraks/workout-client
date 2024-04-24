@@ -51,6 +51,21 @@ export const startChallenge = async (id: string) => {
     throw new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
+export const pinChallenge = async ({ id }: { id: string }) => {
+  try {
+    const response = await axios.put(
+      `${baseUrl}/pin-challenge`,
+      { id },
+      {
+        withCredentials: true,
+        headers,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
 
 export const completedChallenge = async ({
   challengeId,

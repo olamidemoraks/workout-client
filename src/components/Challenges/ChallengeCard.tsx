@@ -1,20 +1,46 @@
-import { ArrowRight, Check } from "lucide-react";
+import { pinChallenge } from "@/api/challenge";
+import useProfile from "@/hooks/useProfile";
+import { ArrowRight, Check, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import toast from "react-hot-toast";
+import { BiSolidPin } from "react-icons/bi";
 import { FaCrown } from "react-icons/fa6";
-import { GiLaurelCrown } from "react-icons/gi";
+import { useMutation } from "react-query";
 
 type ChallengeCardProps = {
   challenge: Challenge;
+  showPin?: boolean;
 };
 
-const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
+const ChallengeCard: React.FC<ChallengeCardProps> = ({
+  challenge,
+  showPin,
+}) => {
   const percentageCompleted =
     ((challenge?.progress + (challenge?.isCompleted ? 0 : -1)) /
       challenge?.days) *
     100; // calculate the percentage complete
   const strokeDashOffset = 158 + (240 * (100 - percentageCompleted)) / 100;
+
+  const { profile, refetch } = useProfile();
+  const { mutate, isLoading } = useMutation({
+    mutationFn: pinChallenge,
+    onSuccess: (data: { challenges: Array<any> }) => {
+      refetch();
+      if (data.challenges?.includes(challenge?._id)) {
+        toast.success("Challenge pinned to home");
+      } else {
+        toast.success("Challenge unpinned from home");
+      }
+    },
+  });
+
+  const handlePinningChallenge = (id: string) => {
+    mutate({ id });
+  };
+
   return (
     <div className="group border border-zinc-800 sm:h-[250px] h-[200px] w-full relative bg-gradient-to-br to-zinc-950 from-zinc-900 rounded-xl">
       <Image
@@ -22,8 +48,29 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
         alt={challenge?.title}
         height={700}
         width={550}
-        className=" absolute object-cover rounded-xl h-full w-full brightness-[.6] transition-all  "
+        className=" absolute object-cover rounded-xl h-full w-full brightness-75 transition-all  "
       />
+
+      {showPin && (
+        <div
+          onClick={() => handlePinningChallenge(challenge?._id)}
+          className="absolute top-2 right-2 cursor-pointer rounded-full backdrop-blur-md hover:bg-neutral-500/40 p-2 group flex items-center justify-center z-20 "
+        >
+          {isLoading ? (
+            <Loader2 className=" animate-spin" size={23} />
+          ) : (
+            <BiSolidPin
+              className={` rotate-[54deg] ${
+                profile?.challengePin?.includes(challenge?._id)
+                  ? "fill-red-500"
+                  : ""
+              }  group-hover:scale-105 `}
+              size={23}
+            />
+          )}
+        </div>
+      )}
+
       <div className="flex flex-col justify-between h-full w-full  absolute md:p-6 p-2">
         <div>
           <p className="font-bold uppercase md:text-3xl text-2xl ">

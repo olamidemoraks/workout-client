@@ -6,26 +6,56 @@ import Image from "next/image";
 import { useQuery } from "react-query";
 import { getCategory } from "@/api/workout";
 import FeatureCategories from "./FeatureCategories";
+import { getAllWorkout } from "../../api/workout";
+import WorkoutSection from "./WorkoutSection";
+import CustomLoader from "../Common/CustomLoader";
 
 const Workouts = () => {
   const { data, isLoading } = useQuery({
-    queryFn: getCategory,
-    queryKey: "category",
+    queryFn: getAllWorkout,
+    queryKey: "workouts",
+    refetchOnReconnect: false,
   });
 
-  const featureCategory = data?.categories?.filter(
-    (category: any) => category?.feature === true
-  );
+  const workouts: Array<{ [key: string]: Array<any> }> = data?.workout;
 
-  return (
-    <div className="px-10 mb-10">
-      <p className=" text-2xl font-semibold uppercase mb-5">Workout Category</p>
-
-      <div className="  w-full relative flex overflow-x-scroll pb-4 scrollbar-thumb-transparent scrollbar-thin scrollbar-track-transparent">
-        <ul className="flex flex-row  flex-nowrap gap-4 w-full snap-x">
-          <FeatureCategories />
-        </ul>
+  if (isLoading) {
+    return (
+      <div className="md:px-10 px-5 mb-10 flex flex-col gap-10">
+        <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 sm:gap-x-8 gap-y-8">
+          <CustomLoader
+            height="h-[200px]"
+            weight="max-w-[500px] w-full"
+            amount={3}
+          />
+        </div>
+        <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 sm:gap-x-8 gap-y-8">
+          <CustomLoader
+            height="h-[200px]"
+            weight="max-w-[500px] w-full"
+            amount={3}
+          />
+        </div>
+        <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 sm:gap-x-8 gap-y-8">
+          <CustomLoader
+            height="h-[200px]"
+            weight="max-w-[500px] w-full"
+            amount={3}
+          />
+        </div>
       </div>
+    );
+  }
+  return (
+    <div className="md:px-10 px-5 mb-10 flex flex-col gap-10">
+      <p className=" text-2xl font-semibold uppercase">Workouts</p>
+      {workouts?.map((categoryWorkout, idx) => (
+        <WorkoutSection
+          key={idx}
+          header={Object.keys(categoryWorkout)?.[0]}
+          workouts={Object.values(categoryWorkout)?.[0]}
+        />
+      ))}
     </div>
   );
 };

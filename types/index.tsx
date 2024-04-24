@@ -16,6 +16,7 @@ interface IUser {
   heightMeasure: "cm" | "ft";
   followers: [string];
   following: [string];
+  challengePin: Array<string>;
 }
 
 interface IWorkout {
@@ -35,7 +36,12 @@ interface IWorkout {
 
 interface ICustomWorkout {
   _id: string;
-  creatorId: string;
+  creatorId: {
+    _id: string;
+    username: string;
+    name: string;
+    avatar: { public_id: string; url: string };
+  };
   exercises: [IExercise];
   location: string;
   name: string;

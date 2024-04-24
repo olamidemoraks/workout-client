@@ -66,7 +66,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
           src={`${workout?.image?.url}`}
           alt={workout?.name}
           fill
-          className=" w-full h-full  object-cover rounded-md group-hover:brightness-90  -z-[2]"
+          className=" w-full h-full  object-cover rounded-md group-hover:brightness-100 brightness-75  -z-[2]"
         />
         {/* <div className="absolute top-3 right-3 flex gap-2 items-center">
     <small className="font-semibold">Owner</small>
@@ -80,16 +80,10 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
           </div>
         </Link>
       </div>
-      <div className="h-fit w-full flex justify-between items-center md:mt-2 mt-1">
-        <div className="flex flex-col">
-          <p className="font-semibold md:text-lg text-sm  uppercase  text-center">
-            {workout?.name} ({levels[workout?.difficult_level]})
-          </p>
-          {/* <div className="flex gap-1 items-center ">
-            <Clock color="#3b82f6" size={15} />
-            <p className="text-neutral-300">{workout.estimate_time} min</p>
-          </div> */}
-        </div>
+      <div className="h-fit w-full flex justify-between items-center mt-4">
+        <p className="font-semibold text-lg   uppercase  text-center">
+          {workout?.name} ({levels[workout?.difficult_level]})
+        </p>
 
         <div className="flex items-center">
           {Array(3)
@@ -105,7 +99,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
                     ? difficultyColor[workout?.difficult_level].fill
                     : "fill-neutral-600"
                 }`}
-                size={13 + index * 2}
+                size={16 + index * 2}
                 color={
                   index < workout?.difficult_level
                     ? difficultyColor[workout?.difficult_level].border

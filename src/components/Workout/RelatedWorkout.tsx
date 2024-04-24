@@ -15,6 +15,7 @@ const RelatedWorkout: React.FC<RelatedWorkoutProps> = ({ name }) => {
     queryFn: async () => {
       return await freemiumWorkout(name);
     },
+    queryKey: "relatedWorkout",
   });
 
   const workouts: IWorkout[] = data?.workouts;

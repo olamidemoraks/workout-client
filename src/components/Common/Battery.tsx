@@ -37,7 +37,7 @@ const Battery = () => {
         .fill(0)
         .map((_, i) => (
           <div
-            className={`w-3 rounded-full h-3 ${
+            className={`w-2 rounded-full h-2 ${
               chargeLeft > i ? `${chargeColor[chargeLeft]}` : " bg-transparent"
             } `}
             key={i}

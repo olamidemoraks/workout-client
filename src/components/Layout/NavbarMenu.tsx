@@ -59,7 +59,7 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
               ] ?? "bg-zinc-900/60"
             }  h-10 w-10 rounded-full flex items-center justify-center text-xl uppercase font-semibold`}
           >
-            {profile?.username?.substring(0, 1)}
+            {profile?.name?.substring(0, 1)}
           </div>
         )}
       </div>

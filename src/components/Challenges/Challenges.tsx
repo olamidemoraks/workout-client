@@ -22,18 +22,18 @@ const Challenges = () => {
       <p className=" text-2xl font-semibold uppercase">Challenges</p>
       <div className="mt-4 flex flex-col gap-3">
         <p className=" font-semibold text-neutral-300">Jump back in</p>
-        <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-10">
+        <div className="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
           {recentChallenges?.map((challenge) => (
-            <ChallengeCard challenge={challenge} key={challenge?._id} />
+            <ChallengeCard challenge={challenge} showPin key={challenge?._id} />
           ))}
         </div>
       </div>
 
       <div className="mt-10 flex flex-col gap-3 ">
         <p className=" font-semibold text-neutral-300">Others</p>
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
+        <div className="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
           {allChallenges?.map((challenge) => (
-            <ChallengeCard challenge={challenge} key={challenge?._id} />
+            <ChallengeCard challenge={challenge} showPin key={challenge?._id} />
           ))}
         </div>
       </div>

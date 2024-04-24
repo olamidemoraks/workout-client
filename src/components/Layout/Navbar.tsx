@@ -82,10 +82,10 @@ const Navbar = () => {
             <p className="text-sm text-zinc-200">{profile?.username}</p>
           </div>
         </div>
-        <Notification
+        {/* <Notification
           open={openNotificationbar}
           setClose={() => setOpenNotificationbar(false)}
-        />
+        /> */}
       </div>
     </div>
   );

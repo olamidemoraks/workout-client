@@ -1,4 +1,4 @@
-import { MenuItem } from "@mui/material";
+import { Avatar, MenuItem } from "@mui/material";
 import { Edit, Play, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,9 +13,14 @@ import DeleteModal from "../Modal/DeleteModal";
 import useProfile from "@/hooks/useProfile";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "react-query";
-import { deleteCustomWorkout } from "@/api/custom.workout";
+import {
+  customWorkoutInviteResponse,
+  deleteCustomWorkout,
+} from "@/api/custom.workout";
 import { cn } from "@/libs/utils";
 import AddUserToWorkout from "./AddUserToWorkout";
+import { alphabetsColor } from "@/utils/data";
+import toast from "react-hot-toast";
 
 type PersonalizeWorkoutCardProps = {
   workout: ICustomWorkout;
@@ -61,20 +66,41 @@ const PersonalizeWorkoutCard: React.FC<PersonalizeWorkoutCardProps> = ({
       </div>
       <div className="h-fit w-full flex justify-between md:mt-3 mt-1">
         <div className="flex gap-3 items-center">
-          {/* <div className="relative h-[30px] min-w-[30px] ">
-            <Image
-              src={`${profile?.avatar?.url}`}
-              fill
-              className="h-full w-full  rounded-full ring-2 ring-emerald-400"
-              alt="profile image"
-            />
-          </div> */}
-          <p className="font-semibold md:text-lg text-sm  uppercase  text-center">
-            {workout?.name}
-          </p>
+          <div className="relative h-[30px] min-w-[30px] ">
+            {workout?.creatorId?.avatar?.public_id ? (
+              <Image
+                src={`${workout?.creatorId?.avatar?.url}`}
+                fill
+                className="h-full w-full  rounded-full ring-2 ring-emerald-400"
+                alt="profile image"
+              />
+            ) : (
+              <div
+                className={`${
+                  alphabetsColor[
+                    workout?.creatorId?.name
+                      .split(" ")?.[0]
+                      .substring(0, 1)
+                      .toUpperCase()
+                  ] ?? "bg-zinc-900/60"
+                }  h-10 w-10 rounded-full flex items-center justify-center text-xl uppercase font-semibold`}
+              >
+                {workout?.creatorId?.name?.substring(0, 1)}
+              </div>
+            )}
+          </div>
+          <div className=" leading-8">
+            <p className="font-semibold text-base  capitalize">
+              {workout?.name}
+            </p>
+            <p className="font-semibold text-neutral-300 text-sm  capitalize ">
+              <span className=" text-neutral-400">creator</span>{" "}
+              {workout?.creatorId?.name}
+            </p>
+          </div>
         </div>
 
-        <Menu id={workout?._id} owner={workout.creatorId === userId} />
+        <Menu id={workout?._id} owner={workout?.creatorId?._id === userId} />
       </div>
     </div>
   );
@@ -105,8 +131,30 @@ export const Menu = ({ id, owner }: { id: string; owner: boolean }) => {
     },
   });
 
+  const { mutate: inviteRespondMutate, isLoading: sendingRespond } =
+    useMutation({
+      mutationFn: customWorkoutInviteResponse,
+      onSuccess: () => {
+        queryClient.invalidateQueries("custom-workout");
+      },
+      onError: (data: any) => {
+        toast.error(data?.message);
+      },
+      onSettled: () => {
+        setIsOpen(false);
+      },
+    });
+
   const handleDeleteWorkout = async () => {
     await mutateAsync({ id });
+  };
+
+  const handlecustomWorkoutInviteResponse = () => {
+    const data = {
+      status: "reject",
+    };
+
+    inviteRespondMutate({ data, id });
   };
 
   return (
@@ -118,10 +166,7 @@ export const Menu = ({ id, owner }: { id: string; owner: boolean }) => {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         className={cn(
-          " hover:bg-zinc-900 w-fit text-neutral-200 cursor-pointer rounded-full p-1 transition duration-150",
-          {
-            " hidden": !owner,
-          }
+          " hover:bg-zinc-900 w-fit text-neutral-200 cursor-pointer rounded-full p-1 transition duration-150"
         )}
       >
         <BiDotsVerticalRounded size={22} />
@@ -141,64 +186,89 @@ export const Menu = ({ id, owner }: { id: string; owner: boolean }) => {
           },
         }}
       >
-        <MenuItem
-          sx={{
-            "&:hover": {
-              bgcolor: "#27272a",
-            },
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            fontSize: 12,
-          }}
-          onClick={() => {
-            handleClose();
-            router.push(`/workouts/edit/${id}`);
-          }}
-        >
-          <Edit size={17} /> Edit
-        </MenuItem>
-        <MenuItem
-          sx={{
-            "&:hover": {
-              bgcolor: "#27272a",
-            },
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            fontSize: 12,
-          }}
-          onClick={() => {
-            handleClose();
-            setIsShareOpen(true);
-          }}
-        >
-          <BiShareAlt size={17} /> Invite
-        </MenuItem>
-        <MenuItem
-          sx={{
-            "&:hover": {
-              bgcolor: "#27272a",
-              color: "rose",
-            },
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            fontSize: 12,
-          }}
-          onClick={() => {
-            handleClose();
-            setIsOpen(true);
-          }}
-        >
-          <Trash2 size={17} /> Delete
-        </MenuItem>
+        {owner ? (
+          <>
+            <MenuItem
+              sx={{
+                "&:hover": {
+                  bgcolor: "#27272a",
+                },
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                fontSize: 12,
+              }}
+              onClick={() => {
+                handleClose();
+                router.push(`/workouts/edit/${id}`);
+              }}
+            >
+              <Edit size={17} /> Edit
+            </MenuItem>
+            <MenuItem
+              sx={{
+                "&:hover": {
+                  bgcolor: "#27272a",
+                },
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                fontSize: 12,
+              }}
+              onClick={() => {
+                handleClose();
+                setIsShareOpen(true);
+              }}
+            >
+              <BiShareAlt size={17} /> Invite
+            </MenuItem>
+            <MenuItem
+              sx={{
+                "&:hover": {
+                  bgcolor: "#27272a",
+                  color: "rose",
+                },
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                fontSize: 12,
+              }}
+              onClick={() => {
+                handleClose();
+                setIsOpen(true);
+              }}
+            >
+              <Trash2 size={17} /> Delete
+            </MenuItem>
+          </>
+        ) : (
+          <MenuItem
+            sx={{
+              "&:hover": {
+                bgcolor: "#27272a",
+                color: "rose",
+              },
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              fontSize: 12,
+            }}
+            onClick={() => {
+              handleClose();
+              setIsOpen(true);
+            }}
+          >
+            <Trash2 size={17} /> Remove
+          </MenuItem>
+        )}
       </MuiMenu>
 
       <DeleteModal
         setClose={() => setIsOpen(false)}
         open={isOpen}
-        handleAction={handleDeleteWorkout}
+        handleAction={
+          owner ? handleDeleteWorkout : handlecustomWorkoutInviteResponse
+        }
         isLoading={isLoading}
       />
       <AddUserToWorkout

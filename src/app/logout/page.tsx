@@ -3,22 +3,18 @@ import { logout } from "@/api/user";
 import { Loader2 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import React, { useEffect } from "react";
 import { useMutation } from "react-query";
 
 const Logout = () => {
   const { mutate, isLoading } = useMutation({
     mutationFn: logout,
-    onSuccess: () => {
-      signOut();
-    },
   });
 
   useEffect(() => {
     mutate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    signOut();
+  }, [mutate]);
   return (
     <div className="h-screen w-full flex items-center justify-center">
       <div className="text-center space-y-2">

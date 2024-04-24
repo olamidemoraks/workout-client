@@ -17,7 +17,9 @@ const Notification: React.FC<IndexProps> = ({ open, setClose }) => {
   const { profile } = useProfile();
   const dispatch = useDispatch();
   const { socket } = useSelector((state: any) => state.socket);
-  const [audio] = useState(new Audio("/audio/notification-sound.mp3"));
+  const [audio] = useState<HTMLAudioElement>(
+    new Audio("/audio/notification-sound.mp3")
+  );
   const notifications = data?.notifications as INotification[];
 
   const notificationBar = useRef<HTMLDivElement>(null);
@@ -44,7 +46,7 @@ const Notification: React.FC<IndexProps> = ({ open, setClose }) => {
 
   const playerNotificationSound = useCallback(() => {
     audio.play();
-  }, []);
+  }, [audio]);
 
   useEffect(() => {
     if (profile) {
