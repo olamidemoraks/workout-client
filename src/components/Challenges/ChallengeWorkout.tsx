@@ -28,7 +28,7 @@ const ChallengeWorkout: React.FC<ChallengeWorkoutProps> = ({ id }) => {
       >
         <ArrowLeft />
       </div>
-      <CurrentExercise workout={workout} isChallenge />
+      <CurrentExercise workout={workout} workoutType="challenge" />
     </div>
   );
 };
