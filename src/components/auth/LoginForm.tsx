@@ -81,6 +81,8 @@ const LoginForm = () => {
     onSuccess: (value: any) => {
       router.push("/");
     },
+    retryDelay: 5000,
+    retry: true,
   });
 
   const handleSignup = (values: signupTypeReference) => {
