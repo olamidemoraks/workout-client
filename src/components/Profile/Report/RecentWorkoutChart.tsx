@@ -55,7 +55,7 @@ const RecentWorkoutChart = () => {
         } else {
           accumalator.push({
             id: label,
-            label: label,
+            label: label === "back" ? "Back & Shoulder" : label,
             value: 1,
           });
         }
@@ -63,19 +63,19 @@ const RecentWorkoutChart = () => {
         return accumalator;
       }, []);
 
+    // console.log({ serverFocusPoint });
+
     const mainFocusPoint = [...(serverFocusPoint ?? [])];
     points.map((item: any) => {
-      serverFocusPoint?.map(
-        (point: { id: string; label: string; value: number }) => {
-          if (point.id !== item) {
-            mainFocusPoint?.push({
-              id: item,
-              label: item === "back" ? "Back & Shoulder" : item,
-              value: 0.5,
-            });
-          }
-        }
-      );
+      if (!!(serverFocusPoint as Array<any>).find((p: any) => p.id === item)) {
+        return;
+      } else {
+        mainFocusPoint?.push({
+          id: item,
+          label: item === "back" ? "Back & Shoulder" : item,
+          value: 0.5,
+        });
+      }
       // if (!point?.includes(item?.id)) {
       //   mainFocusPoint?.push({
       //     id: item,
@@ -87,7 +87,7 @@ const RecentWorkoutChart = () => {
     return mainFocusPoint;
   }, [data]);
 
-  console.log({ focusPoint });
+  // console.log({ focusPoint });
   return (
     <div
       className={cn(

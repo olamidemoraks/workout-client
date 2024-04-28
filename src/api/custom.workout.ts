@@ -1,8 +1,11 @@
+import { getTokenFromLocalStorage } from "@/utils/localstorage";
 import axios from "axios";
 
 const baseUrl = process.env.NEXT_PUBLIC_SERVER_URI;
 
+const token = getTokenFromLocalStorage();
 const headers = {
+  Authorization: `Bearer ${token}`,
   "Content-Type": "application/json",
 };
 

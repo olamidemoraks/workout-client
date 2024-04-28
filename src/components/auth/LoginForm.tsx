@@ -13,6 +13,7 @@ import { FcGoogle } from "react-icons/fc";
 import { cn } from "@/libs/utils";
 import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import { setTokenToLocalStorage } from "@/utils/localstorage";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -20,6 +21,9 @@ const LoginForm = () => {
   const { data } = useSession();
   const { mutate: socialAuth, isLoading: authLoading } = useMutation({
     mutationFn: socialAuthentication,
+    onSuccess: (data) => {
+      setTokenToLocalStorage(data?.token);
+    },
   });
   const { mutate: checkUserExist, isLoading: checkingForUser } = useMutation({
     mutationFn: checkUser,
@@ -79,10 +83,9 @@ const LoginForm = () => {
       toast.error(value?.message);
     },
     onSuccess: (value: any) => {
+      setTokenToLocalStorage(value?.token);
       router.push("/");
     },
-    retryDelay: 5000,
-    retry: true,
   });
 
   const handleSignup = (values: signupTypeReference) => {
