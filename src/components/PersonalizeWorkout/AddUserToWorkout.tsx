@@ -31,9 +31,10 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
   setClose,
 }) => {
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+
   const { socket } = useSelector((state: any) => state.socket);
   const { data, isLoading } = useQuery({
-    queryFn: getFollowing,
+    queryFn: async () => await getFollowing({ params: null }),
     queryKey: "friend",
     enabled: open,
   });

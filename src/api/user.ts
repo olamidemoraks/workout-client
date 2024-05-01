@@ -214,7 +214,7 @@ export const unfollowUser = async ({ id }: { id: string }) => {
     throw new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
-export const getFollowing = async ({ params }: { params: any }) => {
+export const getFollowing = async ({ params }: { params?: any }) => {
   const query = new URLSearchParams(params ?? {});
   try {
     const response = await axios.get(`${baseUrl}/get-following?${query}`, {
