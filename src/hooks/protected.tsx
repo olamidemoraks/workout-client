@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import { io, Socket } from "socket.io-client";
 import { useDispatch } from "react-redux";
 import { getSocket } from "@/redux/feature/socketSlice";
+import OnboardingScreen from "@/components/Common/OnboardingScreen";
 
 const Protected = ({ children }: PropsWithChildren) => {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ const Protected = ({ children }: PropsWithChildren) => {
 
   const socket = useRef<Socket | null>(null);
   // add socket to global state
+
   useEffect(() => {
     if (profile) {
       if (!socket.current) {
@@ -56,9 +58,7 @@ const Protected = ({ children }: PropsWithChildren) => {
   return (
     <>
       {isLoading ? (
-        <div className="w-full h-screen flex justify-center items-center">
-          <Loader2 className=" text-3xl text-white animate-spin" />
-        </div>
+        <OnboardingScreen isLoading={isLoading} />
       ) : (
         <>{profile ? children : redirect("/login")}</>
       )}

@@ -36,35 +36,26 @@ const HomePersonalizeWorkouts = () => {
   });
 
   const workouts: ICustomWorkout[] = data?.workouts;
+
+  if (isLoading) {
+    return (
+      <CustomLoader
+        amount={4}
+        height="h-[170px]"
+        weight="sm:min-w-[300px] min-w-[200px]"
+      />
+    );
+  }
   return (
-    <div className="flex gap-4 ">
-      <div className="flex overflow-x-auto w-full gap-4 scrollbar-thumb-zinc-900 scrollbar-thin scrollbar-track-transparent pb-4 relative snap-x">
-        {isLoading ? (
-          <CustomLoader
-            amount={4}
-            height="h-[170px]"
-            weight="sm:min-w-[300px] min-w-[200px]"
-          />
-        ) : (
-          <>
-            {workouts?.map((workout) => (
-              <PersonalizeWorkoutCard
-                workout={workout}
-                key={workout._id}
-                userId={profile?._id}
-              />
-            ))}
-          </>
-        )}
-      </div>
-      {/* <Link
-        href={"/workouts/create"}
-        className="snap-start min-w-[300px] h-[160px] bg-zinc-900/30 backdrop-blur-sm hover:bg-neutral-900  rounded-md flex items-center flex-col justify-center"
-      >
-        <Plus />
-        <p>New Workout</p>
-      </Link> */}
-    </div>
+    <>
+      {workouts?.map((workout) => (
+        <PersonalizeWorkoutCard
+          workout={workout}
+          key={workout?._id}
+          userId={profile?._id}
+        />
+      ))}
+    </>
   );
 };
 

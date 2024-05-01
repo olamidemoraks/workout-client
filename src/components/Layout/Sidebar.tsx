@@ -146,71 +146,37 @@ const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
         <div className=" flex flex-col gap-2 mt-10">
           {navData.map(({ Icon, navLink, title }) => (
             <>
-              {navLink === "profile" ? (
-                <Link
-                  href={`/${navLink}?id=${profile?._id}`}
-                  key={title}
-                  className={cn(
-                    "flex items-center px-5  gap-3 group hover:bg-zinc-900  py-3",
-                    {
-                      "bg-zinc-900 border-l-4 border-emerald-500  ":
-                        navLink === pathName,
-                    }
-                  )}
+              <Link
+                href={`/${navLink}`}
+                key={title}
+                className={cn(
+                  "flex items-center px-5  gap-3  group hover:bg-zinc-900  py-3",
+                  {
+                    "bg-zinc-900 border-l-4 border-emerald-500  ":
+                      navLink === pathName,
+                  }
+                )}
+              >
+                <div className="relative group">
+                  <div className="z-10 relative">{Icon}</div>
+                  <div
+                    className={cn(
+                      "h-full bg-gradient-to-r  from-emerald-500 w-full absolute top-0 z-0 blur-sm opacity-0 rounded-md ",
+                      {
+                        "opacity-50": navLink === pathName,
+                      }
+                    )}
+                  />
+                </div>
+                <p
+                  className={cn("text-neutral-400", {
+                    " hidden": sideDrawer,
+                    "text-white": navLink === pathName,
+                  })}
                 >
-                  <div className="relative">
-                    <div className="z-10 relative">{Icon}</div>
-                    <div
-                      className={cn(
-                        "h-full bg-gradient-to-r  from-emerald-500 w-full absolute top-0 z-0 blur-sm opacity-0 rounded-md ",
-                        {
-                          "opacity-50": navLink === pathName,
-                        }
-                      )}
-                    />
-                  </div>
-                  <p
-                    className={cn("text-neutral-400", {
-                      " hidden": sideDrawer,
-                      "text-white": navLink === pathName,
-                    })}
-                  >
-                    {title}
-                  </p>
-                </Link>
-              ) : (
-                <Link
-                  href={`/${navLink}`}
-                  key={title}
-                  className={cn(
-                    "flex items-center px-5  gap-3  group hover:bg-zinc-900  py-3",
-                    {
-                      "bg-zinc-900 border-l-4 border-emerald-500  ":
-                        navLink === pathName,
-                    }
-                  )}
-                >
-                  <div className="relative group">
-                    <div className="z-10 relative">{Icon}</div>
-                    <div
-                      className={cn(
-                        "h-full bg-gradient-to-r  from-emerald-500 w-full absolute top-0 z-0 blur-sm opacity-0 rounded-md ",
-                        {
-                          "opacity-50": navLink === pathName,
-                        }
-                      )}
-                    />
-                  </div>
-                  <p
-                    className={cn("text-neutral-400", {
-                      " hidden": sideDrawer,
-                      "text-white": navLink === pathName,
-                    })}
-                  >
-                    {title}
-                  </p>
-                </Link>
-              )}
+                  {title}
+                </p>
+              </Link>
             </>
           ))}
         </div>

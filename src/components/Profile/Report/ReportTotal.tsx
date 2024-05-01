@@ -1,8 +1,9 @@
-import useRecentWorkout from "@/hooks/useRecentWorkout";
+import useGetAllActivities from "@/hooks/useGetAllActivities";
+import { useSearchParams } from "next/navigation";
 import React, { useMemo } from "react";
 
 const ReportTotal = () => {
-  const { data, isLoading } = useRecentWorkout();
+  const { data, isLoading } = useGetAllActivities();
   const totalMin = useMemo(() => {
     return data?.activities?.reduce(
       (accumalator: number, currentValue: { totalTime: any }) => {

@@ -84,6 +84,19 @@ export const verifyCode = async ({
   }
 };
 
+export const checkUser = async ({ value }: { value: any }) => {
+  try {
+    const response = await axios.post(`${baseUrl}/check-user`, value, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
+
 export const updateProfile = async ({ value }: { value: any }) => {
   try {
     const response = await axios.put(
@@ -119,6 +132,17 @@ export const userProfile = async () => {
     throw new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
+export const getProfile = async (id: string) => {
+  try {
+    const response = await axios.get(`${baseUrl}/profile-info/${id}`, {
+      withCredentials: true,
+      headers,
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
 export const getStreak = async ({ id }: { id: string }) => {
   try {
     const response = await axios.get(`${baseUrl}/get-streak/${id}`, {
@@ -131,17 +155,6 @@ export const getStreak = async ({ id }: { id: string }) => {
   }
 };
 
-export const checkUser = async ({ value }: any) => {
-  try {
-    const response = await axios.post(`${baseUrl}/check-user`, value, {
-      withCredentials: true,
-      headers,
-    });
-    return response.data;
-  } catch (error: any) {
-    throw new Error(error?.response?.data?.message ?? "Something went wrong");
-  }
-};
 export const findUser = async ({ params }: { params: any }) => {
   try {
     const query = new URLSearchParams(params ?? {});
@@ -201,9 +214,10 @@ export const unfollowUser = async ({ id }: { id: string }) => {
     throw new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
-export const getFollowing = async () => {
+export const getFollowing = async ({ params }: { params: any }) => {
+  const query = new URLSearchParams(params ?? {});
   try {
-    const response = await axios.get(`${baseUrl}/get-following`, {
+    const response = await axios.get(`${baseUrl}/get-following?${query}`, {
       withCredentials: true,
       headers,
     });
@@ -213,9 +227,11 @@ export const getFollowing = async () => {
     throw new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
-export const getFollower = async () => {
+export const getFollower = async ({ params }: { params: any }) => {
+  const query = new URLSearchParams(params ?? {});
+
   try {
-    const response = await axios.get(`${baseUrl}/get-follower`, {
+    const response = await axios.get(`${baseUrl}/get-follower?${query}`, {
       withCredentials: true,
       headers,
     });

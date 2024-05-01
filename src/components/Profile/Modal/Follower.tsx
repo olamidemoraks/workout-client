@@ -9,8 +9,11 @@ import useProfile from "@/hooks/useProfile";
 import { Avatar, Box } from "@mui/material";
 import { Loader2, X } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect } from "react";
 import { useMutation, useQuery } from "react-query";
+import FollowActionButton from "./FollowActionButton";
 
 type FollowerProps = {
   open: boolean;
@@ -18,11 +21,17 @@ type FollowerProps = {
 };
 const Follower: React.FC<FollowerProps> = ({ open, setClose }) => {
   const { profile, refetch: refetchProfile } = useProfile();
-  const { isLoading, data } = useQuery({
-    queryFn: getFollower,
+  const searchParams = useSearchParams();
+  const id = searchParams?.get("id");
+  const { isLoading, data, refetch } = useQuery({
+    queryFn: async () => await getFollower({ params: searchParams }),
     queryKey: "follower",
     enabled: open,
   });
+
+  useEffect(() => {
+    refetch();
+  }, [searchParams]);
 
   const { mutate: follow, isLoading: following } = useMutation({
     mutationFn: followUser,
@@ -56,10 +65,9 @@ const Follower: React.FC<FollowerProps> = ({ open, setClose }) => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
           p: 4,
         }}
-        className=" bg-zinc-900 rounded-md sm:w-[500px] w-[95%] max-h-[80vh] min-h-[600px] p-4 py-6 gap-3 flex-col"
+        className=" bg-zinc-900 rounded-md sm:w-[600px] w-[95%] max-h-[80vh] min-h-[600px] p-4 py-6 gap-3 flex-col"
       >
         <div className="flex justify-between items-center static top-0 w-full">
           <p className=" text-2xl text-zinc-400">Followers</p>
@@ -75,13 +83,17 @@ const Follower: React.FC<FollowerProps> = ({ open, setClose }) => {
             <Loader2 className=" animate-spin" size={22} />
           </div>
         )}
-        <div className="flex flex-col gap-3 mt-6 h-[500px]  overflow-auto scrollbar scrollbar-none ">
+        <div className="flex flex-col gap-6 mt-6 h-[70vh]  overflow-auto scrollbar scrollbar-none ">
           {users?.map((user) => (
             <div
               key={user?._id}
               className="w-full flex justify-between items-center"
             >
-              <div className="flex gap-2 items-center">
+              <Link
+                href={`/profile?id=${user?._id}`}
+                onClick={setClose}
+                className="flex gap-2 group items-center"
+              >
                 <div className="md:h-[60px] md:w-[60px] h-[50px] w-[50px] relative cursor-pointer">
                   {user?.avatar?.url ? (
                     <Image
@@ -96,28 +108,22 @@ const Follower: React.FC<FollowerProps> = ({ open, setClose }) => {
                 </div>
 
                 <div className="flex flex-col">
-                  <p>{user?.name}</p>
+                  <p className=" group-hover:underline underline-offset-2">
+                    {user?.name}
+                  </p>
                   <p className=" opacity-75">{user?.username}</p>
                 </div>
-              </div>
+              </Link>
 
-              <button
-                onClick={() =>
-                  handleFollowAndUnfollowAction(
-                    user?._id,
-                    followingUsers?.includes(user?._id)
-                  )
-                }
-                disabled={following || unfollowing ? true : false}
-                className=" disabled:opacity-50 px-2 p-1 bg-blue-600 rounded"
-              >
-                {followingUsers?.includes(user?._id) ? (
-                  <>unfollow</>
-                ) : (
-                  <>follow</>
-                )}
-                {(following || unfollowing) && "ing..."}
-              </button>
+              <FollowActionButton
+                id={id}
+                following={following}
+                handleFollowAndUnfollowAction={handleFollowAndUnfollowAction}
+                followingUsers={followingUsers}
+                profile={profile}
+                unfollowing={unfollowing}
+                user={user}
+              />
             </div>
           ))}
         </div>

@@ -13,7 +13,7 @@ type IndexProps = {
 };
 
 const Notification: React.FC<IndexProps> = ({ open, setClose }) => {
-  const { data, isLoading, refetch } = useNotification();
+  const { data, isLoading, refetch } = useNotification({ open });
   const { profile } = useProfile();
   const dispatch = useDispatch();
   const { socket } = useSelector((state: any) => state.socket);
@@ -48,9 +48,10 @@ const Notification: React.FC<IndexProps> = ({ open, setClose }) => {
     audio.play();
   }, [audio]);
 
+  console.log({ socket });
   useEffect(() => {
     if (profile) {
-      if (socket || socket.current) {
+      if (socket && socket.current !== null) {
         socket.current.on(
           "receive-notification",
           (data: { success: boolean }) => {
@@ -63,7 +64,7 @@ const Notification: React.FC<IndexProps> = ({ open, setClose }) => {
         );
       }
     }
-  }, [socket]);
+  }, [socket, profile, playerNotificationSound, dispatch, refetch]);
 
   return (
     <div

@@ -15,10 +15,10 @@ import { readNotification } from "@/redux/feature/socketSlice";
 
 const Navbar = () => {
   const { profile } = useProfile();
-  const { streak } = useStreak({ userId: profile?._id });
+  const { streak, isLoading } = useStreak({ userId: profile?._id });
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openNotificationbar, setOpenNotificationbar] = useState(false);
-  const { newNotification } = useNotification();
+  const { newNotification } = useNotification({ open: openNotificationbar });
   const dispatch = useDispatch();
 
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -65,7 +65,7 @@ const Navbar = () => {
           <Sidebar setSideDrawer={setOpenSidebar} openMenu={openSidebar} />
         </div>
         <div className="md:block hidden">
-          <UserStreak streak={streak ?? 0} />
+          <UserStreak streak={streak ?? 0} isLoading={isLoading} />
         </div>
       </div>
       <div className="flex justify-between items-center gap-5">
@@ -75,17 +75,17 @@ const Navbar = () => {
             <div className="h-2 w-2 bg-emerald-600 ring-4 ring-emerald-600/20 absolute rounded-full top-0 right-0" />
           )}
         </div>
-        <div className="flex items-start gap-2 bg-zinc-900 px-3 py-2 rounded-lg">
+        <div className="flex items-start gap-2 hoveer:bg-zinc-900 transition-all px-3 py-2 rounded-lg">
           <NavbarMenu profile={profile} />
           <div>
             <p className=" text-sm font-semibold">{profile?.name}</p>
             <p className="text-sm text-zinc-200">{profile?.username}</p>
           </div>
         </div>
-        {/* <Notification
+        <Notification
           open={openNotificationbar}
           setClose={() => setOpenNotificationbar(false)}
-        /> */}
+        />
       </div>
     </div>
   );

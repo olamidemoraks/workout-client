@@ -15,10 +15,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  modal,
-}: {
+}: // modal,
+{
   children: React.ReactNode;
-  modal: React.ReactNode;
+  // modal: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -27,7 +27,7 @@ export default function RootLayout({
         <ReactQueryProvider>
           <Provider>
             {children}
-            {modal}
+            {/* {modal} */}
           </Provider>
         </ReactQueryProvider>
       </body>

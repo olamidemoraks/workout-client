@@ -10,16 +10,11 @@ import { useMutation } from "react-query";
 import { logout } from "@/api/user";
 import { signOut } from "next-auth/react";
 import { alphabetsColor } from "@/utils/data";
+import { deleteTokenFromLocalStorage } from "@/utils/localstorage";
 
 export default function NavbarMenu({ profile }: { profile: IUser }) {
   const router = useRouter();
-  const { mutate, isLoading } = useMutation({
-    mutationFn: logout,
-    onSuccess: () => {
-      signOut();
-      router.push("/login");
-    },
-  });
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -111,7 +106,9 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
           }}
           onClick={() => {
             handleClose();
-            router.push("/logout");
+            signOut();
+            deleteTokenFromLocalStorage();
+            router.push("/login");
           }}
         >
           Logout <BiLogOut className="ml-2" size={20} />

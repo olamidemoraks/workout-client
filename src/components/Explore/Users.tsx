@@ -4,6 +4,7 @@ import useProfile from "@/hooks/useProfile";
 import { Avatar } from "@mui/material";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -83,7 +84,7 @@ const Users: React.FC<UsersProps> = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full ">
       <form
         onSubmit={searchForUser}
         className=" flex items-center  bg-zinc-800 rounded-md w-full p-2 gap-3 "
@@ -109,7 +110,10 @@ const Users: React.FC<UsersProps> = () => {
               key={user?._id}
               className="w-full flex justify-between items-center"
             >
-              <div className="flex gap-2 items-center">
+              <Link
+                href={`/profile?id=${user?._id}`}
+                className="flex group gap-2 items-center"
+              >
                 <div className="md:h-[60px] md:w-[60px] h-[50px] w-[50px] relative cursor-pointer">
                   {user?.avatar ? (
                     <Image
@@ -124,10 +128,12 @@ const Users: React.FC<UsersProps> = () => {
                 </div>
 
                 <div className="flex flex-col">
-                  <p>{user?.name}</p>
+                  <p className=" group-hover:underline underline-offset-2">
+                    {user?.name}
+                  </p>
                   <p className=" opacity-75">{user?.username}</p>
                 </div>
-              </div>
+              </Link>
 
               <button
                 onClick={() =>

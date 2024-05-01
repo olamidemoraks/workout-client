@@ -1,50 +1,41 @@
 "use client";
+import { getProfile } from "@/api/user";
+import useProfile from "@/hooks/useProfile";
 import { cn } from "@/libs/utils";
-import {
-  Edit2,
-  HeartPulse,
-  LineChart,
-  Loader2,
-  Smile,
-  Trophy,
-} from "lucide-react";
-import Image from "next/image";
+import { HeartPulse, LineChart } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useQuery } from "react-query";
+import ProfileDetail from "./ProfileDetail";
 import Reports from "./Report/Reports";
 import Workouts from "./Workouts/Index";
-import useProfile from "@/hooks/useProfile";
-import { alphabetsColor } from "@/utils/data";
-import { useMutation, useQueryClient } from "react-query";
-import { updateProfileImage } from "@/api/user";
-import toast from "react-hot-toast";
-import Link from "next/link";
-import Achievements from "./Achievements/Achievements";
-import Following from "./Modal/Following";
-import Follower from "./Modal/Follower";
-import useStreak from "@/hooks/useStreak";
 
 type ProfileProps = {};
 
 const Profile: React.FC<ProfileProps> = () => {
-  const [openFollowing, setOpenFollowing] = useState<boolean>(false);
-  const [openFollowers, setOpenFollowers] = useState<boolean>(false);
-  const queryClient = useQueryClient();
-  const { profile } = useProfile();
-  const { streak } = useStreak({ userId: profile?._id });
-  const { mutate, isLoading } = useMutation({
-    mutationFn: updateProfileImage,
-    onError: () => {
-      toast.error("Couldn't update profile image");
-    },
-    onSuccess: () => {
-      queryClient.refetchQueries("profile");
-      toast.success("Profile image has been changed");
-    },
-  });
   const { replace } = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
+  const { profile } = useProfile();
+
+  const id = searchParams?.get("id");
+  const {
+    data,
+    isLoading: profileLoading,
+    refetch,
+  } = useQuery({
+    queryFn: async () => await getProfile(id!),
+    queryKey: "user-profile",
+    enabled: !!id,
+    refetchOnWindowFocus: false,
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [searchParams]);
+
+  const otherProfile = data?.user as IUser;
+
   const search = searchParams?.get("tab");
   const handleNavigation = (path: string) => {
     const params = new URLSearchParams(searchParams ?? {});
@@ -57,115 +48,14 @@ const Profile: React.FC<ProfileProps> = () => {
     replace(`${pathName}?${params}`);
   };
 
-  const handleSelectImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const fileReader = new FileReader();
-      fileReader.onload = (e: any) => {
-        if (fileReader.readyState === 2) {
-          const data = {
-            image: fileReader.result,
-          };
-          mutate({ value: data });
-        }
-      };
-      fileReader.readAsDataURL(file);
-    }
-  };
-
   return (
     <>
-      <Following
-        open={openFollowing}
-        setClose={() => setOpenFollowing(false)}
-      />
-      <Follower open={openFollowers} setClose={() => setOpenFollowers(false)} />
-      <div className="mx-auto flex flex-col w-full items-center  ">
+      <div className="mx-auto flex flex-col w-full items-center relative ">
         <div className="flex items-center justify-center w-full flex-col">
-          <div className=" h-[180px] w-[180px] rounded-full relative bg-zinc-900/60 flex items-center justify-center m-5 ">
-            {profile?.avatar?.url ? (
-              <Image
-                src={profile?.avatar.url}
-                alt="avatar"
-                width={600}
-                height={600}
-                className="w-[92%] h-[92%] rounded-full absolute object-cover"
-              />
-            ) : (
-              <div
-                className={`${
-                  alphabetsColor[
-                    profile?.name.split(" ")?.[0].substring(0, 1).toUpperCase()
-                  ] ?? "bg-zinc-900/60"
-                } h-full w-full rounded-full flex items-center justify-center text-4xl uppercase font-semibold`}
-              >
-                {profile?.username?.substring(0, 1)}
-              </div>
-            )}
-            <label
-              htmlFor="avatar"
-              className="absolute -bottom-1 right-3 bg-zinc-900/60 hover:bg-zinc-900 h-9 w-9 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition duration-200"
-            >
-              {isLoading ? (
-                <Loader2 className=" animate-spin" size={17} />
-              ) : (
-                <Smile size={17} />
-              )}
-              <input
-                id="avatar"
-                type="file"
-                accept=".png, .jpg, .jpeg"
-                hidden
-                onChange={handleSelectImage}
-              />
-            </label>
-          </div>
-          <hr />
-          <div className="text-center leading-6 flex items-start gap-3">
-            <div className="  flex flex-col items-center gap-1">
-              <p className=" text-xl  font-semibold ">{profile?.name ?? "-"}</p>
-              <p className="text-lg  font-semibold">
-                @{profile?.username ?? "-"}
-              </p>
-            </div>
-
-            <Link
-              href={`/profile/${profile?._id}`}
-              className="p-2 rounded-lg bg-zinc-900/40 hover:bg-zinc-900 cursor-pointer"
-            >
-              <Edit2 size={18} />
-            </Link>
-          </div>
-          <div>
-            <div className="flex   flex-row items-center justify-evenly px-5 md:gap-5 gap-2  mt-3">
-              <div className="flex flex-col text-center ">
-                <p className=" text-2xl font-semibold text-emerald-400">
-                  {streak ?? 0}
-                </p>
-                <p className=" text-neutral-300 ">Day Streaks</p>
-              </div>
-              <div className="h-6 w-[1px] bg-zinc-800" />
-              <div
-                onClick={() => setOpenFollowers(true)}
-                className="flex cursor-pointer flex-col text-center"
-              >
-                <p className=" text-2xl font-semibold text-emerald-400">
-                  {profile?.followers?.length ?? 0}
-                </p>
-                <p className=" text-neutral-300">Followers</p>
-              </div>
-              <div className="h-6 w-[1px] bg-zinc-800" />
-              <div
-                onClick={() => setOpenFollowing(true)}
-                className=" cursor-pointer flex flex-col text-center"
-              >
-                <p className=" text-2xl font-semibold text-emerald-400">
-                  {profile?.following?.length ?? 0}
-                </p>
-                <p className=" text-neutral-300">Following</p>
-              </div>
-            </div>
-          </div>
+          <ProfileDetail
+            profile={id ? otherProfile : profile}
+            personalPage={id ? false : true}
+          />
           <div className="w-full border-b border-zinc-900 flex items-center justify-center gap-2 mt-7">
             <div
               className={cn(
@@ -182,9 +72,9 @@ const Profile: React.FC<ProfileProps> = () => {
                   search === "report" ? "text-white" : "text-zinc-300"
                 }`}
               >
-                My Stats
+                Stats
               </span>{" "}
-              <LineChart size={15} />
+              <LineChart size={20} />
             </div>
 
             {/* achievement */}
@@ -218,7 +108,7 @@ const Profile: React.FC<ProfileProps> = () => {
               >
                 Workouts
               </span>{" "}
-              <HeartPulse size={15} />
+              <HeartPulse size={20} />
             </div>
           </div>
         </div>

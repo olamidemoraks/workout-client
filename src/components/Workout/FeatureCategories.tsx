@@ -59,7 +59,7 @@ const FeatureCategories = () => {
       {featureCategory?.map((item: any, index: number) => (
         <li
           key={item?._id}
-          className=" border group border-zinc-800 snap-start sm:min-w-[300px] min-w-[200px]  h-[170px] relative  rounded-lg cursor-pointer ease-linear duration-200"
+          className=" border group border-zinc-800 snap-start sm:min-w-[300px] min-w-[250px]  h-[170px] relative  rounded-lg cursor-pointer ease-linear duration-200"
         >
           <Link href={`/workouts/${item?._id}`}>
             <Image

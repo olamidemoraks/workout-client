@@ -6,7 +6,7 @@ const Page = () => {
   return (
     <Layout>
       <div className=" mx-auto px-4 h-full w-full justify-center flex mt-4">
-        <div className="md:w-[500px] w-full h-full  p-2 min-h-[70vh] rounded ">
+        <div className="md:w-[700px] w-full h-full  p-2 min-h-[70vh] rounded ">
           <Users />
         </div>
       </div>

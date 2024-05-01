@@ -1,17 +1,38 @@
 import { cn } from "@/libs/utils";
-import { Zap } from "lucide-react";
-import { BiSolidZap } from "react-icons/bi";
 import Image from "next/image";
-import React from "react";
 import Battery from "./Battery";
+import gsap from "gsap";
+import React, { useEffect, useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
 
 interface IUserStreak {
   streak: number;
-  isProfile?: boolean;
-  initials?: string;
+  isLoading?: boolean;
+  isProfile?: string;
 }
 
-const UserStreak = ({ streak, initials, isProfile }: IUserStreak) => {
+const UserStreak = ({ streak, isLoading, isProfile }: IUserStreak) => {
+  const [reset, setReset] = useState(false);
+  const scope = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const timeline = gsap.timeline({
+      paused: true,
+      defaults: {
+        ease: "bounce.in",
+      },
+    });
+    timeline.to(".streak-box", {
+      opacity: 1,
+      duration: 1,
+      stagger: 0.5,
+      ease: "bounce.out",
+    });
+
+    if (!reset) {
+      timeline.play();
+    }
+  }, [reset]);
   return (
     <div className="flex items-center gap-1 flex-row z-10 group cursor-pointer relative ">
       <div className="h-[50px] w-[50px] rounded-full  animate-pulse  p-1 flex items-center justify-center z-20">
@@ -75,16 +96,26 @@ const UserStreak = ({ streak, initials, isProfile }: IUserStreak) => {
               .fill(0)
               .map((_, index) => (
                 <div
-                  className={cn("md:w-[6px] w-[3px] h-full bg-zinc-700/25", {
-                    "bg-red-600": index < streak && streak >= 8 && index < 6,
-                    "bg-red-500": index < streak && streak >= 8 && index >= 6,
-                    "bg-orange-800":
-                      index < streak && streak >= 6 && streak < 8 && index < 4,
-                    "bg-orange-700":
-                      index < streak && streak >= 6 && streak < 8 && index >= 4,
-                    "bg-blue-700": index < streak && streak <= 5 && index < 3,
-                    "bg-blue-500": index < streak && streak <= 5 && index >= 3,
-                  })}
+                  className={cn(
+                    "streak-box opacity-0  md:w-[6px] w-[3px] h-full bg-zinc-700/25",
+                    {
+                      "bg-red-600": index < streak && streak >= 8 && index < 6,
+                      "bg-red-500": index < streak && streak >= 8 && index >= 6,
+                      "bg-orange-800":
+                        index < streak &&
+                        streak >= 6 &&
+                        streak < 8 &&
+                        index < 4,
+                      "bg-orange-700":
+                        index < streak &&
+                        streak >= 6 &&
+                        streak < 8 &&
+                        index >= 4,
+                      "bg-blue-700": index < streak && streak <= 5 && index < 3,
+                      "bg-blue-500":
+                        index < streak && streak <= 5 && index >= 3,
+                    }
+                  )}
                   key={index}
                 />
               ))}

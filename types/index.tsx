@@ -36,7 +36,8 @@ interface IWorkout {
 
 interface ICustomWorkout {
   _id: string;
-  creatorId: {
+  creatorId: string;
+  creator: {
     _id: string;
     username: string;
     name: string;

@@ -5,6 +5,7 @@ import useProfile from "@/hooks/useProfile";
 import { Avatar } from "@mui/material";
 import { Check, X } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useMutation } from "react-query";
@@ -22,6 +23,7 @@ const NotifcationCard: React.FC<NotifcationCardProps> = ({
   const { socket } = useSelector((state: any) => state.socket);
   const { profile, refetch: reloadProfile } = useProfile();
   const [followingId, setFollowingId] = useState("");
+  const router = useRouter();
 
   const { mutate: follow, isLoading: following } = useMutation({
     mutationFn: followUser,
@@ -36,7 +38,7 @@ const NotifcationCard: React.FC<NotifcationCardProps> = ({
       toast.error(data?.message);
     },
   });
-  const { mutate: inviteRespondMutate, isLoading: sendingRespond } =
+  const { mutateAsync: inviteRespondMutate, isLoading: sendingRespond } =
     useMutation({
       mutationFn: customWorkoutInviteResponse,
       onSuccess: () => {
@@ -71,7 +73,11 @@ const NotifcationCard: React.FC<NotifcationCardProps> = ({
       status,
     };
 
-    inviteRespondMutate({ data, id: notification?.workoutId! });
+    inviteRespondMutate({ data, id: notification?.workoutId! }).then(() => {
+      if (status === "accept") {
+        router.push(`/workout/${notification?.workoutId!}`);
+      }
+    });
   };
 
   return (

@@ -1,13 +1,15 @@
+import { recentRctivity } from "@/api/activity";
 import CustomLoader from "@/components/Common/CustomLoader";
 import Empty from "@/components/Common/Empty";
 import useRecentWorkout from "@/hooks/useRecentWorkout";
 import { alphabetsColor } from "@/utils/data";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
+import { useQuery } from "react-query";
 
 const RecentWorkouts = () => {
   const { data, isLoading } = useRecentWorkout();
-
   const recentWorkoutActivities: any[] = useMemo(() => {
     return data?.activities?.slice(0, 5);
   }, [data]);
@@ -88,7 +90,7 @@ const RecentWorkouts = () => {
                 </p>
               </div> */}
 
-              <div className="h-[40px] rounded min-w-[40px] bg-white flex items-center justify-center relative">
+              <div className="h-[40px] rounded min-w-[40px] bg-white/75 flex items-center justify-center relative">
                 <Image
                   src={
                     icons[

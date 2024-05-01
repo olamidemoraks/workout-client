@@ -3,17 +3,23 @@ import { useQuery } from "react-query";
 import { activityReport } from "@/api/activity";
 import { useEffect, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 type IMonthlyCalender = {
   isDashboard?: boolean;
 };
 
 const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
-  const { data, isLoading } = useQuery({
-    queryFn: activityReport,
+  const searchParams = useSearchParams();
+  const { data, isLoading, refetch } = useQuery({
+    queryFn: async () => await activityReport({ params: searchParams }),
     queryKey: "activity-reports",
     refetchOnWindowFocus: false,
   });
+
+  useEffect(() => {
+    refetch();
+  }, [searchParams]);
 
   const [screenWidth, setScreenWidth] = useState<any>(() => {
     if (typeof window !== "undefined") {

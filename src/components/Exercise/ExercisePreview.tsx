@@ -33,54 +33,72 @@ const ExercisePreview: React.FC<ExercisePreviewProps> = ({
               fill
               className="absolute object-cover rounded-xl"
             />
-            <div className="flex md:gap-5 gap-1 md:flex-row flex-col items-center justify-center h-full w-full space-y-2 bg-gradient-to-r  absolute p-6 rounded-xl from-black/60 to-zinc-900/30">
-              <div>
-                <p className="font-bold uppercase md:text-4xl text-3xl text-neutral-100">
-                  {workout?.name}
+            {type === "challenge" && (
+              <div className="flex md:gap-5 gap-1  flex-col items-center justify-center h-full w-full space-y-2 bg-gradient-to-r  absolute p-6 rounded-xl from-black/60 to-zinc-900/30">
+                <div>
+                  <p className="font-bold uppercase md:text-4xl text-3xl text-neutral-100">
+                    {workout?.name}
+                  </p>
+                </div>
+                <p className=" block text-2xl font-bold uppercase">
+                  Day {workout?.day}
                 </p>
               </div>
-              {type === "challenge" && <p>{workout?.day}</p>}
-              {type === "default" && (
-                <>
-                  <div className="md:h-[70px] md:w-[2px] w-[120px] h-[1px] bg-white/40 backdrop-blur-md rounded-full md:block hidden" />
-                  <div className="flex flex-col gap-1 md:items-start items-center">
-                    <div className="flex items-center">
-                      {Array(3)
-                        .fill(0)
-                        .map((_, index) => (
-                          <Zap
-                            key={index}
-                            // className={cn(" fill-neutral-600", {
-                            //  "": index < workout?.difficult_level,
-                            // })}
-                            className={`${
-                              index < workout?.difficult_level
-                                ? "fill-white"
-                                : "fill-neutral-600"
-                            }`}
-                            size={22}
-                            color={
-                              index < workout?.difficult_level
-                                ? "#fff"
-                                : "#525252"
-                            }
-                          />
-                        ))}
-                    </div>
-                    <div className="flex items-center  md:items-start font-semibold mt-1">
-                      <div className="flex items-center gap-1 text-neutral-300">
-                        <AlarmCheck />
-                        {workout?.estimate_time} min
-                      </div>
-                      <Dot />
-                      <p className=" text-base  text-neutral-300">
-                        {workout?.exercises?.length} Varient
-                      </p>
-                    </div>
+            )}
+            {type === "customize" && (
+              <div className="flex md:gap-5 gap-1 md:flex-row flex-col items-center justify-center h-full w-full space-y-2 bg-gradient-to-r  absolute p-6 rounded-xl from-black/60 to-zinc-900/30">
+                <div>
+                  <p className="font-bold uppercase md:text-4xl text-3xl text-neutral-100">
+                    {workout?.name}
+                  </p>
+                </div>
+              </div>
+            )}
+            {type === "default" && (
+              <div className="flex md:gap-5 gap-1 md:flex-row flex-col items-center justify-center h-full w-full space-y-2 bg-gradient-to-r  absolute p-6 rounded-xl from-black/60 to-zinc-900/30">
+                <div>
+                  <p className="font-bold uppercase md:text-4xl text-3xl text-neutral-100">
+                    {workout?.name}
+                  </p>
+                </div>
+                <div className="md:h-[70px] md:w-[2px] w-[120px] h-[1px] bg-white/40 backdrop-blur-md rounded-full md:block hidden" />
+                <div className="flex flex-col gap-1 md:items-start items-center">
+                  <div className="flex items-center">
+                    {Array(3)
+                      .fill(0)
+                      .map((_, index) => (
+                        <Zap
+                          key={index}
+                          // className={cn(" fill-neutral-600", {
+                          //  "": index < workout?.difficult_level,
+                          // })}
+                          className={`${
+                            index < workout?.difficult_level
+                              ? "fill-white"
+                              : "fill-neutral-600"
+                          }`}
+                          size={22}
+                          color={
+                            index < workout?.difficult_level
+                              ? "#fff"
+                              : "#525252"
+                          }
+                        />
+                      ))}
                   </div>
-                </>
-              )}
-            </div>
+                  <div className="flex items-center  md:items-start font-semibold mt-1">
+                    <div className="flex items-center gap-1 text-neutral-300">
+                      <AlarmCheck />
+                      {workout?.estimate_time} min
+                    </div>
+                    <Dot />
+                    <p className=" text-base  text-neutral-300">
+                      {workout?.exercises?.length} Varient
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="lg:w-[75%] w-full mt-12  mb-12">

@@ -23,9 +23,11 @@ export const createActivity = async ({ data }: { data: any }) => {
   }
 };
 
-export const activityReport = async () => {
+export const activityReport = async ({ params }: { params: any }) => {
+  const query = new URLSearchParams(params ?? {});
+
   try {
-    const response = await axios.get(`${baseUrl}/activity-report`, {
+    const response = await axios.get(`${baseUrl}/activity-report?${query}`, {
       withCredentials: true,
       headers,
     });
@@ -35,9 +37,23 @@ export const activityReport = async () => {
     throw new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
-export const recentRctivity = async () => {
+export const recentRctivity = async ({ params }: { params: any }) => {
+  const query = new URLSearchParams(params ?? {});
   try {
-    const response = await axios.get(`${baseUrl}/recent-activity`, {
+    const response = await axios.get(`${baseUrl}/recent-activity?${query}`, {
+      withCredentials: true,
+      headers,
+    });
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
+export const allActivities = async ({ params }: { params: any }) => {
+  const query = new URLSearchParams(params ?? {});
+  try {
+    const response = await axios.get(`${baseUrl}/all-activity?${query}`, {
       withCredentials: true,
       headers,
     });

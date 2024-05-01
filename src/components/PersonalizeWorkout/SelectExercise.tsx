@@ -26,7 +26,7 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
-  const muscle_group = searchParams?.get("focus_point");
+  const muscle_group = searchParams?.get("focus_point") ?? "abs";
 
   const { data, refetch } = useQuery({
     queryFn: async () => {
@@ -75,7 +75,7 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({
           transform: "translate(-50%, -50%)",
           p: 4,
         }}
-        className=" overflow-hidden bg-zinc-900 lg:w-[600px] sm:w-[80%] w-[99%] rounded-md   min-h-[200px] flex p-4 py-6 gap-3 flex-col"
+        className=" overflow-hidden bg-zinc-900 lg:w-[700px] sm:w-[80%] w-[99%] rounded-md   min-h-[200px] flex p-4 py-6 gap-3 flex-col"
       >
         <>
           <div className=" absolute top-2 right-3" onClick={setClose}>
@@ -87,8 +87,8 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({
           <p className=" text-neutral-300 text-center leading-5">
             Filter exercise base on muscle group available to you below
           </p>
-          <div className=" overflow-x-auto w-full scrollbar-thumb-zinc-900 scrollbar-thin scrollbar-track-transparent">
-            <div className="flex   w-fit overflow-x-auto gap-2 p-2  ">
+          <div className=" overflow-x-auto w-full scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-blue-600/75">
+            <div className="flex   w-fit overflow-x-auto gap-2 p-2 ">
               {focus.map((group, index) => (
                 <div
                   onClick={() => handleSelectMuscle(group.title)}
@@ -117,7 +117,7 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({
           <p className=" text-neutral-300 text-center leading-5">
             Click an exercise to add to your workout routine.
           </p>
-          <div className="grid md:grid-cols-2 grid-cols-1 scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-blue-600/75 overflow-y-auto max-h-[400px] rounded mt-3 gap-2">
+          <div className="grid md:grid-cols-2 grid-cols-1 overflow-x-hidden scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-blue-600/75 overflow-y-auto max-h-[400px] rounded mt-3 gap-2">
             {exercises?.map((exercise) => (
               <div
                 onClick={() => handleAddWorkouts(exercise)}

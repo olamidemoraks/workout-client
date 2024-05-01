@@ -210,7 +210,7 @@ const PersonalizeWorkoutForm = ({ id }: { id?: string }) => {
             <button
               type="button"
               onClick={() => setOpenExercise(true)}
-              className="  bg-zinc-700/75 cursor-pointer w-fit px-4 py-1 flex items-center gap-3 bg-zinc-900 hover:bg-zinc-800 rounded-full backdrop-blur-md"
+              className="   cursor-pointer w-fit px-4 py-2 flex items-center gap-3 bg-zinc-800 hover:bg-emerald-700 rounded-xl transition-all backdrop-blur-md"
             >
               Select Exercise <Plus />
             </button>

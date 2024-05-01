@@ -23,6 +23,7 @@ import { CSS } from "@dnd-kit/utilities";
 
 import type { DropAnimation } from "@dnd-kit/core";
 import { memo, useMemo, useState } from "react";
+import Empty from "../Common/Empty";
 
 const dropAnimationConfig: DropAnimation = {
   sideEffects: defaultDropAnimationSideEffects({
@@ -102,7 +103,7 @@ const SelectedExerciseList: React.FC<SelectedExerciseListProps> = ({
       <div className="w-full mt-4">
         {workouts?.length <= 0 ? (
           <div className=" h-[400px] w-full flex  mt-10 justify-center">
-            Empty
+            <Empty title="No Exercise Selected" />
           </div>
         ) : (
           <DndContext

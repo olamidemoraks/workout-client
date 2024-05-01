@@ -37,14 +37,14 @@ const PersonalizeWorkoutCard: React.FC<PersonalizeWorkoutCardProps> = ({
     <div
       className={cn("flex flex-col ", {
         "w-full": isProfile,
-        "sm:w-[300px] w-[200px]": !isProfile,
+        "sm:w-[300px] w-[250px]": !isProfile,
       })}
       key={workout?._id}
     >
       <div
-        className={
-          " cursor-pointer group snap-start w-full h-[160px]  relative  p-3 flex flex-col items-center justify-center border  border-zinc-900 rounded-lg  transition duration-200"
-        }
+        className={` cursor-pointer group snap-start w-full sm:h-[160px] ${
+          isProfile ? "h-[200px]" : "h-[160px]"
+        }   relative  p-3 flex flex-col items-center justify-center border  border-zinc-900 rounded-lg  transition duration-200`}
       >
         <Image
           src={`${workout?.image?.url}`}
@@ -65,11 +65,14 @@ const PersonalizeWorkoutCard: React.FC<PersonalizeWorkoutCardProps> = ({
         </Link>
       </div>
       <div className="h-fit w-full flex justify-between md:mt-3 mt-1">
-        <div className="flex gap-3 items-center">
-          <div className="relative h-[30px] min-w-[30px] ">
-            {workout?.creatorId?.avatar?.public_id ? (
+        <div className="flex gap-3 items-start">
+          <Link
+            href={`/profile?id=${workout?.creatorId}`}
+            className="relative h-[30px] min-w-[30px] "
+          >
+            {workout?.creator?.avatar?.public_id ? (
               <Image
-                src={`${workout?.creatorId?.avatar?.url}`}
+                src={`${workout?.creator?.avatar?.url}`}
                 fill
                 className="h-full w-full  rounded-full ring-2 ring-emerald-400"
                 alt="profile image"
@@ -78,29 +81,33 @@ const PersonalizeWorkoutCard: React.FC<PersonalizeWorkoutCardProps> = ({
               <div
                 className={`${
                   alphabetsColor[
-                    workout?.creatorId?.name
-                      .split(" ")?.[0]
+                    workout?.creator?.name
+                      ?.split(" ")?.[0]
                       .substring(0, 1)
                       .toUpperCase()
                   ] ?? "bg-zinc-900/60"
                 }  h-10 w-10 rounded-full flex items-center justify-center text-xl uppercase font-semibold`}
               >
-                {workout?.creatorId?.name?.substring(0, 1)}
+                {workout?.creator?.name?.substring(0, 1)}
               </div>
             )}
-          </div>
-          <div className=" leading-8">
-            <p className="font-semibold text-base  capitalize">
+          </Link>
+          <div className=" leading-8 max-w-[90%]">
+            <p className="font-semibold w-full text-base  capitalize ">
               {workout?.name}
             </p>
-            <p className="font-semibold text-neutral-300 text-sm  capitalize ">
-              <span className=" text-neutral-400">creator</span>{" "}
-              {workout?.creatorId?.name}
-            </p>
+            {userId === workout?.creatorId ? (
+              <p className=" text-emerald-400 text-sm">owner</p>
+            ) : (
+              <p className="font-semibold text-neutral-300 text-sm  capitalize ">
+                <span className=" text-purple-400 lowercase">creator</span>{" "}
+                {workout?.creator?.username}
+              </p>
+            )}
           </div>
         </div>
 
-        <Menu id={workout?._id} owner={workout?.creatorId?._id === userId} />
+        <Menu id={workout?._id} owner={workout?.creator?._id === userId} />
       </div>
     </div>
   );

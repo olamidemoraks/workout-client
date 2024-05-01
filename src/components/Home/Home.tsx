@@ -45,7 +45,11 @@ const Home = () => {
           seeMoreLink=""
           customStyle="pl-4 md:pl-10"
         >
-          <HomePersonalizeWorkouts />
+          <div className="  w-full relative flex overflow-x-scroll   scrollbar-thumb-transparent scrollbar-thin scrollbar-track-transparent">
+            <ul className="flex flex-row  flex-nowrap gap-4 w-full snap-x">
+              <HomePersonalizeWorkouts />
+            </ul>
+          </div>
         </HomeSection>
 
         <div className="px-4 mb-10 md:hidden ">
