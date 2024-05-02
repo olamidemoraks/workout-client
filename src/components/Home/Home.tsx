@@ -42,7 +42,7 @@ const Home = () => {
 
         <HomeSection
           title="Personalize Workouts"
-          seeMoreLink=""
+          seeMoreLink="/profile?tab=workouts"
           customStyle="pl-4 md:pl-10"
         >
           <div className="  w-full relative flex overflow-x-scroll   scrollbar-thumb-transparent scrollbar-thin scrollbar-track-transparent">

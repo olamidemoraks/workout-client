@@ -1,31 +1,8 @@
-import {
-  deleteCustomWorkout,
-  getUserCustomWorkouts,
-} from "@/api/custom.workout";
+import { getUserCustomWorkouts } from "@/api/custom.workout";
 import useProfile from "@/hooks/useProfile";
-import {
-  ArrowRight,
-  BarChart3,
-  BarChartBig,
-  Edit,
-  Edit2,
-  Play,
-  Plus,
-  Trash2,
-} from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import { BiDotsVerticalRounded, BiSolidBarChartSquare } from "react-icons/bi";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import Button from "@mui/material/Button";
-import { Menu as MuiMenu } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import { useRouter } from "next/navigation";
-import { cn } from "@/libs/utils";
-import DeleteModal from "../Modal/DeleteModal";
-import PersonalizeWorkoutCard from "./PersonalizeWorkoutCard";
+import { useQuery } from "react-query";
 import CustomLoader from "../Common/CustomLoader";
+import PersonalizeWorkoutCard from "./PersonalizeWorkoutCard";
 
 const HomePersonalizeWorkouts = () => {
   const { profile } = useProfile();

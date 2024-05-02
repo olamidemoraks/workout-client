@@ -13,6 +13,7 @@ import { cn } from "@/libs/utils";
 import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import useProfile from "@/hooks/useProfile";
 
 type SignupFormProps = {};
 
@@ -21,6 +22,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
   const [withEmail, setWithEmail] = useState("google"); //google, email, verify
   const [showPassword, setShowPassword] = useState(false);
 
+  const { profile } = useProfile();
   const { data } = useSession();
   const { mutate: socialAuth, isLoading: socialAuthLoading } = useMutation({
     mutationFn: socialAuthentication,
@@ -48,12 +50,13 @@ const SignupForm: React.FC<SignupFormProps> = () => {
       }
     },
   });
-
   useEffect(() => {
-    if (data) {
-      checkUserExist({ value: { email: data.user?.email } });
+    if (profile) {
+      router.replace("/");
+    } else if (data?.user) {
+      checkUserExist({ value: { email: data?.user?.email } });
     }
-  }, [checkUserExist, data]);
+  }, [checkUserExist, data, profile, router]);
 
   const validator = yup.object().shape({
     name: yup.string().required("Please fill your name"),

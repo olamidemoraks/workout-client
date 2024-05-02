@@ -57,7 +57,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
       />
       <Follower open={openFollowers} setClose={() => setOpenFollowers(false)} />
 
-      <div className=" h-[180px] w-[180px] rounded-full relative bg-zinc-900/60 flex items-center justify-center m-5 ">
+      <div className=" md:h-[220px] md:w-[220px] h-[180px] w-[180px] rounded-full relative bg-zinc-900/60 flex items-center justify-center m-5 ">
         {profile?.avatar?.url ? (
           <Image
             src={profile?.avatar.url}

@@ -37,7 +37,7 @@ const PersonalizeWorkoutCard: React.FC<PersonalizeWorkoutCardProps> = ({
     <div
       className={cn("flex flex-col ", {
         "w-full": isProfile,
-        "sm:w-[300px] w-[250px]": !isProfile,
+        "sm:min-w-[300px] min-w-[250px]": !isProfile,
       })}
       key={workout?._id}
     >

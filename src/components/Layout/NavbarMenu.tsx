@@ -69,6 +69,7 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
         sx={{
           "& .MuiPaper-root": {
             bgcolor: "#18181b",
+            width: "250px",
           },
         }}
       >
@@ -77,32 +78,46 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             "&:hover": {
               bgcolor: "#27272a",
             },
+            margin: "5px",
+            borderRadius: "4px",
+            py: "6px",
           }}
           onClick={() => {
             handleClose();
             router.push("/profile");
           }}
         >
-          Profile
+          <div>
+            <p className=" text-sm font-semibold">{profile?.name}</p>
+            <p className="text-sm text-zinc-200">{profile?.email}</p>
+          </div>{" "}
         </MenuItem>
         <MenuItem
           sx={{
             "&:hover": {
               bgcolor: "#27272a",
             },
+            margin: "5px",
+            borderRadius: "4px",
+            py: "6px",
+            fontSize: "14px",
           }}
           onClick={() => {
             handleClose();
             router.push("/workouts/create");
           }}
         >
-          Create Workouts Plan
+          Create Plan
         </MenuItem>
         <MenuItem
           sx={{
             "&:hover": {
               bgcolor: "#27272a",
             },
+            margin: "5px",
+            borderRadius: "4px",
+            py: "6px",
+            fontSize: "14px",
           }}
           onClick={() => {
             handleClose();
@@ -111,7 +126,7 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             router.push("/login");
           }}
         >
-          Logout <BiLogOut className="ml-2" size={20} />
+          Log out
         </MenuItem>
       </Menu>
     </div>

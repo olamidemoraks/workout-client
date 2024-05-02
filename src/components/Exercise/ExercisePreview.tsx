@@ -1,12 +1,10 @@
 import useBatteryCharge from "@/hooks/useBatteryCharge";
-import { cn } from "@/libs/utils";
-import { difficultyColor, padTo2Digits } from "@/utils/data";
+import { padTo2Digits } from "@/utils/data";
 import { AlarmCheck, ArrowLeft, Dot, Play, Zap } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import ChargeLowModal from "./ChargeLowModal";
+import { FaBolt } from "react-icons/fa";
 
 type ExercisePreviewProps = {
   workout: IWorkout;
@@ -19,13 +17,12 @@ const ExercisePreview: React.FC<ExercisePreviewProps> = ({
 }) => {
   const { chargeLeft } = useBatteryCharge();
   const router = useRouter();
-  const [open, setOpen] = useState(false);
 
   const goToWorkout = () => {
     if (chargeLeft > 0) {
       router.push(`/exercise/${workout?._id}?type=${type}`);
     } else {
-      setOpen(true);
+      return;
     }
   };
   return (
@@ -120,9 +117,18 @@ const ExercisePreview: React.FC<ExercisePreviewProps> = ({
                 <p className=" md:text-2xl text-xl font-semibold">Exercises</p>
                 <button
                   onClick={goToWorkout}
-                  className="flex items-center gap-1 bg-emerald-600 p-2 px-4 rounded-lg w-fit text-base uppercase"
+                  disabled={chargeLeft > 0 ? false : true}
+                  className="flex disabled:opacity-70 items-center gap-1 bg-emerald-600 p-2 px-4 rounded-lg w-fit text-base uppercase"
                 >
-                  Start <Play className="fill-white" size={17} />
+                  {chargeLeft > 0 ? (
+                    <>
+                      Start <Play className="fill-white" size={17} />
+                    </>
+                  ) : (
+                    <>
+                      Take some rest <FaBolt className="fill-white" size={17} />
+                    </>
+                  )}
                 </button>
               </div>
 

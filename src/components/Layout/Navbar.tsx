@@ -68,8 +68,11 @@ const Navbar = () => {
           <UserStreak streak={streak ?? 0} isLoading={isLoading} />
         </div>
       </div>
-      <div className="flex justify-between items-center gap-5">
-        <div onClick={handleNoficationBar} className="relative  cursor-pointer">
+      <div className="flex justify-between items-center gap-2">
+        <div
+          onClick={handleNoficationBar}
+          className="relative hover:opacity-100 opacity-75  cursor-pointer"
+        >
           <Bell size={26} className="" />
           {newNotification && (
             <div className="h-2 w-2 bg-emerald-600 ring-4 ring-emerald-600/20 absolute rounded-full top-0 right-0" />
@@ -77,9 +80,9 @@ const Navbar = () => {
         </div>
         <div className="flex items-start gap-2 hoveer:bg-zinc-900 transition-all px-3 py-2 rounded-lg">
           <NavbarMenu profile={profile} />
-          <div>
+          <div className="md:flex flex-col hidden">
             <p className=" text-sm font-semibold">{profile?.name}</p>
-            <p className="text-sm text-zinc-200">{profile?.username}</p>
+            <p className="text-sm text-zinc-200">{profile?.email}</p>
           </div>
         </div>
         <Notification

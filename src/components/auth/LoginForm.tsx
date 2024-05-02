@@ -14,9 +14,11 @@ import { cn } from "@/libs/utils";
 import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { setTokenToLocalStorage } from "@/utils/localstorage";
+import useProfile from "@/hooks/useProfile";
 
 const LoginForm = () => {
   const router = useRouter();
+  const { profile } = useProfile();
   const [showPassword, setShowPassword] = useState(false);
   const { data } = useSession();
   const { mutate: socialAuth, isLoading: authLoading } = useMutation({
@@ -50,10 +52,12 @@ const LoginForm = () => {
   });
 
   useEffect(() => {
-    if (data?.user) {
+    if (profile) {
+      router.replace("/");
+    } else if (data?.user) {
       checkUserExist({ value: { email: data?.user?.email } });
     }
-  }, [data]);
+  }, [checkUserExist, data, profile, router]);
 
   const validator = yup.object().shape({
     email: yup
