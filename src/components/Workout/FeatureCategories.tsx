@@ -66,7 +66,7 @@ const FeatureCategories = () => {
               src={item?.image.url}
               alt={item.title}
               fill
-              className="absolute object-cover rounded-lg brightness-90 group-hover:brightness-100 transition-all "
+              className="absolute object-cover rounded-lg brightness-[.6] group-hover:brightness-90 transition-all "
             />
             <div className="flex items-end h-full w-full absolute pb-5">
               <div className="flex gap-5 items-center">

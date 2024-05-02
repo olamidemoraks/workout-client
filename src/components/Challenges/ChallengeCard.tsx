@@ -48,7 +48,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
         alt={challenge?.title}
         height={700}
         width={550}
-        className=" absolute object-cover rounded-xl h-full w-full brightness-75 transition-all  "
+        className=" absolute object-cover rounded-xl h-full w-full brightness-50 transition-all  "
       />
 
       {showPin && (

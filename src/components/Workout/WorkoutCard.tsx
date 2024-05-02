@@ -1,9 +1,8 @@
-import React from "react";
-import Image from "next/image";
-import { Zap, Skull, Clock, Play } from "lucide-react";
-import { cn } from "@/libs/utils";
-import Link from "next/link";
 import { difficultyColor } from "@/utils/data";
+import { Play } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 import { BiSolidZap } from "react-icons/bi";
 type WorkoutCardProps = {
   workout: IWorkout;
@@ -66,7 +65,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
           src={`${workout?.image?.url}`}
           alt={workout?.name}
           fill
-          className=" w-full h-full  object-cover rounded-md group-hover:brightness-100 brightness-75  -z-[2]"
+          className=" w-full h-full  object-cover rounded-md group-hover:brightness-90 brightness-[.6]  -z-[2]"
         />
         {/* <div className="absolute top-3 right-3 flex gap-2 items-center">
     <small className="font-semibold">Owner</small>
