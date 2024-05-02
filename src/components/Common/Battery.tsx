@@ -2,25 +2,9 @@ import useRecentWorkout from "@/hooks/useRecentWorkout";
 import { BiSolidZap } from "react-icons/bi";
 import gsap from "gsap";
 import React, { useMemo, useEffect, useState } from "react";
+import useBatteryCharge from "@/hooks/useBatteryCharge";
 const Battery = () => {
-  const { data, isLoading } = useRecentWorkout();
-  const chargeLeft: number = useMemo(() => {
-    const todayDate = new Date();
-    const charge = 4;
-    const allActivityForToday: any[] = data?.activities?.filter(
-      (activity: any) => {
-        const activityDate = new Date(activity?.createdAt);
-        if (
-          activityDate.toLocaleDateString() === todayDate.toLocaleDateString()
-        ) {
-          return activity;
-        }
-      }
-    );
-    let remainingCharge = charge - (allActivityForToday?.length ?? 4);
-
-    return remainingCharge;
-  }, [data]);
+  const { chargeLeft } = useBatteryCharge();
 
   const chargeColor: { [key: number]: string } = {
     1: "bg-red-700/60",

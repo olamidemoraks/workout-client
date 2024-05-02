@@ -42,6 +42,7 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
     queryFn: async () => await getInvitedUserFromCustomWorkout({ id }),
     queryKey: "invitedfriend",
     enabled: open,
+    refetchOnWindowFocus: false,
   });
   const { mutateAsync, isLoading: SavingUpdate } = useMutation({
     mutationFn: customWorkoutInvite,
@@ -94,7 +95,7 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
           transform: "translate(-50%, -50%)",
           p: 4,
         }}
-        className="relative overflow-hidden bg-zinc-900 lg:w-[600px] sm:w-[80%] w-[99%] rounded-md   min-h-[500px] flex p-4 py-6 gap-3 flex-col"
+        className="relative overflow-hidden bg-zinc-900 lg:w-[600px] sm:w-[80%] w-[99%] rounded-md  h-[80vh] flex p-4 py-6 gap-3 flex-col"
       >
         {/* <div className="flex items-center bg-zinc-800 rounded-md w-full p-2 gap-3">
           <BiSearch className="opacity-80" size={21} />
@@ -112,13 +113,14 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
         />
         <p className=" text-center text-zinc-300 text-lg">Invite a friend</p>
         <div className="h-[1px] w-full bg-zinc-700" />
+        <p>Members</p>
+
         {(isLoading || loadingInvitedUser) && (
           <div className="h-full w-full flex items-center justify-center">
             <Loader2 className="animate-spin" />
           </div>
         )}
 
-        <p>Members</p>
         <div className=" border-b border-zinc-700 flex gap-2 scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-blue-600/75  overflow-y-auto  w-full my-2 pb-2 ">
           {/* already members */}
 
@@ -163,14 +165,14 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
               </div>
             ))}
         </div>
-        <div className=" grid grid-cols-3 max-h-[400px] scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-blue-600/75  overflow-y-auto  gap-y-5 w-full my-3 pb-7 ">
+        <div className=" flex flex-wrap gap-x-7 gap-y-5  scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-blue-600/75  overflow-y-auto  w-full my-3 pb-7 ">
           {/* not members */}
           {users
             ?.filter((u) => !invitedUsersId?.includes(u._id))
             ?.map((user, index) => (
               <div
                 key={index}
-                className="flex flex-col   gap-2 items-center text-center"
+                className="flex flex-col gap-2 items-center text-center"
               >
                 <div
                   className="md:h-[70px] md:w-[70px] h-[60px] w-[60px] relative cursor-pointer"
@@ -195,7 +197,7 @@ const AddUserToWorkout: React.FC<AddUserToWorkoutProps> = ({
                   ) : null}
                 </div>
 
-                <p className="">{user?.name}</p>
+                <p className="w-[70px]">{user?.name}</p>
               </div>
             ))}
         </div>
