@@ -113,7 +113,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
         <div className="flex flex-col gap-6 ">
           <div
             onClick={() => signIn("google")}
-            className=" flex items-center justify-center px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black rounded-full py-3 min-w-[350px] text-lg font-medium gap-2 "
+            className=" flex items-center justify-center px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
           >
             <FcGoogle className="text-xl" />
             Sign up with Google
@@ -125,7 +125,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
           </div>
 
           <div
-            className=" flex items-center justify-center px-8 border cursor-pointer border-zinc-700  rounded-full py-3 min-w-[350px] text-lg font-medium gap-2 "
+            className=" flex items-center justify-center px-8 border cursor-pointer border-zinc-700  rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
             onClick={() => setWithEmail("email")}
           >
             Continue with email
@@ -154,6 +154,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
               </label>
               <input
                 {...register("name", { required: true })}
+                placeholder="john doe"
                 className={cn(
                   "bg-transparent focus:outline-none border-[3px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
                   {
@@ -171,6 +172,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
               </label>
               <input
                 {...register("username", { required: true })}
+                placeholder="john doe"
                 className={cn(
                   "bg-transparent focus:outline-none border-[3px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
                   {
@@ -232,7 +234,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
 
           <button
             type="submit"
-            className=" flex items-center justify-center px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 min-w-[350px] text-lg font-medium gap-2 "
+            className=" flex items-center justify-center px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
           >
             {!isLoading ? (
               "Create Account"
@@ -276,7 +278,9 @@ const SignupForm: React.FC<SignupFormProps> = () => {
         </div>
       ) : null}
       <div>
-        <p className=" text-[1.6rem] font-bold mb-8">Sign up to brand</p>
+        <p className=" text-[1.6rem] font-bold md:mb-8 mb-4">
+          Sign up to brand
+        </p>
         {content}
       </div>
     </>

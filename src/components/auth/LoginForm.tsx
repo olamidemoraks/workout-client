@@ -112,11 +112,13 @@ const LoginForm = () => {
         onSubmit={handleSubmit(handleSignup)}
         className="flex flex-col gap-6 relative "
       >
-        <p className=" text-[1.6rem] font-bold mb-8">Login to brand</p>
+        <p className=" text-[1.6rem] font-bold md:mb-8 mb-4">
+          Login to <span className=" font-sans">MaxUp</span>
+        </p>
 
         <div
           onClick={() => signIn("google")}
-          className=" flex items-center justify-center px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black rounded-full py-3 min-w-[350px] text-lg font-medium gap-2 "
+          className=" flex items-center justify-center  bg-neutral-200 hover:bg-white cursor-pointer text-black rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
         >
           <FcGoogle className="text-xl" />
           Login with Google
@@ -133,9 +135,9 @@ const LoginForm = () => {
           <input
             type="email"
             {...register("email", { required: true })}
-            placeholder="me@gmail.com"
+            placeholder="your-email@gmail.com"
             className={cn(
-              "bg-transparent focus:outline-none border-[3px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
+              "bg-transparent focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
               {
                 "border-red-500 focus:border-red-500": errors.email,
               }
@@ -152,10 +154,10 @@ const LoginForm = () => {
           <div className="relative w-full">
             <input
               {...register("password", { required: true })}
-              placeholder=""
+              placeholder="--------"
               type={showPassword ? "text" : "password"}
               className={cn(
-                "bg-transparent w-full focus:outline-none border-[3px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
+                "bg-transparent w-full focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
                 {
                   "border-red-500 focus:border-red-500": errors.password,
                 }
@@ -175,7 +177,7 @@ const LoginForm = () => {
 
         <button
           type="submit"
-          className=" flex items-center justify-center px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 min-w-[350px] text-lg font-medium gap-2 "
+          className=" flex items-center justify-center px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
         >
           {!isLoading ? (
             "Login"
