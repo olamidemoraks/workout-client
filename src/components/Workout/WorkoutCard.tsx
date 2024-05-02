@@ -65,7 +65,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
           src={`${workout?.image?.url}`}
           alt={workout?.name}
           fill
-          className=" w-full h-full  object-cover rounded-md group-hover:brightness-90 brightness-[.6]  -z-[2]"
+          className=" w-full h-full  object-cover rounded-md group-hover:brightness-90  md:brightness-[.6] brightness-90  -z-[2]"
         />
         {/* <div className="absolute top-3 right-3 flex gap-2 items-center">
     <small className="font-semibold">Owner</small>

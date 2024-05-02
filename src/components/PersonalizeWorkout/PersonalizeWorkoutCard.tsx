@@ -50,7 +50,7 @@ const PersonalizeWorkoutCard: React.FC<PersonalizeWorkoutCardProps> = ({
           src={`${workout?.image?.url}`}
           alt={workout?.name}
           fill
-          className=" w-full h-full  object-cover rounded-md brightness-[.6] group-hover:brightness-90 -z-[2]"
+          className=" w-full h-full  object-cover rounded-md md:brightness-[.6] brightness-90 group-hover:brightness-90 -z-[2]"
         />
         {/* <div className="absolute top-3 right-3 flex gap-2 items-center">
       <small className="font-semibold">Owner</small>
