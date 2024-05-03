@@ -45,7 +45,7 @@ const Navbar = () => {
     dispatch(readNotification({}));
   };
   return (
-    <div className="relative max-md:fixed top-0  w-full md:px-10  px-3 py-5 flex justify-between items-center bg-zinc-950/70 backdrop-blur-sm gap-5 z-20 border-b border-b-zinc-800">
+    <div className="relative max-md:fixed top-0  w-full md:px-5  px-3 py-2 flex justify-between items-center bg-zinc-950/70 backdrop-blur-sm gap-5 z-20 border-b border-b-zinc-800">
       <div className="flex gap-2 items-center  relative  max-[280px]:w-full ">
         <BiMenu
           onClick={() => setOpenSidebar((prev) => !prev)}
@@ -80,10 +80,7 @@ const Navbar = () => {
         </div>
         <div className="flex items-start gap-2 hoveer:bg-zinc-900 transition-all px-3 py-2 rounded-lg">
           <NavbarMenu profile={profile} />
-          <div className="md:flex flex-col hidden">
-            <p className=" text-sm font-semibold">{profile?.name}</p>
-            <p className="text-sm text-zinc-200">{profile?.email}</p>
-          </div>
+         
         </div>
         <Notification
           open={openNotificationbar}

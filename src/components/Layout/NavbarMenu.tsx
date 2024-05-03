@@ -40,7 +40,7 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
               src={profile?.avatar.url}
               alt="avatar"
               fill
-              className=" rounded-full absolute object-cover"
+              className=" rounded-xl absolute object-cover"
             />
           </div>
         ) : (
@@ -52,7 +52,7 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
               alphabetsColor[
                 profile?.name.split(" ")?.[0].substring(0, 1).toUpperCase()
               ] ?? "bg-zinc-900/60"
-            }  h-10 w-10 rounded-full flex items-center justify-center text-xl uppercase font-semibold`}
+            }  h-10 w-10 rounded-xl flex items-center justify-center text-xl uppercase font-semibold`}
           >
             {profile?.name?.substring(0, 1)}
           </div>
@@ -75,22 +75,63 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
       >
         <MenuItem
           sx={{
+            margin: "5px",
+            borderRadius: "4px",
+            py: "6px",
+          }}
+          onClick={() => {
+           
+          }}
+        >
+          <div className="flex gap-2 ">
+            <div>
+            {profile?.avatar ? (
+          <div className="h-12 w-12 relative">
+            <Image
+              src={profile?.avatar.url}
+              alt="avatar"
+              fill
+              className=" rounded-xl absolute object-cover"
+            />
+          </div>
+        ) : (
+          // <div className=" bg-zinc-800   md:h-10 md:w-10 h-8 w-8 flex items-center justify-center rounded-full font-semibold uppercase text-lg">
+          //   {profile?.username?.substring(0, 1)}
+          // </div>
+          <div
+            className={`${
+              alphabetsColor[
+                profile?.name.split(" ")?.[0].substring(0, 1).toUpperCase()
+              ] ?? "bg-zinc-900/60"
+            }  h-12 w-12 rounded-xl flex items-center justify-center text-xl uppercase font-semibold`}
+          >
+            {profile?.name?.substring(0, 1)}
+          </div>
+        )}
+              </div>
+           <div >
+           <p className=" text-lg font-semibold">{profile?.name}</p>
+            <p className="text-xs text-zinc-200">@{profile?.username}</p>
+           </div>
+          </div>
+        </MenuItem>
+        <div className=" w-full h-[1px] bg-zinc-800"/>
+        <MenuItem
+          sx={{
             "&:hover": {
               bgcolor: "#27272a",
             },
             margin: "5px",
             borderRadius: "4px",
-            py: "6px",
+            py: "10px",
+            fontSize: "14px",
           }}
           onClick={() => {
             handleClose();
             router.push("/profile");
           }}
         >
-          <div>
-            <p className=" text-sm font-semibold">{profile?.name}</p>
-            <p className="text-sm text-zinc-200">{profile?.email}</p>
-          </div>{" "}
+          Profile
         </MenuItem>
         <MenuItem
           sx={{
@@ -99,7 +140,7 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             },
             margin: "5px",
             borderRadius: "4px",
-            py: "6px",
+            py: "10px",
             fontSize: "14px",
           }}
           onClick={() => {
@@ -116,7 +157,7 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             },
             margin: "5px",
             borderRadius: "4px",
-            py: "6px",
+            py: "10px",
             fontSize: "14px",
           }}
           onClick={() => {
