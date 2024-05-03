@@ -48,7 +48,7 @@ const VerifyPin = () => {
         <input
           value={pin}
           onChange={(e) => setPin(e.target.value)}
-          className="bg-transparent focus:outline-none border-[3px] text-lg text-center p-3 border-zinc-400  focus:border-primary rounded-lg h-[50px]"
+          className="bg-transparent focus:outline-none border-[3px] text-lg text-center p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]"
           maxLength={6}
         />
         <p className=" text-zinc-400 -mt-2">

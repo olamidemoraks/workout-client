@@ -110,9 +110,9 @@ const LoginForm = () => {
       ) : null}
       <form
         onSubmit={handleSubmit(handleSignup)}
-        className="flex flex-col gap-6 relative "
+        className="flex flex-col gap-6 relative w-full"
       >
-        <p className=" text-[1.6rem] font-bold md:mb-8 mb-4">
+        <p className=" text-[1.6rem] font-bold md:mb-8 mb-4 w-full">
           Login to <span className=" font-sans">MaxUp</span>
         </p>
 
@@ -124,11 +124,11 @@ const LoginForm = () => {
           Login with Google
         </div>
 
-        <div className="flex items-center justify-center gap-4 text-zinc-400">
+        <div className="w-full flex items-center justify-center gap-4 text-zinc-400">
           <div className="h-[2px] w-full bg-zinc-800" /> or{" "}
           <div className="h-[2px] w-full bg-zinc-800" />
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="w-full flex flex-col gap-3">
           <label htmlFor="name" className=" text-lg">
             Email
           </label>
@@ -147,7 +147,7 @@ const LoginForm = () => {
             <p className=" text-primary -mt-2">{errors.email.message}</p>
           )}
         </div>
-        <div className="flex flex-col gap-3 ">
+        <div className="w-full flex flex-col gap-3 ">
           <label htmlFor="password" className=" text-lg">
             Password
           </label>

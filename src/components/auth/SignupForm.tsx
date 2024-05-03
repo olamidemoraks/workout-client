@@ -145,46 +145,45 @@ const SignupForm: React.FC<SignupFormProps> = () => {
       content = (
         <form
           onSubmit={handleSubmit(handleSignup)}
-          className="flex flex-col gap-6 relative "
+          className="flex flex-col gap-3 relative "
         >
-          <div className="grid md:grid-cols-2 grid-cols-1  gap-4">
-            <div className="flex flex-col gap-3">
-              <label htmlFor="name" className=" text-lg">
-                Name
-              </label>
-              <input
-                {...register("name", { required: true })}
-                placeholder="john doe"
-                className={cn(
-                  "bg-transparent focus:outline-none border-[3px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
-                  {
-                    "border-red-500 focus:border-red-500": errors.name,
-                  }
-                )}
-              />
-              {errors.name && (
-                <p className=" text-red-500 -mt-2">{errors.name.message}</p>
+          <div className="flex flex-col gap-3">
+            <label htmlFor="name" className=" text-lg">
+              Name
+            </label>
+            <input
+              {...register("name", { required: true })}
+              placeholder="john doe"
+              className={cn(
+                "bg-transparent focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
+                {
+                  "border-red-500 focus:border-red-500": errors.name,
+                }
               )}
-            </div>
-            <div className="flex flex-col gap-3">
-              <label htmlFor="name" className=" text-lg">
-                Username
-              </label>
-              <input
-                {...register("username", { required: true })}
-                placeholder="john doe"
-                className={cn(
-                  "bg-transparent focus:outline-none border-[3px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
-                  {
-                    "border-red-500 focus:border-red-500": errors.username,
-                  }
-                )}
-              />
-              {errors.username && (
-                <p className=" text-red-500 -mt-2">{errors.username.message}</p>
-              )}
-            </div>
+            />
+            {errors.name && (
+              <p className=" text-red-500 -mt-2">{errors.name.message}</p>
+            )}
           </div>
+          <div className="flex flex-col gap-3">
+            <label htmlFor="name" className=" text-lg">
+              Username
+            </label>
+            <input
+              {...register("username", { required: true })}
+              placeholder="johndoe"
+              className={cn(
+                "bg-transparent focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
+                {
+                  "border-red-500 focus:border-red-500": errors.username,
+                }
+              )}
+            />
+            {errors.username && (
+              <p className=" text-red-500 -mt-2">{errors.username.message}</p>
+            )}
+          </div>
+
           <div className="flex flex-col gap-3">
             <label htmlFor="name" className=" text-lg">
               Email
@@ -194,7 +193,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
               {...register("email", { required: true })}
               placeholder="me@gmail.com"
               className={cn(
-                "bg-transparent focus:outline-none border-[3px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
+                "bg-transparent focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
                 {
                   "border-red-500 focus:border-red-500": errors.email,
                 }
@@ -214,7 +213,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
                 placeholder="6+ characters"
                 type={showPassword ? "text" : "password"}
                 className={cn(
-                  "bg-transparent w-full focus:outline-none border-[3px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
+                  "bg-transparent w-full focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
                   {
                     "border-red-500 focus:border-red-500": errors.password,
                   }
@@ -234,13 +233,13 @@ const SignupForm: React.FC<SignupFormProps> = () => {
 
           <button
             type="submit"
-            className=" flex items-center justify-center px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
+            className=" flex items-center justify-center mt-2 px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
           >
             {!isLoading ? (
               "Create Account"
             ) : (
               <>
-                Processing <Loader2 className=" animate-spin" color="black" />
+                Signing up <Loader2 className=" animate-spin" color="black" />
               </>
             )}
           </button>
@@ -277,7 +276,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
           </div>
         </div>
       ) : null}
-      <div>
+      <div className="w-full">
         <p className=" text-[1.6rem] font-bold md:mb-8 mb-4">
           Sign up to brand
         </p>
