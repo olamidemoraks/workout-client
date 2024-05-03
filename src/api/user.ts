@@ -73,8 +73,7 @@ export const verifyCode = async ({
       `${baseUrl}/activate-user`,
       { activation_code, activation_token },
       {
-        withCredentials: true,
-        headers,
+        headers: { "Content-Type": "application/json" },
       }
     );
     return response.data;

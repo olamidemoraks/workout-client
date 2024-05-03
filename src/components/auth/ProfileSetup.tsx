@@ -73,7 +73,7 @@ const ProfileSetup = () => {
       break;
   }
   return (
-    <div className=" flex flex-col items-center h-screen py-20 gap-8 ">
+    <div className=" flex flex-col items-center  h-[100vh] py-20 gap-8 ">
       <ProgressStep step={steps} />
       <div className=" h-full">{content}</div>
     </div>
