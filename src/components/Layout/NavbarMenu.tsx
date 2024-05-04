@@ -124,7 +124,7 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             margin: "5px",
             borderRadius: "4px",
             py: "10px",
-            fontSize: "14px",
+            fontSize: "16px",
           }}
           onClick={() => {
             handleClose();
@@ -141,7 +141,7 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             margin: "5px",
             borderRadius: "4px",
             py: "10px",
-            fontSize: "14px",
+            fontSize: "16px",
           }}
           onClick={() => {
             handleClose();
@@ -158,7 +158,7 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             margin: "5px",
             borderRadius: "4px",
             py: "10px",
-            fontSize: "14px",
+            fontSize: "16px",
           }}
           onClick={() => {
             handleClose();
