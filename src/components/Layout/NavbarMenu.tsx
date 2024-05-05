@@ -3,18 +3,24 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Image from "next/image";
-import { FaCaretDown } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { BiLogOut } from "react-icons/bi";
-import { useMutation } from "react-query";
-import { logout } from "@/api/user";
+import { BiSolidZap } from "react-icons/bi";
+
 import { signOut } from "next-auth/react";
 import { alphabetsColor } from "@/utils/data";
 import { deleteTokenFromLocalStorage } from "@/utils/localstorage";
+import useBatteryCharge from "@/hooks/useBatteryCharge";
 
+const chargeColor: { [key: number]: string } = {
+  1: "fill-red-500",
+  2: "fill-orange-500",
+  3: "fill-yellow-600",
+  4: "fill-yellow-500",
+  0: "",
+};
 export default function NavbarMenu({ profile }: { profile: IUser }) {
   const router = useRouter();
-
+  const { chargeLeft } = useBatteryCharge();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -27,13 +33,17 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
   return (
     <div>
       <div
-        id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
+        id="profile-button"
+        aria-controls={open ? "profile-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        className=" cursor-pointer"
+        className=" cursor-pointer flex items-center bg-zinc-800 rounded-lg h-10"
       >
+        <div className="flex gap-1 items-center  pl-4 pr-3 h-full ">
+          <BiSolidZap className={`${chargeColor[chargeLeft]}`} size={19} />
+          <p className="font-semibold text-base">{chargeLeft}</p>
+        </div>
         {profile?.avatar ? (
           <div className="h-10 w-10 relative">
             <Image
@@ -59,17 +69,18 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
         )}
       </div>
       <Menu
-        id="basic-menu"
+        id="profile-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          "aria-labelledby": "basic-button",
+          "aria-labelledby": "profile-button",
         }}
         sx={{
           "& .MuiPaper-root": {
             bgcolor: "#18181b",
-            width: "250px",
+            minWidth: "250px",
+            maxWidth: "350px",
           },
         }}
       >
@@ -79,43 +90,44 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             borderRadius: "4px",
             py: "6px",
           }}
-          onClick={() => {
-           
-          }}
+          onClick={() => {}}
         >
           <div className="flex gap-2 ">
             <div>
-            {profile?.avatar ? (
-          <div className="h-12 w-12 relative">
-            <Image
-              src={profile?.avatar.url}
-              alt="avatar"
-              fill
-              className=" rounded-xl absolute object-cover"
-            />
-          </div>
-        ) : (
-          // <div className=" bg-zinc-800   md:h-10 md:w-10 h-8 w-8 flex items-center justify-center rounded-full font-semibold uppercase text-lg">
-          //   {profile?.username?.substring(0, 1)}
-          // </div>
-          <div
-            className={`${
-              alphabetsColor[
-                profile?.name.split(" ")?.[0].substring(0, 1).toUpperCase()
-              ] ?? "bg-zinc-900/60"
-            }  h-12 w-12 rounded-xl flex items-center justify-center text-xl uppercase font-semibold`}
-          >
-            {profile?.name?.substring(0, 1)}
-          </div>
-        )}
-              </div>
-           <div >
-           <p className=" text-lg font-semibold">{profile?.name}</p>
-            <p className="text-xs text-zinc-200">@{profile?.username}</p>
-           </div>
+              {profile?.avatar ? (
+                <div className="h-12 w-12 relative">
+                  <Image
+                    src={profile?.avatar.url}
+                    alt="avatar"
+                    fill
+                    className=" rounded-xl absolute object-cover"
+                  />
+                </div>
+              ) : (
+                // <div className=" bg-zinc-800   md:h-10 md:w-10 h-8 w-8 flex items-center justify-center rounded-full font-semibold uppercase text-lg">
+                //   {profile?.username?.substring(0, 1)}
+                // </div>
+                <div
+                  className={`${
+                    alphabetsColor[
+                      profile?.name
+                        .split(" ")?.[0]
+                        .substring(0, 1)
+                        .toUpperCase()
+                    ] ?? "bg-zinc-900/60"
+                  }  h-12 w-12 rounded-xl flex items-center justify-center text-xl uppercase font-semibold`}
+                >
+                  {profile?.name?.substring(0, 1)}
+                </div>
+              )}
+            </div>
+            <div>
+              <p className=" text-lg font-semibold">{profile?.name}</p>
+              <p className="text-xs text-zinc-200">@{profile?.username}</p>
+            </div>
           </div>
         </MenuItem>
-        <div className=" w-full h-[1px] bg-zinc-800"/>
+        <div className=" w-full h-[1px] bg-zinc-800" />
         <MenuItem
           sx={{
             "&:hover": {

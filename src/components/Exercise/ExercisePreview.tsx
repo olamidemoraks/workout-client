@@ -42,6 +42,7 @@ const ExercisePreview: React.FC<ExercisePreviewProps> = ({
                 src={workout?.image?.url}
                 alt={workout?.name}
                 fill
+                priority
                 className="absolute object-cover rounded-xl"
               />
               {type === "challenge" && (

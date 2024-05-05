@@ -57,7 +57,7 @@ const Protected = ({ children }: PropsWithChildren) => {
   }, [profile, dispatch]);
   return (
     <>
-      {isLoading ? (
+      {isLoading || checkingForUser || authLoading ? (
         <OnboardingScreen isLoading={isLoading} />
       ) : (
         <>{profile ? children : redirect("/login")}</>

@@ -15,9 +15,12 @@ const useStreak = ({ userId }: useStreakProps) => {
   });
 
   const streak = data?.streak as number;
-
+  const longestStreak = data?.longestStreak as number;
+  const totalWorkout = data?.totalWorkout as number;
   return {
     streak,
+    totalWorkout,
+    longestStreak,
     isLoading,
   };
 };

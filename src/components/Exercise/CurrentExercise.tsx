@@ -180,6 +180,7 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
                         alt={currentExercise?.name as string}
                         height={200}
                         width={500}
+                        priority
                         className=" object-cover w-full sm:h-full rounded-xl "
                       />
                     </div>
@@ -230,6 +231,7 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
                         alt={currentExercise?.name as string}
                         height={200}
                         width={500}
+                        priority
                         className=" object-cover w-full h-full rounded-xl "
                       />
                       <div className="h-[4px] flex items-center sm:w-full w-[90%] outline outline-zinc-600/70 rounded-full  absolute  -bottom-3 px-1 mt-1">

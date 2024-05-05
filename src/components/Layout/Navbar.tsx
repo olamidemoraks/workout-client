@@ -2,7 +2,7 @@ import useProfile from "@/hooks/useProfile";
 import { cn } from "@/libs/utils";
 import { Bell } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { BiMenu } from "react-icons/bi";
+import { BiMenu, BiSolidBell } from "react-icons/bi";
 import Battery from "../Common/Battery";
 import UserStreak from "../Common/UserStreak";
 import NavbarMenu from "./NavbarMenu";
@@ -15,7 +15,9 @@ import { readNotification } from "@/redux/feature/socketSlice";
 
 const Navbar = () => {
   const { profile } = useProfile();
-  const { streak, isLoading } = useStreak({ userId: profile?._id });
+  const { streak, longestStreak, totalWorkout, isLoading } = useStreak({
+    userId: profile?._id,
+  });
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openNotificationbar, setOpenNotificationbar] = useState(false);
   const { newNotification } = useNotification({ open: openNotificationbar });
@@ -65,22 +67,29 @@ const Navbar = () => {
           <Sidebar setSideDrawer={setOpenSidebar} openMenu={openSidebar} />
         </div>
         <div className="md:block hidden">
-          <UserStreak streak={streak ?? 0} isLoading={isLoading} />
+          <UserStreak
+            streak={streak ?? 0}
+            isLoading={isLoading}
+            longestStreak={longestStreak}
+            totalWorkout={totalWorkout}
+          />
         </div>
       </div>
       <div className="flex justify-between items-center gap-2">
         <div
           onClick={handleNoficationBar}
-          className="relative hover:opacity-100 opacity-75  cursor-pointer"
+          className="relative bg-zinc-800/75 rounded-lg flex items-center justify-center h-10 w-10  cursor-pointer"
         >
-          <Bell size={26} className="" />
+          <BiSolidBell
+            size={21}
+            className=" fill-neutral-400 hover:fill-neutral-200"
+          />
           {newNotification && (
-            <div className="h-2 w-2 bg-emerald-600 ring-4 ring-emerald-600/20 absolute rounded-full top-0 right-0" />
+            <div className="h-2 w-2 bg-emerald-600 ring-4 ring-emerald-600/20 absolute rounded-full top-2 right-2" />
           )}
         </div>
         <div className="flex items-start gap-2 hoveer:bg-zinc-900 transition-all px-3 py-2 rounded-lg">
           <NavbarMenu profile={profile} />
-         
         </div>
         <Notification
           open={openNotificationbar}
