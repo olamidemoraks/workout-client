@@ -1,26 +1,14 @@
+import useProfile from "@/hooks/useProfile";
+import useStreak from "@/hooks/useStreak";
 import { cn } from "@/libs/utils";
-import {
-  ActivityIcon,
-  BarChart2,
-  Compass,
-  Dumbbell,
-  LayoutDashboard,
-  Star,
-  User2,
-} from "lucide-react";
-import { IoGrid } from "react-icons/io5";
-import { BiCaretLeft, BiCaretRight, BiDumbbell } from "react-icons/bi";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import { usePathname } from "next/navigation";
-import { GiCutDiamond } from "react-icons/gi";
-import { FaCompass, FaSearch } from "react-icons/fa";
-import { GiBodyBalance } from "react-icons/gi";
+import { BiCaretLeft, BiCaretRight, BiDumbbell } from "react-icons/bi";
+import { FaSearch } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
-import useProfile from "@/hooks/useProfile";
-import UserStreak from "../Common/UserStreak";
-import useStreak from "@/hooks/useStreak";
+import { GiBodyBalance } from "react-icons/gi";
+import { IoGrid } from "react-icons/io5";
 
 const navData = [
   {
@@ -92,7 +80,6 @@ type SideBarProps = {
 };
 const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
   const { profile } = useProfile();
-  const { streak } = useStreak({ userId: profile?._id });
   const pathName = usePathname()?.split("/")[1];
   return (
     <div
@@ -108,9 +95,7 @@ const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
         className={`block md:hidden ${
           openMenu ? "opacity-100" : "opacity-0"
         } mt-3 absolute top-7`}
-      >
-        <UserStreak streak={streak ?? 0} />
-      </div>
+      ></div>
       <div
         onClick={() => setSideDrawer(openMenu ? false : true)}
         className={cn(

@@ -83,28 +83,6 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
 
         {challenge?.progress !== null ? (
           <div>
-            {/* <div className="flex justify-end ">
-              <p className=" text-zinc-400 ">
-                <span className="  text-emerald-400 ">
-                  {challenge?.progress}
-                </span>
-                /{challenge?.days}
-              </p>
-            </div>
-
-            <div className="w-full h-[4px] bg-slate-50/20 rounded backdrop-blur-sm mt-1 relative">
-              <div className="absolute w-full">
-                <div
-                  className=" h-[4px] bg-emerald-400 ring-4 ring-emerald-600/10 rounded relative"
-                  style={{
-                    width: `${challenge?.progress * (100 / challenge?.days)}%`,
-                  }}
-                >
-                  <GiLaurelCrown className=" absolute -top-2 -right-4 text-xl" />
-                </div>
-              </div>
-            </div> */}
-
             <div className="mt-4 flex justify-between items-center w-full">
               {challenge.progress === challenge.days &&
               challenge.isCompleted ? (
@@ -112,10 +90,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
                   href={`/challenge/${challenge?._id}`}
                   className="  py-1 px-1 pl-3 flex items-center gap-2 backdrop-blur-md bg-neutral-600/30 hover:bg-neutral-500/40 text-white rounded-full w-fit  text-sm font-bold"
                 >
-                  <p className="items-center hidden sm:block gap-1">
-                    Completed
-                  </p>
-                  <p className="items-center sm:hidden block gap-1">Continue</p>
+                  <p className="items-center  block gap-1">Completed</p>
                   <div className="p-2 rounded-full bg-emerald-500">
                     <Check color="#fff" size={18} />
                   </div>

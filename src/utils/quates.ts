@@ -1,14 +1,13 @@
 export const quotes: Array<{ quote: string; author: string }> = [
   {
     quote:
-      " hated every minute of training, but I said, ‘Don’t quit. Suffer now and live the rest of your life as a champion.",
+      "I hated every minute of training, but I said, ‘Don’t quit. Suffer now and live the rest of your life as a champion.",
     author: "Muhammad Ali",
   },
   {
     quote:
-      "We are what we repeatedly do. Excellence then is not an act but a habit.",
-    author:
-      "We are what we repeatedly do. Excellence then is not an act but a habit.",
+      "In training, you listen to your body. In competition, you tell your body to shut up.",
+    author: "Rich Froning",
   },
   {
     quote: "The body achieves what the mind believes.”",
@@ -56,7 +55,7 @@ export const quotes: Array<{ quote: string; author: string }> = [
   },
   {
     quote:
-      "ou’re going to have to let it hurt. Let it suck. The harder you work, the better you will look. Your appearance isn’t parallel to how heavy you lift, it’s parallel to how hard you work.",
+      "You’re going to have to let it hurt. Let it suck. The harder you work, the better you will look. Your appearance isn’t parallel to how heavy you lift, it’s parallel to how hard you work.",
     author: "Joe Mangianello",
   },
   {

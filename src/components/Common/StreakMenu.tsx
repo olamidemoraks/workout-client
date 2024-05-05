@@ -1,7 +1,8 @@
 import { Menu } from "@mui/material";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import DailyAttendance from "../Home/DailyAttendance";
 import { FaMasksTheater } from "react-icons/fa6";
+import ChooseStreakApperance from "./ChooseStreakApperance";
 
 type StreakMenuProps = {
   children: ReactNode;
@@ -18,6 +19,7 @@ const StreakMenu: React.FC<StreakMenuProps> = ({
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [openApperance, setOpenApperance] = useState(false);
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -36,7 +38,10 @@ const StreakMenu: React.FC<StreakMenuProps> = ({
       >
         {children}
       </div>
-
+      <ChooseStreakApperance
+        open={openApperance}
+        setClose={() => setOpenApperance(false)}
+      />
       <Menu
         id="streak-menu"
         anchorEl={anchorEl}
@@ -48,7 +53,7 @@ const StreakMenu: React.FC<StreakMenuProps> = ({
         sx={{
           "& .MuiPaper-root": {
             border: "1px solid #222225",
-            bgcolor: "#141417",
+            bgcolor: "#1d1d21",
             minWidth: "250px",
             maxWidth: "350px",
             borderRadius: "8px",
@@ -79,10 +84,16 @@ const StreakMenu: React.FC<StreakMenuProps> = ({
           <div>
             <div className="h-[1px] w-full bg-zinc-700" />
 
-            <div className="flex gap-2 items-center justify-center mt-4 cursor-pointer hover:bg-zinc-600/75 p-2 rounded-md">
+            <button
+              onClick={() => {
+                handleClose();
+                setOpenApperance(true);
+              }}
+              className="flex w-full gap-2 items-center justify-center mt-4 cursor-pointer hover:bg-zinc-600/75 p-2 rounded-md"
+            >
               <p className=" text-sm text-zinc-300">Choose streak apperance</p>
               <FaMasksTheater />{" "}
-            </div>
+            </button>
           </div>
         </div>
       </Menu>

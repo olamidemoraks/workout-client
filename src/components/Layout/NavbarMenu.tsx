@@ -1,15 +1,16 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import * as React from "react";
 import { BiSolidZap } from "react-icons/bi";
-
-import { signOut } from "next-auth/react";
+import Tooltip from "@mui/material/Tooltip";
+import useBatteryCharge from "@/hooks/useBatteryCharge";
+import useStreak from "@/hooks/useStreak";
 import { alphabetsColor } from "@/utils/data";
 import { deleteTokenFromLocalStorage } from "@/utils/localstorage";
-import useBatteryCharge from "@/hooks/useBatteryCharge";
+import { signOut } from "next-auth/react";
+import UserStreak from "../Common/UserStreak";
 
 const chargeColor: { [key: number]: string } = {
   1: "fill-red-500",
@@ -21,6 +22,9 @@ const chargeColor: { [key: number]: string } = {
 export default function NavbarMenu({ profile }: { profile: IUser }) {
   const router = useRouter();
   const { chargeLeft } = useBatteryCharge();
+  const { streak, longestStreak, totalWorkout, isLoading } = useStreak({
+    userId: profile?._id,
+  });
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -40,10 +44,12 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
         onClick={handleClick}
         className=" cursor-pointer flex items-center bg-zinc-800 rounded-lg h-10"
       >
-        <div className="flex gap-1 items-center  pl-4 pr-3 h-full ">
-          <BiSolidZap className={`${chargeColor[chargeLeft]}`} size={19} />
-          <p className="font-semibold text-base">{chargeLeft}</p>
-        </div>
+        <Tooltip title="Energy level" arrow placement="left">
+          <div className="flex gap-1 items-center  pl-4 pr-3 h-full ">
+            <BiSolidZap className={`${chargeColor[chargeLeft]}`} size={19} />
+            <p className="font-semibold text-base">{chargeLeft}</p>
+          </div>
+        </Tooltip>
         {profile?.avatar ? (
           <div className="h-10 w-10 relative">
             <Image
@@ -123,7 +129,15 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             </div>
             <div>
               <p className=" text-lg font-semibold">{profile?.name}</p>
-              <p className="text-xs text-zinc-200">@{profile?.username}</p>
+              <p className="text-sm text-zinc-200">@{profile?.username}</p>
+              <div className="md:hidden block mt-4">
+                <UserStreak
+                  streak={streak ?? 0}
+                  isLoading={isLoading}
+                  longestStreak={longestStreak}
+                  totalWorkout={totalWorkout}
+                />
+              </div>
             </div>
           </div>
         </MenuItem>

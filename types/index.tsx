@@ -17,6 +17,7 @@ interface IUser {
   followers: [string];
   following: [string];
   challengePin: Array<string>;
+  streakApperanceType: number;
 }
 
 interface IWorkout {

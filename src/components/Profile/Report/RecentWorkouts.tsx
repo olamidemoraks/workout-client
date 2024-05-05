@@ -6,6 +6,7 @@ import { alphabetsColor } from "@/utils/data";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
+import { FaStopwatch } from "react-icons/fa";
 import { useQuery } from "react-query";
 
 const RecentWorkouts = () => {
@@ -68,11 +69,11 @@ const RecentWorkouts = () => {
                     })}
                   </p>
                 </div>
-                <p className="text-neutral-400 text-sm">
-                  Duration{" "}
+                <p className="text-neutral-400 text-sm gap-1 flex items-center">
+                  <FaStopwatch className=" fill-zinc-400" />
                   {(activity?.totalTime / 60).toFixed(0) +
                     ":" +
-                    (activity?.totalTime % 60)}
+                    (activity?.totalTime % 60)}{" "}
                   min
                 </p>
               </div>
