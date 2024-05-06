@@ -1,6 +1,7 @@
 import useGetAllActivities from "@/hooks/useGetAllActivities";
 import { useSearchParams } from "next/navigation";
 import React, { useMemo } from "react";
+import CustomLoader from "../../Common/CustomLoader";
 
 const ReportTotal = () => {
   const { data, isLoading } = useGetAllActivities();
@@ -14,6 +15,10 @@ const ReportTotal = () => {
       0
     );
   }, [data]);
+
+  if (isLoading) {
+    <CustomLoader height="h-full" width="lg:w-[500px] w-full" amount={1} />;
+  }
   return (
     <div className=" rounded-md flex flex-col items-center justify-center  px-5 h-full   lg:w-[500px] w-full gap-5 lg:py-2 py-5 lg:mt-0 mt-8">
       <div className="flex   flex-row items-center justify-evenly px-5 gap-5">

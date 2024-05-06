@@ -4,6 +4,7 @@ import { activityReport } from "@/api/activity";
 import { useEffect, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import CustomLoader from "../../Common/CustomLoader";
 
 type IMonthlyCalender = {
   isDashboard?: boolean;
@@ -93,7 +94,7 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
   if (isLoading) {
     return (
       <div>
-        <Loader2 className=" animate-spin" size={18} />
+        <CustomLoader width="w-full" height="h-[180px]" amount={1} />
       </div>
     );
   }

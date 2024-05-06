@@ -7,7 +7,7 @@ const RecentWorkoutChart = () => {
   const { data, isLoading } = useGetAllActivities();
 
   const focusPoint = useMemo(() => {
-    const points = ["abs", "legs", "arms", "back", "chest", "cardio"];
+    const points = ["abs", "legs", "arm", "back", "chest", "cardio"];
 
     const serverFocusPoint = data?.activities
       ?.filter((activity: any) =>
