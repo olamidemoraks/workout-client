@@ -7,7 +7,7 @@ const RecentWorkoutChart = () => {
   const { data, isLoading } = useGetAllActivities();
 
   const focusPoint = useMemo(() => {
-    const points = ["abs", "legs", "arm", "back", "chest", "cardio"];
+    const points = ["abs", "legs", "arm", "back", "chest"];
 
     const serverFocusPoint = data?.activities
       ?.filter((activity: any) =>
@@ -59,79 +59,76 @@ const RecentWorkoutChart = () => {
     return mainFocusPoint;
   }, [data]);
 
-  console.log({ focusPoint });
   return (
-    <div
-      className={cn(
-        "w-[100%] h-[400px] flex flex-col justify-center items-center lg:col-span-1"
-      )}
-    >
-      {data?.activities?.length === 0 ? (
-        <Empty />
-      ) : (
-        <ResponsiveRadar
-          data={focusPoint}
-          keys={["value"]}
-          indexBy="label"
-          valueFormat=">.0f"
-          margin={{ top: 70, right: 80, bottom: 40, left: 80 }}
-          borderColor={{ from: "color" }}
-          gridShape="linear"
-          gridLabelOffset={11}
-          gridLevels={4}
-          dotSize={9}
-          dotColor={{ theme: "background" }}
-          dotBorderWidth={2}
-          ariaLabel=""
-          colors={{ scheme: "set2" }}
-          blendMode="multiply"
-          motionConfig="wobbly"
-          theme={{
-            axis: {
-              ticks: {
-                text: {
-                  fill: "#fff",
-                  fontSize: 14,
+    <div className=" h-full w-full mt-[16px] flex flex-col justify-center items-center">
+      <div className={cn("w-[100%] h-[400px]")}>
+        {data?.activities?.length === 0 ? (
+          <Empty />
+        ) : (
+          <ResponsiveRadar
+            data={focusPoint}
+            keys={["value"]}
+            indexBy="label"
+            valueFormat=">.0f"
+            margin={{ top: 70, right: 80, bottom: 40, left: 80 }}
+            borderColor={{ from: "color" }}
+            gridShape="linear"
+            gridLabelOffset={11}
+            gridLevels={4}
+            dotSize={9}
+            dotColor={{ theme: "background" }}
+            dotBorderWidth={2}
+            ariaLabel=""
+            colors={{ scheme: "set2" }}
+            blendMode="multiply"
+            motionConfig="wobbly"
+            theme={{
+              axis: {
+                ticks: {
+                  text: {
+                    fill: "#fff",
+                    fontSize: 14,
+                    textTransform: "capitalize",
+                  },
+                },
+              },
+              grid: {
+                line: {
+                  stroke: "#cacacacf",
+                },
+              },
+              tooltip: {
+                container: {
+                  background: "#1e1e20",
+                  textEmphasisColor: "#000",
                   textTransform: "capitalize",
                 },
               },
-            },
-            grid: {
-              line: {
-                stroke: "#cacacacf",
-              },
-            },
-            tooltip: {
-              container: {
-                background: "#1e1e20",
-                textEmphasisColor: "#000",
-                textTransform: "capitalize",
-              },
-            },
-          }}
-          // legends={[
-          //   {
-          //     anchor: "top-left",
-          //     direction: "column",
-          //     translateX: -50,
-          //     translateY: -40,
-          //     itemWidth: 80,
-          //     itemHeight: 20,
-          //     itemTextColor: "#b3b3b3",
-          //     symbolSize: 12,
-          //     symbolShape: "circle",
-          //     effects: [
-          //       {
-          //         on: "hover",
-          //         style: {
-          //           itemTextColor: "#ffffff",
-          //         },
-          //       },
-          //     ],
-          //   },
-          // ]}
-        />
-      )}
+            }}
+            // legends={[
+            //   {
+            //     anchor: "top-left",
+            //     direction: "column",
+            //     translateX: -50,
+            //     translateY: -40,
+            //     itemWidth: 80,
+            //     itemHeight: 20,
+            //     itemTextColor: "#b3b3b3",
+            //     symbolSize: 12,
+            //     symbolShape: "circle",
+            //     effects: [
+            //       {
+            //         on: "hover",
+            //         style: {
+            //           itemTextColor: "#ffffff",
+            //         },
+            //       },
+            //     ],
+            //   },
+            // ]}
+          />
+        )}
+      </div>
     </div>
   );
 };

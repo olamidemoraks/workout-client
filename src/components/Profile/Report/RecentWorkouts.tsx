@@ -1,13 +1,10 @@
-import { recentRctivity } from "@/api/activity";
 import CustomLoader from "@/components/Common/CustomLoader";
 import Empty from "@/components/Common/Empty";
 import useRecentWorkout from "@/hooks/useRecentWorkout";
 import { alphabetsColor } from "@/utils/data";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import { FaStopwatch } from "react-icons/fa";
-import { useQuery } from "react-query";
 
 const RecentWorkouts = () => {
   const { data, isLoading } = useRecentWorkout();
@@ -20,8 +17,8 @@ const RecentWorkouts = () => {
     arm: "/assets/icons/arm.png",
     back: "/assets/icons/back.webp",
     chest: "/assets/icons/chest.png",
-    leg: "/assets/icons/leg.png",
-    challenge: "/assets/icons/challenge.png",
+    legs: "/assets/icons/leg.png",
+    challenge: "/assets/icons/challenge.webp",
     custom: "/assets/icons/calender.png",
   };
 

@@ -94,7 +94,7 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
   if (isLoading) {
     return (
       <div>
-        <CustomLoader width="w-full" height="h-[180px]" amount={1} />
+        <CustomLoader weight="w-full" height="h-[180px]" amount={1} />
       </div>
     );
   }
