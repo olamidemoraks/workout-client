@@ -87,7 +87,7 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({
           <p className=" text-neutral-300 text-center leading-5">
             Filter exercise base on muscle group available to you below
           </p>
-          <div className=" overflow-x-auto w-full scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-blue-600/75">
+          <div className=" overflow-x-auto w-full scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-emerald-600/75">
             <div className="flex   w-fit overflow-x-auto gap-2 p-2 ">
               {focus.map((group, index) => (
                 <div

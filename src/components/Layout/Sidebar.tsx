@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiCaretLeft, BiCaretRight, BiDumbbell } from "react-icons/bi";
+import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
 import { GiBodyBalance } from "react-icons/gi";
@@ -79,7 +80,6 @@ type SideBarProps = {
   openMenu?: boolean;
 };
 const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
-  const { profile } = useProfile();
   const pathName = usePathname()?.split("/")[1];
   return (
     <div
@@ -99,24 +99,25 @@ const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
       <div
         onClick={() => setSideDrawer(openMenu ? false : true)}
         className={cn(
-          "absolute top-3 right-0 bg-zinc-900 p-3 rounded-l-full hover:bg-zinc-800 cursor-pointer",
+          "fixed sm:top-[5.2rem] top-[2rem]  left-0 p-3 z-[100] cursor-pointer",
           {
             hidden: sideDrawer,
           }
         )}
       >
-        <BiCaretLeft />
+        <BsChevronCompactLeft className={" text-2xl"} size={26} />
       </div>
+
       <div
         onClick={() => setSideDrawer(false)}
         className={cn(
-          "absolute top-3 left-0 bg-zinc-900 p-3 rounded-r-full hover:bg-zinc-800 cursor-pointer",
+          "fixed sm:top-[5.2rem] top-[2rem]  left-0 p-3 z-[100] cursor-pointer",
           {
             hidden: !sideDrawer,
           }
         )}
       >
-        <BiCaretRight />
+        <BsChevronCompactRight className={" text-2xl"} size={26} />
       </div>
       <div className="w-full">
         <div className=" w-full items-center flex justify-center h-[100px] gap-1">

@@ -2,13 +2,21 @@ import { Modal } from "@mui/material";
 import { ImQuotesLeft, ImQuotesRight } from "react-icons/im";
 import { Loader } from "lucide-react";
 import useQuotes from "@/hooks/useQuotes";
+import Image from "next/image";
 
 const OnboardingScreen = ({ isLoading }: { isLoading: boolean }) => {
   const { selectedQuote } = useQuotes();
   return (
     <Modal open={isLoading} onClose={() => {}}>
-      <div className="h-full w-full backdrop-blur-sm flex items-center justify-center">
+      <div className="h-full bg-[url('/assets/bg1.jpg')] bg-cover w-full backdrop-blur-sm flex items-center justify-center">
         <div className="sm:max-w-[500px] w-full flex flex-col items-center p-2">
+          <Image
+            src={"/assets/logo3.svg"}
+            alt="logo"
+            height={90}
+            width={100}
+            className="-translate-x-2"
+          />
           <div className="flex w-full">
             <ImQuotesLeft size={33} />
           </div>

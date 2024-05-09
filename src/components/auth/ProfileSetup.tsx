@@ -10,6 +10,8 @@ import Goals from "./Goals";
 import Level from "./Level";
 import Weight from "./Weight";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import toast from "react-hot-toast";
 
 const ProfileSetup = () => {
   const router = useRouter();
@@ -25,6 +27,9 @@ const ProfileSetup = () => {
         return;
       }
       setSteps(value?.user?.steps);
+    },
+    onError: () => {
+      toast.error("Something went wrong. Try again!");
     },
   });
 
@@ -73,7 +78,7 @@ const ProfileSetup = () => {
       break;
   }
   return (
-    <div className=" flex flex-col items-center  h-[100vh] py-20 gap-8 ">
+    <div className=" flex flex-col items-center  h-[100vh] pt-5 pb-16 gap-8 ">
       <ProgressStep step={steps} />
       <div className=" h-full">{content}</div>
     </div>
@@ -92,21 +97,26 @@ const ProgressStep = ({ step = "gender" }: { step: string }) => {
   };
 
   return (
-    <div className="flex items-center gap-1">
-      {Array(6)
-        .fill(0)
-        .map((_, index) => (
-          <div
-            className={cn(
-              "h-[4px] md:w-14 sm:w-12 w-7 bg-zinc-700 rounded-full",
-              {
-                "bg-emerald-400": index < steps[step],
-              }
-            )}
-            key={index}
-          />
-        ))}
-    </div>
+    <>
+      <div className=" w-full flex justify-center">
+        <Image src={"/assets/logo3.svg"} alt="logo" height={90} width={100} />
+      </div>
+      <div className="flex items-center gap-1">
+        {Array(6)
+          .fill(0)
+          .map((_, index) => (
+            <div
+              className={cn(
+                "h-[4px] md:w-14 sm:w-12 w-7 bg-zinc-700 rounded-full",
+                {
+                  "bg-emerald-400": index < steps[step],
+                }
+              )}
+              key={index}
+            />
+          ))}
+      </div>
+    </>
   );
 };
 

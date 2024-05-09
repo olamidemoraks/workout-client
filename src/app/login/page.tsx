@@ -13,7 +13,7 @@ const page = () => {
           <LoginForm />
         </div>
       </div>
-      <div className="flex flex-col items-center gap-2 -rotate-[30deg] absolute lg:right-20 md:right-10 right-1 lg:translate-x-0 md:translate-x-[30%]  translate-x-[80%] md:translate-y-[-50%] translate-y-[-100%]">
+      {/* <div className="flex flex-col items-center gap-2 -rotate-[30deg] absolute lg:right-20 md:right-10 right-1 lg:translate-x-0 md:translate-x-[30%]  translate-x-[80%] md:translate-y-[-50%] translate-y-[-100%]">
         <div className="relative">
           <div className="flex flex-col items-center gap-2">
             <div className="h-3 w-[300px] bg-zinc-400 rounded-full" />
@@ -26,7 +26,7 @@ const page = () => {
             <div className="h-3 w-[280px] bg-white rounded-full" />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -3,6 +3,7 @@ import React, { PropsWithChildren, useState } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Protected from "@/hooks/protected";
+import Image from "next/image";
 
 const Layout = ({ children }: PropsWithChildren) => {
   const [sideDrawer, setSideDrawer] = useState(true);
@@ -10,12 +11,22 @@ const Layout = ({ children }: PropsWithChildren) => {
     <Protected>
       <div className="flex w-full h-screen overflow-hidden ">
         <Sidebar setSideDrawer={setSideDrawer} sideDrawer={sideDrawer} />
-        <div className="w-full h-full relative overflow-y-auto overflow-x-hidden scrollbar scrollbar-none scroll-smooth ">
+        <div className=" fixed top-0 w-full z-[30]">
           <Navbar />
-          <div className="w-full h-full absolute md:mt-[2rem]  mt-[5rem]">
-            <div className="absolute -top-10 z-[-2] min-h-[89vh] h-full w-full bg-[#000000] bg-[radial-gradient(#ffffff1f_1px,#09090b_1px)] bg-[size:20px_20px]"></div>
-            <br className=" md:hidden block" />
-            {children}
+        </div>
+        <div className="w-full h-full relative overflow-y-auto overflow-x-hidden scrollbar scrollbar-none scroll-smooth ">
+          <div className="w-full h-full absolute ">
+            {/* <div className="absolute -top-10 z-[-2] min-h-[89vh] h-full w-full bg-[#000000] bg-[radial-gradient(#ffffff1f_1px,#09090b_1px)] bg-[size:20px_20px]"></div> */}
+            <Image
+              src={"/assets/nnnoise.svg"}
+              fill
+              alt="bg-noise"
+              className="absolute object-cover -top-10 z-[-2] h-[100vh] w-full "
+            />
+
+            <div className=" scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-zinc-400 scroll-smooth overflow-y-auto h-[100vh] w-full py-[6rem] ">
+              {children}
+            </div>
           </div>
         </div>
       </div>

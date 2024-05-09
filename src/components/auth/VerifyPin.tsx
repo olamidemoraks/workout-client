@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useMutation } from "react-query";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const VerifyPin = () => {
   const router = useRouter();
@@ -40,6 +41,13 @@ const VerifyPin = () => {
       {/* Security verification
     email verfifcattion code 
     enter the verification code sent to your mail */}
+      <Image
+        src={"/assets/logo3.svg"}
+        alt="logo"
+        height={90}
+        width={100}
+        className="-translate-x-2"
+      />
       <p className=" text-[1.6rem] font-bold mb-8">Security Verification</p>
       <form onSubmit={handleSubmitCode} className="flex flex-col gap-3">
         <label htmlFor="name" className=" text-lg">

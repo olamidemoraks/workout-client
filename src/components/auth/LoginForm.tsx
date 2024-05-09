@@ -15,6 +15,7 @@ import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { setTokenToLocalStorage } from "@/utils/localstorage";
 import useProfile from "@/hooks/useProfile";
+import Image from "next/image";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -103,17 +104,22 @@ const LoginForm = () => {
             <div>
               <Loader2 className=" animate-spin" size={24} />
             </div>
-
-            <p className=" text-lg font-semibold">loading account...</p>
           </div>
         </div>
       ) : null}
       <form
         onSubmit={handleSubmit(handleSignup)}
-        className="flex flex-col gap-6 relative w-full"
+        className="flex flex-col gap-2 relative w-full"
       >
-        <p className=" text-[1.6rem] font-bold md:mb-8 mb-4 w-full">
-          Login to <span className=" font-sans">MaxUp</span>
+        <Image
+          src={"/assets/logo3.svg"}
+          alt="logo"
+          height={90}
+          width={100}
+          className="-translate-x-2"
+        />
+        <p className=" text-[1.6rem] font-bold md:mb-5 mb-4 w-full ">
+          Login to<span className=" font-sans"> MaxUp</span>
         </p>
 
         <div
@@ -124,76 +130,78 @@ const LoginForm = () => {
           Login with Google
         </div>
 
-        <div className="w-full flex items-center justify-center gap-4 text-zinc-400">
-          <div className="h-[2px] w-full bg-zinc-800" /> or{" "}
-          <div className="h-[2px] w-full bg-zinc-800" />
-        </div>
-        <div className="w-full flex flex-col gap-3">
-          <label htmlFor="name" className=" text-lg">
-            Email
-          </label>
-          <input
-            type="email"
-            {...register("email", { required: true })}
-            placeholder="your-email@gmail.com"
-            className={cn(
-              "bg-transparent focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
-              {
-                "border-red-500 focus:border-red-500": errors.email,
-              }
-            )}
-          />
-          {errors.email && (
-            <p className=" text-primary -mt-2">{errors.email.message}</p>
-          )}
-        </div>
-        <div className="w-full flex flex-col gap-3 ">
-          <label htmlFor="password" className=" text-lg">
-            Password
-          </label>
-          <div className="relative w-full">
+        <div className="flex flex-col gap-4">
+          <div className="w-full flex items-center justify-center gap-4 text-zinc-400">
+            <div className="h-[2px] w-full bg-zinc-800" /> or{" "}
+            <div className="h-[2px] w-full bg-zinc-800" />
+          </div>
+          <div className="w-full flex flex-col gap-3">
+            <label htmlFor="name" className=" text-lg">
+              Email
+            </label>
             <input
-              {...register("password", { required: true })}
-              placeholder="--------"
-              type={showPassword ? "text" : "password"}
+              type="email"
+              {...register("email", { required: true })}
+              placeholder="your-email@gmail.com"
               className={cn(
-                "bg-transparent w-full focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
+                "bg-transparent focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
                 {
-                  "border-red-500 focus:border-red-500": errors.password,
+                  "border-red-500 focus:border-red-500": errors.email,
                 }
               )}
             />
-            <div
-              className="absolute right-3 top-3 cursor-pointer"
-              onClick={() => setShowPassword((prev) => !prev)}
-            >
-              {showPassword ? <Eye /> : <EyeOff />}
-            </div>
-            {errors.password && (
-              <p className=" text-primary">{errors.password?.message}</p>
+            {errors.email && (
+              <p className=" text-primary -mt-2">{errors.email.message}</p>
             )}
           </div>
-        </div>
+          <div className="w-full flex flex-col gap-3 ">
+            <label htmlFor="password" className=" text-lg">
+              Password
+            </label>
+            <div className="relative w-full">
+              <input
+                {...register("password", { required: true })}
+                placeholder="--------"
+                type={showPassword ? "text" : "password"}
+                className={cn(
+                  "bg-transparent w-full focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
+                  {
+                    "border-red-500 focus:border-red-500": errors.password,
+                  }
+                )}
+              />
+              <div
+                className="absolute right-3 top-3 cursor-pointer"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? <Eye /> : <EyeOff />}
+              </div>
+              {errors.password && (
+                <p className=" text-primary">{errors.password?.message}</p>
+              )}
+            </div>
+          </div>
 
-        <button
-          type="submit"
-          className=" flex items-center justify-center px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
-        >
-          {!isLoading ? (
-            "Login"
-          ) : (
-            <>
-              Loading.. <Loader2 className=" animate-spin" color="black" />
-            </>
-          )}
-        </button>
-        <p className=" text-center">
-          I don&apos;t have an account?{" "}
-          <Link href={"/signup"} className=" text-blue-500 font-medium ">
-            {" "}
-            Sign Up
-          </Link>
-        </p>
+          <button
+            type="submit"
+            className=" flex items-center justify-center px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
+          >
+            {!isLoading ? (
+              "Login"
+            ) : (
+              <>
+                Loading.. <Loader2 className=" animate-spin" color="black" />
+              </>
+            )}
+          </button>
+          <p className=" text-center">
+            I don&apos;t have an account?{" "}
+            <Link href={"/signup"} className=" text-blue-500 font-medium ">
+              {" "}
+              Sign Up
+            </Link>
+          </p>
+        </div>
       </form>
     </>
   );

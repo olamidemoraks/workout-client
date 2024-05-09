@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import useProfile from "@/hooks/useProfile";
+import Image from "next/image";
 
 type SignupFormProps = {};
 
@@ -253,7 +254,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
 
           <div
             onClick={() => setWithEmail("google")}
-            className=" absolute border border-zinc-700 rounded-full p-3 -left-[25%] -top-4 cursor-pointer transition duration-150 hover:p-[12.7px] md:flex hidden"
+            className=" absolute border border-zinc-700 rounded-full p-3 md:-left-[25%] md:-top-4 -top-12 max-md:right-3 cursor-pointer transition duration-150 hover:p-[12.7px] flex "
           >
             <ChevronLeft className=" text-zinc-700" />
           </div>
@@ -277,8 +278,15 @@ const SignupForm: React.FC<SignupFormProps> = () => {
         </div>
       ) : null}
       <div className="w-full">
+        <Image
+          src={"/assets/logo3.svg"}
+          alt="logo"
+          height={90}
+          width={100}
+          className="-translate-x-2"
+        />
         <p className=" text-[1.6rem] font-bold md:mb-8 mb-4">
-          Sign up to brand
+          Sign up to Maxup
         </p>
         {content}
       </div>
