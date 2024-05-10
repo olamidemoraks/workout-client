@@ -2,6 +2,7 @@ import useGetAllActivities from "@/hooks/useGetAllActivities";
 import { useSearchParams } from "next/navigation";
 import React, { useMemo } from "react";
 import CustomLoader from "../../Common/CustomLoader";
+import Countup from "react-countup";
 
 const ReportTotal = () => {
   const { data, isLoading } = useGetAllActivities();
@@ -26,7 +27,7 @@ const ReportTotal = () => {
       <div className="flex   flex-row items-center justify-evenly px-5 gap-5">
         <div className="flex flex-col text-center">
           <p className=" text-3xl font-semibold text-green-400">
-            {data?.activities?.length ?? 0}
+            <Countup end={data?.activities?.length} duration={2.75} />
           </p>
           <p className=" text-neutral-300">Workouts</p>
         </div>
