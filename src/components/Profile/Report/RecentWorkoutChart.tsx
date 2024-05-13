@@ -20,7 +20,7 @@ const RecentWorkoutChart = () => {
           currentValue.workoutName.split(" ")?.[0] as string
         ).toLowerCase();
         const sameLabel = accumalator.find(
-          (activities) => activities?.label === label
+          (activities) => activities?.id === label
         );
         if (sameLabel) {
           sameLabel.value += 1;
@@ -59,6 +59,7 @@ const RecentWorkoutChart = () => {
     return mainFocusPoint;
   }, [data]);
 
+  console.log({ focusPoint });
   return (
     <div className=" h-full w-full mt-[16px] flex flex-col justify-center items-center">
       <div className={cn("w-[100%] h-[400px]")}>

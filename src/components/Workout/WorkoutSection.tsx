@@ -13,7 +13,7 @@ const WorkoutSection: React.FC<WorkoutSectionProps> = ({
   return (
     <div className={`flex flex-col w-full gap-6`}>
       <div className="flex items-center justify-between w-full">
-        <p className=" font-semibold uppercase sm:text-lg text-base text-zinc-300">
+        <p className=" font-semibold uppercase sm:text-xl text-lg text-zinc-300">
           {header}
         </p>
       </div>

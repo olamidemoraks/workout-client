@@ -16,7 +16,6 @@ const ExerciseInfo: React.FC<ExerciseInfoProps> = ({
   open,
   setClose,
 }) => {
-  console.log({ exercise });
   return (
     <Modal open={open} setClose={setClose}>
       <Box
@@ -27,7 +26,7 @@ const ExerciseInfo: React.FC<ExerciseInfoProps> = ({
           transform: "translate(-50%, -50%)",
           p: 4,
         }}
-        className=" bg-zinc-900 lg:w-[600px] sm:w-[80%] w-[99%] rounded-md   min-h-[200px] flex p-4 py-6 gap-3 flex-col"
+        className=" bg-zinc-900 lg:w-[600px] sm:w-[80%] w-[99%] rounded-md   max-h-[87vh] overflow-y-auto flex p-4 py-6 gap-3 flex-col"
       >
         <div className="w-full flex justify-between mb-2">
           <p className="text-xl">Exercise Info</p>
@@ -65,7 +64,7 @@ const ExerciseInfo: React.FC<ExerciseInfoProps> = ({
 
         <div className="mt-3">
           <p className=" text-lg">Focus Point</p>
-          <div className="w-full flex mt-2">
+          <div className="w-full flex mt-2 overflow-x-auto">
             {exercise?.focus?.map((title, index) => (
               <>
                 {!!focus.find((value) => value.title === title) ? (

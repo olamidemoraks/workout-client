@@ -10,6 +10,7 @@ import { io, Socket } from "socket.io-client";
 import { useDispatch } from "react-redux";
 import { getSocket } from "@/redux/feature/socketSlice";
 import OnboardingScreen from "@/components/Common/OnboardingScreen";
+import { getTokenFromLocalStorage } from "@/utils/localstorage";
 
 const Protected = ({ children }: PropsWithChildren) => {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ const Protected = ({ children }: PropsWithChildren) => {
   });
 
   useEffect(() => {
-    if (!profile) {
+    if (!profile && !getTokenFromLocalStorage()) {
       if (data?.user) {
         checkUserExist({ value: { email: data?.user?.email } });
       }
@@ -57,7 +58,7 @@ const Protected = ({ children }: PropsWithChildren) => {
   }, [profile, dispatch]);
   return (
     <>
-      {isLoading || checkingForUser || authLoading ? (
+      {isLoading || authLoading ? (
         <OnboardingScreen isLoading={isLoading} />
       ) : (
         <>{profile ? children : redirect("/login")}</>

@@ -165,7 +165,6 @@ const StreakApperance: React.FC<StreakApperanceProps> = ({ type, streak }) => {
               />
             )}
           </div>
-          <Image src={"/assets/logo2.svg"} alt="logo" height={90} width={100} />
           <div className="h-10 bg-zinc-800/80 rounded-lg flex items-center justify-center gap-2 px-3">
             <p className="font-semibold text-base">{streak}</p>
             {streak < 1 ? (
@@ -182,6 +181,5 @@ const StreakApperance: React.FC<StreakApperanceProps> = ({ type, streak }) => {
       return;
       break;
   }
-  return <div>Have a good coding</div>;
 };
 export default StreakApperance;

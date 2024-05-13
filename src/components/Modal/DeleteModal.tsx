@@ -28,10 +28,9 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
           p: 4,
         }}
-        className=" bg-zinc-900 rounded-md w-fit  min-h-[200px] flex items-center justify-center p-4 py-6 gap-3 flex-col"
+        className=" bg-zinc-900 rounded-md w-[97%] sm:w-[500px]  min-h-[200px] flex items-center justify-center p-4 py-6 gap-3 flex-col"
       >
         <AlertTriangle className=" fill-rose-500/20" color="#f43f5e" />
         <p className=" font-bold">Are you sure?</p>

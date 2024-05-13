@@ -41,19 +41,19 @@ const ChooseStreakApperance: React.FC<ChooseStreakApperanceProps> = ({
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          p: 4,
+          width: { sm: "fit-content", xs: "100%" },
         }}
       >
-        <div className="flex flex-col justify-between bg-zinc-800 border border-zinc-700 rounded-xl w-[400px] sm:w-[500px] min-h-[40vh] p-5">
+        <div className="flex flex-col justify-between bg-zinc-800 border border-zinc-700 rounded-xl w-[97%] sm:w-[500px] min-h-[40vh] p-5">
           <div className="flex justify-between items-center ">
-            <div className="flex gap-2 items-center justify-center ">
-              <p className=" text-lg text-zinc-300">Choose streak apperance</p>
+            <div className="flex flex-wrap gap-2 items-center justify-center ">
+              <p className=" text-lg text-zinc-300">Streak apperances</p>
               <FaMasksTheater size={20} />{" "}
             </div>
             <FaX size={16} onClick={setClose} className={"cursor-pointer"} />
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mt-7">
+          <div className="grid sm:grid-cols-2 grid-cols-1 gap-4 mt-7">
             <div className="space-y-2">
               <p className=" font-semibold text-zinc-200">Type 1</p>
               <div

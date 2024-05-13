@@ -139,7 +139,7 @@ export const getProfile = async (id: string) => {
     });
     return response.data;
   } catch (error: any) {
-    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+    return new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
 export const getStreak = async ({ id }: { id: string }) => {

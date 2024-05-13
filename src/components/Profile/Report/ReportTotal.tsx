@@ -34,7 +34,7 @@ const ReportTotal = () => {
         <div className="h-8 w-[1px] bg-zinc-800" />
         <div className="flex flex-col text-center">
           <p className=" text-3xl font-semibold text-green-400">
-            {(totalMin / 60 ?? 0).toFixed(0)}
+            <Countup end={Math.ceil(totalMin / 60 ?? 0)} duration={2.75} />
           </p>
           <p className=" text-neutral-300">Minutes</p>
         </div>

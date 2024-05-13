@@ -13,7 +13,10 @@ import { FcGoogle } from "react-icons/fc";
 import { cn } from "@/libs/utils";
 import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
-import { setTokenToLocalStorage } from "@/utils/localstorage";
+import {
+  getTokenFromLocalStorage,
+  setTokenToLocalStorage,
+} from "@/utils/localstorage";
 import useProfile from "@/hooks/useProfile";
 import Image from "next/image";
 
@@ -53,7 +56,7 @@ const LoginForm = () => {
   });
 
   useEffect(() => {
-    if (profile) {
+    if (profile && getTokenFromLocalStorage()) {
       router.replace("/");
     } else if (data?.user) {
       checkUserExist({ value: { email: data?.user?.email } });
@@ -111,16 +114,21 @@ const LoginForm = () => {
         onSubmit={handleSubmit(handleSignup)}
         className="flex flex-col gap-2 relative w-full"
       >
-        <Image
-          src={"/assets/logo3.svg"}
-          alt="logo"
-          height={90}
-          width={100}
-          className="-translate-x-2"
-        />
-        <p className=" text-[1.6rem] font-bold md:mb-5 mb-4 w-full ">
-          Login to<span className=" font-sans"> MaxUp</span>
-        </p>
+        <div className=" flex flex-col items-center justify-center py-3 group">
+          <Image
+            src={"/assets/logo3.svg"}
+            alt="logo"
+            priority
+            height={100}
+            width={100}
+          />
+
+          <p className=" text-lg font-bold group-hover:tracking-[.25rem] transition-all ease-in-out duration-200 tracking-[.2rem] -mt-2">
+            Ma<span className=" text-[28px]">x</span>up
+          </p>
+        </div>
+
+        <p className=" sm:text-2xl font-bold md:mb-5 mb-3 w-full ">Log In</p>
 
         <div
           onClick={() => signIn("google")}

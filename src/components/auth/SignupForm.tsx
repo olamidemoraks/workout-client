@@ -114,10 +114,10 @@ const SignupForm: React.FC<SignupFormProps> = () => {
         <div className="flex flex-col gap-6 ">
           <div
             onClick={() => signIn("google")}
-            className=" flex items-center justify-center px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
+            className=" flex items-center justify-center sm:px-8 px-2 bg-neutral-200 hover:bg-white cursor-pointer  rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
           >
-            <FcGoogle className="text-xl" />
-            Sign up with Google
+            <FcGoogle />
+            <span className="text-black ">Sign up with Google</span>
           </div>
 
           <div className="flex items-center justify-center gap-4 text-zinc-400">
@@ -146,7 +146,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
       content = (
         <form
           onSubmit={handleSubmit(handleSignup)}
-          className="flex flex-col gap-3 relative "
+          className="flex flex-col gap-3 relative my-6 "
         >
           <div className="flex flex-col gap-3">
             <label htmlFor="name" className=" text-lg">
@@ -156,7 +156,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
               {...register("name", { required: true })}
               placeholder="john doe"
               className={cn(
-                "bg-transparent focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
+                "bg-transparent focus:outline-none border-[1px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
                 {
                   "border-red-500 focus:border-red-500": errors.name,
                 }
@@ -174,7 +174,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
               {...register("username", { required: true })}
               placeholder="johndoe"
               className={cn(
-                "bg-transparent focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
+                "bg-transparent focus:outline-none border-[1px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
                 {
                   "border-red-500 focus:border-red-500": errors.username,
                 }
@@ -194,7 +194,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
               {...register("email", { required: true })}
               placeholder="me@gmail.com"
               className={cn(
-                "bg-transparent focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
+                "bg-transparent focus:outline-none border-[1px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
                 {
                   "border-red-500 focus:border-red-500": errors.email,
                 }
@@ -214,7 +214,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
                 placeholder="6+ characters"
                 type={showPassword ? "text" : "password"}
                 className={cn(
-                  "bg-transparent w-full focus:outline-none border-[2px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
+                  "bg-transparent w-full focus:outline-none border-[1px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
                   {
                     "border-red-500 focus:border-red-500": errors.password,
                   }
@@ -252,12 +252,12 @@ const SignupForm: React.FC<SignupFormProps> = () => {
             </Link>
           </p>
 
-          <div
+          <button
             onClick={() => setWithEmail("google")}
-            className=" absolute border border-zinc-700 rounded-full p-3 md:-left-[25%] md:-top-4 -top-12 max-md:right-3 cursor-pointer transition duration-150 hover:p-[12.7px] flex "
+            className="text-zinc-400 hover:text-zinc-50 text-center"
           >
-            <ChevronLeft className=" text-zinc-700" />
-          </div>
+            Back
+          </button>
         </form>
       );
       break;
@@ -277,17 +277,9 @@ const SignupForm: React.FC<SignupFormProps> = () => {
           </div>
         </div>
       ) : null}
-      <div className="w-full">
-        <Image
-          src={"/assets/logo3.svg"}
-          alt="logo"
-          height={90}
-          width={100}
-          className="-translate-x-2"
-        />
-        <p className=" text-[1.6rem] font-bold md:mb-8 mb-4">
-          Sign up to Maxup
-        </p>
+
+      <div className="w-full  sm:mt-0 ">
+        <p className="sm:text-2xl text-xl font-bold md:mb-8 mb-4">Sign up</p>
         {content}
       </div>
     </>

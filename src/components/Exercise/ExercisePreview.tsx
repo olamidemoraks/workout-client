@@ -32,7 +32,7 @@ const ExercisePreview: React.FC<ExercisePreviewProps> = ({
         <div className=" flex w-full px-3 justify-between md:flex-row flex-col gap-2">
           <div
             onClick={() => router.back()}
-            className="sm:ml-2 ml-3 bg-zinc-900 rounded-lg h-[40px] w-[40px] flex items-center justify-center cursor-pointer hover:bg-emerald-600"
+            className=" bg-zinc-900 rounded-lg h-[40px] w-[40px] flex items-center justify-center cursor-pointer hover:bg-emerald-600"
           >
             <ArrowLeft />
           </div>
@@ -47,12 +47,10 @@ const ExercisePreview: React.FC<ExercisePreviewProps> = ({
               />
               {type === "challenge" && (
                 <div className="flex md:gap-5 gap-1  flex-col items-center justify-center h-full w-full space-y-2 bg-gradient-to-r  absolute p-6 rounded-xl from-black/60 to-zinc-900/30">
-                  <div>
-                    <p className="font-bold uppercase md:text-4xl text-3xl text-neutral-100">
-                      {workout?.name}
-                    </p>
-                  </div>
-                  <p className=" block text-2xl font-bold uppercase">
+                  <p className="font-bold uppercase md:text-4xl text-center text-3xl text-neutral-100">
+                    {workout?.name}
+                  </p>
+                  <p className=" block text-2xl font-bold uppercase text-center">
                     Day {workout?.day}
                   </p>
                 </div>
@@ -145,6 +143,7 @@ const ExercisePreview: React.FC<ExercisePreviewProps> = ({
                         alt={exercise?.name}
                         height={50}
                         width={70}
+                        loading="lazy"
                         className=" object-cover rounded-md"
                       />
                       <div>

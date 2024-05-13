@@ -16,7 +16,9 @@ const DailyAttendance = ({ external }: { external?: boolean }) => {
 
   return (
     <div className="  sm:w-fit w-full rounded">
-      {external ? null : <p className="mb-3">Weekly Goals</p>}
+      {external ? null : (
+        <p className="mb-4 uppercase text-lg">Activity Tracking</p>
+      )}
       <StreakDays activities={activities} />
     </div>
   );

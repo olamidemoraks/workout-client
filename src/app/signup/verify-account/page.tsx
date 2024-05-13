@@ -9,7 +9,7 @@ const Page = () => {
         <SignupCarousal />
       </div>
       <div className="w-full h-screen">
-        <div className="flex items-center max-md:justify-center h-full sm:w-full w-[90%]  md:px-[8rem]   ">
+        <div className="flex items-center max-md:justify-center h-full  w-full px-3   md:px-[8rem]   ">
           <VerifyPin />
         </div>
       </div>

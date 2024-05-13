@@ -145,7 +145,8 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
               )}
               onClick={() => setMood(1)}
             >
-              <span className="text-3xl">🥴</span> <p>Too hard</p>
+              <p className="text-3xl">🥴</p>{" "}
+              <p className=" sm:text-base text-sm">Too hard</p>
             </div>
             <div className=" h-[40px] w-[1px] bg-zinc-800" />
             <div
@@ -155,7 +156,8 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
               )}
               onClick={() => setMood(2)}
             >
-              <span className="text-3xl">🙂</span> <p>Just right</p>
+              <p className="text-3xl">🙂</p>{" "}
+              <p className=" sm:text-base text-sm">Just right</p>
             </div>
             <div className=" h-[40px] w-[1px] bg-zinc-800" />
             <div
@@ -165,7 +167,8 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
               )}
               onClick={() => setMood(3)}
             >
-              <span className="text-3xl">😄</span> <p>Too easy</p>
+              <p className="text-3xl">😄</p>{" "}
+              <p className=" sm:text-base text-sm">Too easy</p>
             </div>
           </div>
           <div className="w-full flex flex-col justify-start items-start gap-2 my-4  ">

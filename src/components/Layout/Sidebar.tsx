@@ -1,12 +1,16 @@
-import useProfile from "@/hooks/useProfile";
-import useStreak from "@/hooks/useStreak";
 import { cn } from "@/libs/utils";
+import { deleteTokenFromLocalStorage } from "@/utils/localstorage";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { BiCaretLeft, BiCaretRight, BiDumbbell } from "react-icons/bi";
-import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
-import { FaSearch } from "react-icons/fa";
+import { usePathname, useRouter } from "next/navigation";
+import { BiDumbbell } from "react-icons/bi";
+import {
+  FaAngleDoubleLeft,
+  FaAngleDoubleRight,
+  FaSearch,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
 import { GiBodyBalance } from "react-icons/gi";
 import { IoGrid } from "react-icons/io5";
@@ -81,63 +85,81 @@ type SideBarProps = {
 };
 const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
   const pathName = usePathname()?.split("/")[1];
+  const router = useRouter();
   return (
     <div
       className={cn(
-        " sm:min-h-screen h-screen overflow-hidden border-r border-zinc-800 md:translate-x-0 -translate-x-[100%] flex flex-col justify-between  min-w-[200px] absolute top-0 left-0 md:relative transition duration-200 bg-zinc-950 ",
+        "  z-[100] sm:min-h-screen h-screen overflow-hidden border-r border-zinc-800 md:translate-x-0 -translate-x-[100%] flex flex-col justify-between  min-w-[200px] absolute top-0 left-0 md:relative transition duration-200 bg-zinc-950 ",
         {
           "min-w-[55px] transition duration-200": sideDrawer,
           "translate-x-0": openMenu,
         }
       )}
     >
-      <div
-        className={`block md:hidden ${
-          openMenu ? "opacity-100" : "opacity-0"
-        } mt-3 absolute top-7`}
-      ></div>
-      <div
+      {/* <div
         onClick={() => setSideDrawer(openMenu ? false : true)}
         className={cn(
-          "fixed sm:top-[5.2rem] top-[2rem]  left-0 p-3 z-[100] cursor-pointer",
+          "fixed sm:top-[5.2rem] top-[2rem]  right-[2rem] p-3 z-[100] cursor-pointer",
           {
             hidden: sideDrawer,
           }
         )}
       >
-        <BsChevronCompactLeft className={" text-2xl"} size={26} />
-      </div>
+     
+      </div> */}
 
-      <div
-        onClick={() => setSideDrawer(false)}
-        className={cn(
-          "fixed sm:top-[5.2rem] top-[2rem]  left-0 p-3 z-[100] cursor-pointer",
-          {
-            hidden: !sideDrawer,
-          }
-        )}
-      >
-        <BsChevronCompactRight className={" text-2xl"} size={26} />
-      </div>
-      <div className="w-full">
-        <div className=" w-full items-center flex justify-center h-[100px] gap-1">
-          {/* <div className="h-1 w-1 bg-primary rounded-full" />
-          <div className="h-2 w-2 bg-indigo-500 rounded-full" /> */}
-          {/* <div className=" bg-gradient-to-r from-indigo-500 to-sky-500 rotate-[30deg] rounded-full h-7 w-7 flex items-center justify-center">
-            <ActivityIcon color="#000" />
-          </div> */}
-          {/* <div className="h-2 w-2 bg-cyan-500  rounded-full" />
-          <div className="h-1 w-1 bg-primary rounded-full" /> */}
+      <div className="w-full ">
+        <Link
+          href={"/"}
+          className=" flex flex-col items-center justify-center py-3 group"
+        >
+          <Image
+            src={"/assets/logo3.svg"}
+            alt="logo"
+            height={100}
+            width={100}
+          />
+          {!sideDrawer && (
+            <p className=" text-lg font-bold group-hover:tracking-[.25rem] transition-all ease-in-out duration-200 tracking-[.2rem] -mt-2">
+              Ma<span className=" text-[28px]">x</span>up
+            </p>
+          )}
+        </Link>
+
+        <div
+          className={cn("w-full sm:flex items-center transition-all hidden", {
+            " justify-end": !sideDrawer,
+            " justify-start": sideDrawer,
+          })}
+        >
+          <div
+            onClick={() => setSideDrawer(!sideDrawer)}
+            className={cn(
+              " bg-zinc-900  p-2 w-[70px] cursor-pointer justify-center flex items-center transition-all",
+              {
+                "rounded-l-full": !sideDrawer,
+                " rounded-r-full": sideDrawer,
+              }
+            )}
+          >
+            {sideDrawer ? (
+              <FaAngleDoubleRight className=" fill-zinc-300" size={20} />
+            ) : (
+              <FaAngleDoubleLeft className=" fill-zinc-300" size={20} />
+            )}
+          </div>
         </div>
-        <div className=" flex flex-col gap-2 mt-10">
+
+        <div className=" flex flex-col gap-2 mt-5">
           {navData.map(({ Icon, navLink, title }) => (
             <>
               <Link
                 href={`/${navLink}`}
                 key={title}
                 className={cn(
-                  "flex items-center px-5  gap-3  group hover:bg-zinc-900  py-3",
+                  "flex items-center px-5 gap-3 group hover:bg-zinc-900  py-3",
                   {
+                    " justify-center": sideDrawer,
                     "bg-zinc-900 border-l-4 border-emerald-500  ":
                       navLink === pathName,
                   }
@@ -174,7 +196,7 @@ const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
             { "h-[100px]": sideDrawer }
           )}
         >
-          <div className="pointer-events-none absolute -bottom-5  transform-gpu  -z-20 h-[80%] w-[80%] ">
+          {/* <div className="pointer-events-none absolute -bottom-5  transform-gpu  -z-20 h-[80%] w-[80%] ">
             <div
               style={{
                 clipPath:
@@ -182,28 +204,33 @@ const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
               }}
               className="h-[80%] w-[80%] bg-gradient-to-tr from-purple-500 to-green-600 opacity-100 animate-pulse"
             />
-          </div>
+          </div> */}
 
-          <Link
-            href={""}
-            className="flex group items-center justify-center backdrop-blur-md h-[100%]   w-[100%] p-2  z-10 border-t border-zinc-800"
+          <div
+            onClick={() => {
+              signOut();
+              deleteTokenFromLocalStorage();
+              router.replace("/login");
+            }}
+            className="flex group gap-2 items-center justify-center backdrop-blur-md h-[100%] cursor-pointer   w-[100%] p-2  z-10 "
           >
-            <p
-              className={cn(" font-semibold uppercase  ", {
-                hidden: sideDrawer,
-              })}
-            >
-              Go Pro
-            </p>{" "}
             {/* <GiCutDiamond className="text-2xl  fill-purple-400 transition-colors duration-700 group-hover:fill-emerald-400" /> */}
-            <Image
+            {/* <Image
               src={"/assets/premium.gif"}
               alt="purple diamond"
               height={150}
               width={150}
               className="h-[50px] w-[50px] object-cover  mb-7"
-            />
-          </Link>
+            /> */}
+            <FaSignOutAlt className=" fill-zinc-300" size={22} />
+            <p
+              className={cn(" uppercase  ", {
+                hidden: sideDrawer,
+              })}
+            >
+              LogOut
+            </p>{" "}
+          </div>
         </div>
       </div>
     </div>

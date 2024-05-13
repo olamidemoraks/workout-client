@@ -15,7 +15,7 @@ const Empty: React.FC<EmptyProps> = ({ image, title }) => {
         height={230}
         alt="empty"
       />
-      <p className=" text-2xl w-[70%] text-zinc-200 text-center">
+      <p className=" text-lg w-[70%] text-zinc-200 text-center">
         {title ? title : "Nothing here"}
       </p>
     </div>

@@ -13,6 +13,7 @@ import useNotification from "@/hooks/useNotification";
 import { useDispatch } from "react-redux";
 import { readNotification } from "@/redux/feature/socketSlice";
 import Image from "next/image";
+import Link from "next/link";
 
 const Navbar = () => {
   const { profile } = useProfile();
@@ -48,32 +49,21 @@ const Navbar = () => {
     dispatch(readNotification({}));
   };
   return (
-    <div className="w-full flex bg-zinc-950/70 backdrop-blur-sm border-b-zinc-800 border-b">
-      <div className="border-r border-zinc-800  flex-col ">
-        <Image src={"/assets/logo3.svg"} alt="logo" height={90} width={100} />
-        <p className="text-sm text-zinc-300 font-bold text-center leading-3">
-          Maxup
-        </p>
-      </div>
-      <div className="relative  w-full md:pr-5  pr-3 py-2 flex justify-between items-center  gap-5 z-20  ">
-        <div className="flex gap-2 items-center  relative  max-[280px]:w-full pl-5">
-          <BiMenu
-            onClick={() => setOpenSidebar((prev) => !prev)}
-            className=" fill-zinc-200  hover:bg-zinc-900 rounded-full transition duration-300 cursor-pointer block md:hidden"
-            size={30}
-          />
-
-          <div
-            ref={sidebarRef}
-            className={cn(
-              "fixed top-0 left-0 z-50  transition duration-200 delay-100 md:hidden flex bg-black w-full",
-              {
-                "translate-x-0": openSidebar,
-              }
-            )}
+    <nav className="w-full flex bg-zinc-950/70 backdrop-blur-sm border-b-zinc-800 border-b">
+      <div className="relative  w-full md:px-5  px-3 py-2 flex justify-between items-center  gap-5 z-20  ">
+        <div className="flex  items-center">
+          <Link
+            href={"/"}
+            className="sm:hidden flex items-center justify-center relative sm:h-[70px] h-[60px]   sm:w-[80px] w-[70px]  flex-col "
           >
-            <Sidebar setSideDrawer={setOpenSidebar} openMenu={openSidebar} />
-          </div>
+            <Image
+              src={"/assets/logo3.svg"}
+              alt="logo"
+              height={100}
+              width={100}
+              className="max-sm:absolute w-full h-full"
+            />
+          </Link>
           <div className="md:block hidden">
             <UserStreak
               streak={streak ?? 0}
@@ -83,6 +73,7 @@ const Navbar = () => {
             />
           </div>
         </div>
+
         <div className="flex justify-between items-center gap-2">
           <div
             onClick={handleNoficationBar}
@@ -96,8 +87,28 @@ const Navbar = () => {
               <div className="h-2 w-2 bg-emerald-600 ring-4 ring-emerald-600/20 absolute rounded-full top-2 right-2" />
             )}
           </div>
-          <div className="flex items-start gap-2 hoveer:bg-zinc-900 transition-all px-3 py-2 rounded-lg">
+          <div className="flex items-start gap-2  transition-all px-3 py-2 rounded-lg">
             <NavbarMenu profile={profile} />
+          </div>
+
+          <div className="flex gap-2 items-center  relative  max-[280px]:w-full">
+            <BiMenu
+              onClick={() => setOpenSidebar((prev) => !prev)}
+              className=" fill-zinc-200  hover:bg-zinc-900 rounded-full transition duration-300 cursor-pointer block md:hidden"
+              size={30}
+            />
+
+            <div
+              ref={sidebarRef}
+              className={cn(
+                "fixed top-0 left-0 z-50  transition duration-200 delay-100 md:hidden flex bg-black w-full",
+                {
+                  "translate-x-0": openSidebar,
+                }
+              )}
+            >
+              <Sidebar setSideDrawer={setOpenSidebar} openMenu={openSidebar} />
+            </div>
           </div>
           <Notification
             open={openNotificationbar}
@@ -105,7 +116,7 @@ const Navbar = () => {
           />
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

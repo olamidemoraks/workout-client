@@ -22,13 +22,13 @@ const RecentWorkouts = () => {
     custom: "/assets/icons/calender.png",
   };
 
+  if (isLoading) {
+    return <CustomLoader amount={5} height="h-[60px]" weight="w-full" />;
+  }
+
   return (
     <div className=" flex flex-col gap-4  w-full">
       <p className=" uppercase font-semibold">Recent activity</p>
-
-      {isLoading && (
-        <CustomLoader amount={5} height="h-[60px]" weight="w-full" />
-      )}
 
       {(recentWorkoutActivities?.length === 0 || !data?.activities) && (
         <Empty />

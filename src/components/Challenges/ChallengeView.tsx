@@ -167,85 +167,85 @@ const ChallengeView: React.FC<ChallengeViewProps> = ({ id }) => {
                 >
                   Week {week}
                 </p>
-                <ul className=" bg-zinc-900 mr-3 backdrop-blur-sm rounded w-full grid grid-cols-4 gap-y-7 md:pl-7 pl-3 py-6 items-center h-full mb-2 ">
-                  {index.map((day, idx) => (
-                    <li key={day} className="flex items-center justify-around">
-                      <button
-                        onClick={() => handleStartWorkout(day)}
-                        className="relative z-10 flex flex-col items-center justify-center"
+                <div className="bg-zinc-900 backdrop-blur-sm rounded w-full flex justify-center">
+                  <ul className="w-full  grid grid-cols-4 gap-y-7 md:pl-7 py-6 place-items-center h-full mb-2 ">
+                    {index.map((day, idx) => (
+                      <li
+                        key={day}
+                        className="flex items-center justify-around"
                       >
-                        <div
-                          className={cn(
-                            "flex absolute -z-[1] items-center justify-center sm:h-9 sm:w-9 h-8 w-8 rounded-md  border-[3px]  border-zinc-700 group cursor-no-drop transition duration-200",
-                            {
-                              " scale-105 bg-emerald-600 border-emerald-600 text-emerald-500 font-semibold ring-4 ring-emerald-500/10 cursor-pointer hover:scale-110":
-                                progressInfo.currentDay === day,
-                              " border-emerald-900/70 bg-emerald-900/70 font-semibold cursor-no-drop":
+                        <button
+                          onClick={() => handleStartWorkout(day)}
+                          className="relative z-10 flex flex-col items-center justify-center"
+                        >
+                          <div
+                            className={cn(
+                              "flex absolute -z-[1] items-center justify-center sm:h-9 sm:w-9 h-8 w-8 rounded-md  border-[3px]  border-zinc-700 group cursor-no-drop transition duration-200",
+                              {
+                                " scale-105 bg-emerald-600 border-emerald-600 text-emerald-500 font-semibold ring-4 ring-emerald-500/10 cursor-pointer hover:scale-110":
+                                  progressInfo.currentDay === day,
+                                " border-emerald-900/70 bg-emerald-900/70 font-semibold cursor-no-drop":
+                                  progressInfo.currentDay === day &&
+                                  progressInfo.isCompleted,
+                                "   border-emerald-900/70 bg-emerald-900/70 font-semibold cursor-no-drop":
+                                  progressInfo.currentDay > day,
+                              }
+                            )}
+                          ></div>
+                          <p
+                            className={cn(" text-neutral-200", {
+                              "font-bold text-white":
                                 progressInfo.currentDay === day &&
-                                progressInfo.isCompleted,
-                              "   border-emerald-900/70 bg-emerald-900/70 font-semibold cursor-no-drop":
-                                progressInfo.currentDay > day,
+                                !progressInfo.isCompleted,
+                            })}
+                          >
+                            {idx + 1}
+                          </p>
+
+                          {(progressInfo.currentDay > day ||
+                            (progressInfo.currentDay === day &&
+                              progressInfo.isCompleted)) && (
+                            <div className="flex items-center gap-1 absolute  -bottom-5 md:scale-75 scale-50 opacity-60 cursor-none ">
+                              <TiStarFullOutline
+                                className=" fill-[#B4BDFF]/70"
+                                size={17}
+                              />
+                              <TiStarFullOutline
+                                className=" fill-[#B4BDFF]"
+                                size={21}
+                              />
+                              <TiStarFullOutline
+                                className=" fill-[#B4BDFF]/70"
+                                size={17}
+                              />
+                            </div>
+                          )}
+                        </button>
+                      </li>
+                    ))}
+                    <li className=" flex items-center justify-around text-[24px] ">
+                      <div className="sm:h-[50px] sm:w-[50px] h-[40px] w-[40px] relative   ">
+                        <Image
+                          src={"/assets/trophy.png"}
+                          alt="trophy"
+                          width={800}
+                          height={961}
+                          className={cn(
+                            "w-full h-full object-cover grayscale opacity-50 ",
+                            {
+                              "grayscale-0 opacity-100":
+                                progressInfo.currentDay >= index[6] ||
+                                (progressInfo.currentDay === challenge.days &&
+                                  progressInfo.isCompleted),
                             }
                           )}
-                        ></div>
-                        <p
-                          className={cn(" text-neutral-200", {
-                            "font-bold text-white":
-                              progressInfo.currentDay === day &&
-                              !progressInfo.isCompleted,
-                          })}
-                        >
-                          {idx + 1}
-                        </p>
+                        />
+                      </div>
 
-                        {(progressInfo.currentDay > day ||
-                          (progressInfo.currentDay === day &&
-                            progressInfo.isCompleted)) && (
-                          <div className="flex items-center gap-1 absolute  -bottom-5 md:scale-75 scale-50 opacity-60 cursor-none ">
-                            <TiStarFullOutline
-                              className=" fill-[#B4BDFF]/70"
-                              size={17}
-                            />
-                            <TiStarFullOutline
-                              className=" fill-[#B4BDFF]"
-                              size={21}
-                            />
-                            <TiStarFullOutline
-                              className=" fill-[#B4BDFF]/70"
-                              size={17}
-                            />
-                          </div>
-                        )}
-                      </button>
-                      <BiCaretRight
-                        className={cn(" fill-zinc-700", {
-                          " opacity-0": idx + 1 === 4,
-                        })}
-                      />
+                      <div></div>
                     </li>
-                  ))}
-                  <li className=" flex items-center justify-around text-[24px] ">
-                    <div className="sm:h-[50px] sm:w-[50px] h-[40px] w-[40px] relative   ">
-                      <Image
-                        src={"/assets/trophy.png"}
-                        alt="trophy"
-                        width={800}
-                        height={961}
-                        className={cn(
-                          "w-full h-full object-cover grayscale opacity-50 md:-ml-3 -ml-1",
-                          {
-                            "grayscale-0 opacity-100":
-                              progressInfo.currentDay >= index[6] ||
-                              (progressInfo.currentDay === challenge.days &&
-                                progressInfo.isCompleted),
-                          }
-                        )}
-                      />
-                    </div>
-
-                    <div></div>
-                  </li>
-                </ul>
+                  </ul>
+                </div>
               </div>
             </div>
           ))}

@@ -81,7 +81,7 @@ const NotifcationCard: React.FC<NotifcationCardProps> = ({
   };
 
   return (
-    <div className="p-2 rounded hover:bg-zinc-700/50 w-full flex justify-between items-center">
+    <div className="p-2 rounded hover:bg-zinc-700/50 w-full flex flex-col flex-1 justify-between items-center">
       <div className="flex gap-2 ">
         <div className="md:h-[60px] md:min-w-[60px] h-[50px] min-w-[50px] relative cursor-pointer">
           {notification?.from?.avatar?.url ? (
@@ -101,7 +101,7 @@ const NotifcationCard: React.FC<NotifcationCardProps> = ({
           <p className="text-sm text-zinc-300 ">{notification?.content}</p>
         </div>
       </div>
-      <div>
+      <div className=" flex justify-end w-full mt-2">
         {notification.type === "follow-request" && (
           <button
             type="button"
@@ -111,7 +111,7 @@ const NotifcationCard: React.FC<NotifcationCardProps> = ({
             className={`flex items-center gap-1 disabled:opacity-50 px-2 p-1 ${
               userFollowed?.includes(notification?.from?._id)
                 ? " hover:bg-gray-600 text-rose-600"
-                : "bg-blue-500 "
+                : "bg-blue-600/25 border border-blue-900 "
             } rounded`}
           >
             {userFollowed?.includes(notification?.from?._id) ? (
@@ -125,24 +125,24 @@ const NotifcationCard: React.FC<NotifcationCardProps> = ({
           </button>
         )}
         {notification.type === "invite-request" && (
-          <div className="flex gap-1">
+          <div className="flex gap-3">
             <button
               onClick={() =>
                 handlecustomWorkoutInviteResponse({ status: "accept" })
               }
-              className="flex items-center gap-1 disabled:opacity-50 px-2 p-1 bg-blue-600 rounded"
+              className="flex items-center gap-1 disabled:opacity-50 px-2 p-2 bg-blue-600/25 border border-blue-900 rounded"
               disabled={sendingRespond == true ? true : false}
             >
-              <Check size={20} />
+              Accept
             </button>
             <button
               onClick={() =>
                 handlecustomWorkoutInviteResponse({ status: "reject" })
               }
-              className="flex items-center gap-1 disabled:opacity-50 px-2 p-1 bg-rose-600 rounded"
+              className="flex items-center gap-1 disabled:opacity-50 px-2 p-2 bg-rose-600/25 border border-red-900 rounded"
               disabled={sendingRespond == true ? true : false}
             >
-              <X size={20} />
+              Decline
             </button>
           </div>
         )}

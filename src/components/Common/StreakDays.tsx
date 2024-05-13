@@ -33,10 +33,10 @@ const StreakDays: React.FC<StreakDaysProps> = ({ activities }) => {
                     className=" text-sm fill-zinc-800 "
                     size="20"
                   />
-                  <FaCaretDown
+                  {/* <FaCaretDown
                     className="absolute -top-4 fill-pink-500 opacity-80"
                     size={16}
-                  />
+                  /> */}
                 </>
               ) : null}
             </div>

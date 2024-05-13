@@ -37,18 +37,24 @@ const VerifyPin = () => {
     });
   };
   return (
-    <div>
+    <div className="flex justify-center flex-col">
       {/* Security verification
     email verfifcattion code 
     enter the verification code sent to your mail */}
-      <Image
-        src={"/assets/logo3.svg"}
-        alt="logo"
-        height={90}
-        width={100}
-        className="-translate-x-2"
-      />
-      <p className=" text-[1.6rem] font-bold mb-8">Security Verification</p>
+      <div className=" flex flex-col items-center my-3 group -translate-y-8">
+        <Image
+          src={"/assets/logo3.svg"}
+          alt="logo"
+          priority
+          height={100}
+          width={100}
+        />
+
+        <p className=" text-lg font-bold group-hover:tracking-[.25rem] transition-all ease-in-out duration-200 tracking-[.2rem] -mt-2">
+          Ma<span className=" text-[28px]">x</span>up
+        </p>
+      </div>
+      <p className=" text-[1.6rem] font-bold mb-4">Security Verification</p>
       <form onSubmit={handleSubmitCode} className="flex flex-col gap-3">
         <label htmlFor="name" className=" text-lg">
           Email verification code
@@ -70,7 +76,7 @@ const VerifyPin = () => {
         <button
           disabled={!pin ? true : false}
           type="submit"
-          className=" flex items-center justify-center px-8 disabled:bg-neutral-600 disabled:cursor-not-allowed bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 min-w-[350px] text-lg font-medium gap-2 "
+          className=" flex items-center justify-center px-8 disabled:bg-neutral-600 disabled:cursor-not-allowed bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
         >
           {isLoading ? (
             <span className="text-black">

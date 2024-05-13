@@ -55,10 +55,10 @@ const Resting: React.FC<RestingProps> = ({
           <div className="flex items-center justify-center gap-10 w-full">
             <button
               onClick={() => setRestTime((prev) => prev + 20)}
-              className="h-[50px] w-[100px] justify-center text-lg bg-emerald-500  rounded-md   transition duration-200 flex items-center gap-2"
+              className="h-[50px] w-[100px] justify-center text-lg bg-emerald-500 text-black  rounded-md   transition duration-200 flex items-center gap-1"
             >
+              <Plus color="#000" />
               20s
-              <Plus />
             </button>
             <button
               onClick={handleSkip}

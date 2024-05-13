@@ -8,7 +8,7 @@ const OnboardingScreen = ({ isLoading }: { isLoading: boolean }) => {
   const { selectedQuote } = useQuotes();
   return (
     <Modal open={isLoading} onClose={() => {}}>
-      <div className="h-full bg-[url('/assets/bg1.jpg')] bg-cover w-full backdrop-blur-sm flex items-center justify-center">
+      <div className="h-full  w-full backdrop-blur-sm flex items-center justify-center">
         <div className="sm:max-w-[500px] w-full flex flex-col items-center p-2">
           <Image
             src={"/assets/logo3.svg"}

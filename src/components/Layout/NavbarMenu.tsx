@@ -3,7 +3,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import * as React from "react";
-import { BiSolidZap } from "react-icons/bi";
+import { BiNotepad, BiSolidZap } from "react-icons/bi";
 import Tooltip from "@mui/material/Tooltip";
 import useBatteryCharge from "@/hooks/useBatteryCharge";
 import useStreak from "@/hooks/useStreak";
@@ -11,6 +11,8 @@ import { alphabetsColor } from "@/utils/data";
 import { deleteTokenFromLocalStorage } from "@/utils/localstorage";
 import { signOut } from "next-auth/react";
 import UserStreak from "../Common/UserStreak";
+import { FaUser } from "react-icons/fa6";
+import { FaSignOutAlt } from "react-icons/fa";
 
 const chargeColor: { [key: number]: string } = {
   1: "fill-red-500",
@@ -42,9 +44,14 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        className=" cursor-pointer flex items-center bg-zinc-800 rounded-lg h-10"
+        className=" cursor-pointer flex items-center bg-zinc-800 rounded-l-lg rounded-r-xl h-10"
       >
-        <Tooltip title="Energy level" arrow placement="left">
+        <Tooltip
+          title="Energy level"
+          arrow
+          placement="left"
+          className="sm:flex hidden"
+        >
           <div className="flex gap-1 items-center  pl-4 pr-3 h-full ">
             <BiSolidZap className={`${chargeColor[chargeLeft]}`} size={19} />
             <p className="font-semibold text-base">{chargeLeft}</p>
@@ -98,45 +105,54 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
           }}
           onClick={() => {}}
         >
-          <div className="flex gap-2 ">
-            <div>
-              {profile?.avatar ? (
-                <div className="h-12 w-12 relative">
-                  <Image
-                    src={profile?.avatar.url}
-                    alt="avatar"
-                    fill
-                    className=" rounded-xl absolute object-cover"
-                  />
-                </div>
-              ) : (
-                // <div className=" bg-zinc-800   md:h-10 md:w-10 h-8 w-8 flex items-center justify-center rounded-full font-semibold uppercase text-lg">
-                //   {profile?.username?.substring(0, 1)}
-                // </div>
-                <div
-                  className={`${
-                    alphabetsColor[
-                      profile?.name
-                        .split(" ")?.[0]
-                        .substring(0, 1)
-                        .toUpperCase()
-                    ] ?? "bg-zinc-900/60"
-                  }  h-12 w-12 rounded-xl flex items-center justify-center text-xl uppercase font-semibold`}
-                >
-                  {profile?.name?.substring(0, 1)}
-                </div>
-              )}
+          <div>
+            <div className="flex gap-2 ">
+              <div>
+                {profile?.avatar ? (
+                  <div className="h-12 w-12 relative">
+                    <Image
+                      src={profile?.avatar.url}
+                      alt="avatar"
+                      fill
+                      className=" rounded-xl absolute object-cover"
+                    />
+                  </div>
+                ) : (
+                  // <div className=" bg-zinc-800   md:h-10 md:w-10 h-8 w-8 flex items-center justify-center rounded-full font-semibold uppercase text-lg">
+                  //   {profile?.username?.substring(0, 1)}
+                  // </div>
+                  <div
+                    className={`${
+                      alphabetsColor[
+                        profile?.name
+                          .split(" ")?.[0]
+                          .substring(0, 1)
+                          .toUpperCase()
+                      ] ?? "bg-zinc-900/60"
+                    }  h-12 w-12 rounded-xl flex items-center justify-center text-xl uppercase font-semibold`}
+                  >
+                    {profile?.name?.substring(0, 1)}
+                  </div>
+                )}
+              </div>
+              <div>
+                <p className=" text-lg font-semibold">{profile?.name}</p>
+                <p className="text-sm text-zinc-200">@{profile?.username}</p>
+              </div>
             </div>
-            <div>
-              <p className=" text-lg font-semibold">{profile?.name}</p>
-              <p className="text-sm text-zinc-200">@{profile?.username}</p>
-              <div className="md:hidden block mt-4">
-                <UserStreak
-                  streak={streak ?? 0}
-                  isLoading={isLoading}
-                  longestStreak={longestStreak}
-                  totalWorkout={totalWorkout}
+            <div className="md:hidden  mt-4 flex items-center justify-between">
+              <UserStreak
+                streak={streak ?? 0}
+                isLoading={isLoading}
+                longestStreak={longestStreak}
+                totalWorkout={totalWorkout}
+              />
+              <div className="flex gap-1 items-center  pl-4 pr-3 h-full ">
+                <BiSolidZap
+                  className={`${chargeColor[chargeLeft]}`}
+                  size={19}
                 />
+                <p className="font-semibold text-base">{chargeLeft}</p>
               </div>
             </div>
           </div>
@@ -151,13 +167,16 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             borderRadius: "4px",
             py: "10px",
             fontSize: "16px",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
           }}
           onClick={() => {
             handleClose();
             router.push("/profile");
           }}
         >
-          Profile
+          <FaUser /> Profile
         </MenuItem>
         <MenuItem
           sx={{
@@ -168,13 +187,16 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             borderRadius: "4px",
             py: "10px",
             fontSize: "16px",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
           }}
           onClick={() => {
             handleClose();
             router.push("/workouts/create");
           }}
         >
-          Create Plan
+          <BiNotepad size={23} /> Create Plan
         </MenuItem>
         <MenuItem
           sx={{
@@ -185,6 +207,9 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             borderRadius: "4px",
             py: "10px",
             fontSize: "16px",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
           }}
           onClick={() => {
             handleClose();
@@ -193,7 +218,7 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             router.push("/login");
           }}
         >
-          Log out
+          <FaSignOutAlt size={21} /> Log out
         </MenuItem>
       </Menu>
     </div>

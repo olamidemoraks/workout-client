@@ -224,7 +224,7 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
                 </>
               ) : (
                 <>
-                  <div className="flex flex-col w-[95%] items-center justify-center gap-7">
+                  <div className="flex flex-col w-[95%] items-center justify-center gap-7 ">
                     <div className="relative xl:w-[50%] lg:w-[65%] h-fit sm:w-full  w-[100vw] flex items-center justify-center">
                       <Image
                         src={currentExercise?.image?.url as string}
@@ -232,9 +232,10 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
                         height={200}
                         width={500}
                         priority
-                        className=" object-cover w-full h-full rounded-xl "
+                        loading="eager"
+                        className=" object-cover w-[95%] min-h-[250px] bg-zinc-900 h-full rounded-xl "
                       />
-                      <div className="h-[4px] flex items-center sm:w-full w-[90%] outline outline-zinc-600/70 rounded-full  absolute  -bottom-3 px-1 mt-1">
+                      <div className="h-[4px] flex items-center sm:w-full w-[90%] outline outline-1 outline-zinc-600/70 rounded-full  absolute  -bottom-3 px-1 mt-1">
                         <div
                           style={{
                             width: `${
@@ -253,7 +254,7 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
                         </div>
                       </div>
                     </div>
-                    <div className=" flex flex-col items-center justify-evenly bg-zinc-900  rounded-xl  p-8 xl:w-[50%] lg:w-[65%] w-full gap-5">
+                    <div className=" flex flex-col items-center justify-evenly bg-zinc-900  rounded-xl  p-8 xl:w-[50%] lg:w-[65%] w-full sm:gap-5 gap-3">
                       <p className=" md:text-2xl  text-base uppercase font-bold flex items-center gap-2">
                         {currentExercise?.name}{" "}
                         <Info
@@ -291,9 +292,8 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
                       {!currentExercise?.time_base ? (
                         <button
                           onClick={handleNext}
-                          className="sm:px-10 px-4 py-2 sm:text-lg texl-base bg-emerald-500  rounded-md transition duration-200 flex items-center gap-2"
+                          className="sm:px-10 px-4 py-2 sm:text-lg texl-base bg-emerald-500 text-black  rounded-md transition duration-200 flex items-center gap-2"
                         >
-                          <Check />
                           Done
                         </button>
                       ) : (

@@ -71,7 +71,7 @@ const Notification: React.FC<IndexProps> = ({ open, setClose }) => {
       ref={notificationBar}
       className={` z-[100] transition-all delay-75 duration-200 ${
         open ? "translate-x-0" : "translate-x-[110%]"
-      } rounded border border-zinc-800 bg-zinc-900 w-[400px] h-[calc(100vh-100px)] absolute right-2 top-[5.8rem]`}
+      } rounded border border-zinc-800 bg-zinc-900 sm:w-[400px] w-screen h-[calc(100vh-100px)] absolute sm:right-2 right-0 sm:top-[5.8rem] top-[5rem]`}
     >
       <div className=" border-b border-zinc-800 px-2 py-3 flex justify-between items-center">
         <p className=" text-lg font-semibold text-zinc-300">

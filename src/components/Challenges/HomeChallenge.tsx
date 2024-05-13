@@ -18,7 +18,7 @@ const HomeChallenge: React.FC<HomeChallengeProps> = () => {
 
   if (isLoading) {
     return (
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-10">
+      <div className="grid lg:grid-cols-2 grid-cols-1 gap-10">
         <CustomLoader
           amount={2}
           height="h-[200px] sm:h-[250px]"
