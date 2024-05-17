@@ -110,10 +110,10 @@ const Navbar = () => {
               <Sidebar setSideDrawer={setOpenSidebar} openMenu={openSidebar} />
             </div>
           </div>
-          <Notification
+          {/* <Notification
             open={openNotificationbar}
             setClose={() => setOpenNotificationbar(false)}
-          />
+          /> */}
         </div>
       </div>
     </nav>

@@ -73,22 +73,21 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          p: 4,
         }}
-        className=" overflow-hidden bg-zinc-900 lg:w-[700px] sm:w-[80%] w-[99%] rounded-md   min-h-[200px] flex p-4 py-6 gap-3 flex-col"
+        className=" overflow-hidden bg-zinc-900 lg:w-[700px] sm:w-[80%] w-[99%] rounded-md h-[90vh]  sm:h-[80vh] flex p-4 py-6 gap-3 flex-col"
       >
         <>
           <div className=" absolute top-2 right-3" onClick={setClose}>
             <BiX className=" cursor-pointer fill-emerald-500 " size={30} />
           </div>
-          <p className=" text-lg font-semibold mb-3 text-center ">
+          <p className=" text-lg font-semibold mb-1 sm:mb-3 text-center ">
             Muscle group
           </p>
           <p className=" text-neutral-300 text-center leading-5">
             Filter exercise base on muscle group available to you below
           </p>
-          <div className=" overflow-x-auto w-full scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-emerald-600/75">
-            <div className="flex   w-fit overflow-x-auto gap-2 p-2 ">
+          <div className=" overflow-x-auto overflow-y-hidden min-h-[5.2rem] w-full scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-emerald-600/75">
+            <div className="flex  h-full   w-fit overflow-x-auto gap-2 p-2 ">
               {focus.map((group, index) => (
                 <div
                   onClick={() => handleSelectMuscle(group.title)}
@@ -104,6 +103,7 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({
                     src={`${group.imageUrl}`}
                     alt={`${group.title}`}
                     fill
+                    quality={8}
                     className=" h-full w-full rounded-md absolute brightness-75"
                   />
                   <p className={cn(" font-semibold capitalize z-10 absolute ")}>
@@ -117,13 +117,13 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({
           <p className=" text-neutral-300 text-center leading-5">
             Click an exercise to add to your workout routine.
           </p>
-          <div className="grid md:grid-cols-2 grid-cols-1 overflow-x-hidden scrollbar-thin scrollbar-track-zinc-800  scrollbar-thumb-blue-600/75 overflow-y-auto max-h-[400px] rounded mt-3 gap-2">
+          <div className="grid md:grid-cols-2 grid-cols-1 overflow-x-hidden scrollbar-none overflow-y-auto max-h-[400px] rounded mt-3 gap-2">
             {exercises?.map((exercise) => (
               <div
                 onClick={() => handleAddWorkouts(exercise)}
                 key={exercise?._id}
                 className={cn(
-                  "flex w-full justify-between p-2 px-3 items-center transition hover:bg-zinc-900 bg-zinc-900/40 cursor-pointer "
+                  "flex w-full justify-between p-2 sm:px-3 px-2 items-center transition hover:bg-zinc-900 bg-zinc-900/40 cursor-pointer "
                 )}
               >
                 <div className="flex gap-2 items-center w-full">
@@ -133,10 +133,11 @@ const SelectExercise: React.FC<SelectExerciseProps> = ({
                       alt={exercise?.name}
                       fill
                       loading="lazy"
+                      quality={7}
                       className=" object-cover rounded-sm absolute"
                     />
                   </div>
-                  <div className="flex items-start w-[50%] truncate ">
+                  <div className="flex items-start w-full truncate ">
                     <p>{exercise?.name}</p>
                   </div>
                 </div>

@@ -46,7 +46,6 @@ const SelectedExerciseList: React.FC<SelectedExerciseListProps> = ({
   workouts,
   removeWorkout,
 }) => {
-  console.log({ workouts });
   const [active, setActive] = useState<Active | null>(null);
 
   const activeItem: any = useMemo(() => {
@@ -224,7 +223,7 @@ const SortableItem = ({
       ref={setNodeRef}
       {...attributes}
       className={cn(
-        "w-full flex gap-4 justify-between group p-3 rounded-md   backdrop-blur-sm bg-zinc-900 relative",
+        "w-full flex gap-4 justify-between group p-3 rounded-md border border-zinc-700   backdrop-blur-sm bg-zinc-900 relative",
         {
           "border-emerald-500/60 border-4": grabbed,
         }

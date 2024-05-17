@@ -1,14 +1,7 @@
-import { cn } from "@/libs/utils";
-import Image from "next/image";
-import Battery from "./Battery";
-import gsap from "gsap";
-import React, { useEffect, useRef, useState } from "react";
-import { useGSAP } from "@gsap/react";
-import { FaFireFlameCurved } from "react-icons/fa6";
-import StreakMenu from "./StreakMenu";
-import StreakApperance from "./StreakApperance";
 import useProfile from "@/hooks/useProfile";
 import CustomLoader from "./CustomLoader";
+import StreakApperance from "./StreakApperance";
+import StreakMenu from "./StreakMenu";
 
 interface IUserStreak {
   streak: number;

@@ -91,15 +91,16 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
         }}
         sx={{
           "& .MuiPaper-root": {
-            bgcolor: "#18181b",
+            bgcolor: "#1b1b1d",
             minWidth: "250px",
             maxWidth: "350px",
+            border: "1px solid #363640",
           },
         }}
       >
         <MenuItem
           sx={{
-            margin: "5px",
+            margin: "3px",
             borderRadius: "4px",
             py: "6px",
           }}
@@ -136,11 +137,13 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
                 )}
               </div>
               <div>
-                <p className=" text-lg font-semibold">{profile?.name}</p>
-                <p className="text-sm text-zinc-200">@{profile?.username}</p>
+                <p className=" text-sm font-semibold">{profile?.email}</p>
+                <p className="text-sm text-zinc-200 lowercase">
+                  @{profile?.username}
+                </p>
               </div>
             </div>
-            <div className="md:hidden  mt-4 flex items-center justify-between">
+            <div className="md:hidden bg-zinc-950 p-2 rounded-md  mt-4 flex items-center justify-between">
               <UserStreak
                 streak={streak ?? 0}
                 isLoading={isLoading}
@@ -157,18 +160,19 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             </div>
           </div>
         </MenuItem>
-        <div className=" w-full h-[1px] bg-zinc-800" />
+        <div className=" w-full h-[1px] bg-zinc-800 border-t border-[#363640]" />
         <MenuItem
           sx={{
             "&:hover": {
               bgcolor: "#27272a",
             },
-            margin: "5px",
+            margin: "3px",
             borderRadius: "4px",
-            py: "10px",
+            py: "8px",
             fontSize: "16px",
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
             gap: "6px",
           }}
           onClick={() => {
@@ -176,19 +180,20 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             router.push("/profile");
           }}
         >
-          <FaUser /> Profile
+          Profile <FaUser />
         </MenuItem>
         <MenuItem
           sx={{
             "&:hover": {
               bgcolor: "#27272a",
             },
-            margin: "5px",
+            margin: "3px",
             borderRadius: "4px",
-            py: "10px",
+            py: "8px",
             fontSize: "16px",
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
             gap: "6px",
           }}
           onClick={() => {
@@ -196,19 +201,21 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             router.push("/workouts/create");
           }}
         >
-          <BiNotepad size={23} /> Create Plan
+          Create Plan
+          <BiNotepad size={23} />
         </MenuItem>
         <MenuItem
           sx={{
             "&:hover": {
               bgcolor: "#27272a",
             },
-            margin: "5px",
+            margin: "3px",
             borderRadius: "4px",
-            py: "10px",
+            py: "8px",
             fontSize: "16px",
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
             gap: "6px",
           }}
           onClick={() => {
@@ -218,7 +225,8 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
             router.push("/login");
           }}
         >
-          <FaSignOutAlt size={21} /> Log out
+          Log out
+          <FaSignOutAlt size={21} />
         </MenuItem>
       </Menu>
     </div>
