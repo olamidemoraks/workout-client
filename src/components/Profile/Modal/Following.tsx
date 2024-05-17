@@ -6,7 +6,7 @@ import { Loader2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import FollowActionButton from "./FollowActionButton";
 
@@ -16,6 +16,7 @@ type FollowingProps = {
 };
 
 const Following: React.FC<FollowingProps> = ({ open, setClose }) => {
+  const [userId, setUserId] = useState("");
   const { refetch: refetchProfile, profile } = useProfile();
   const searchParams = useSearchParams();
   const id = searchParams?.get("id");
@@ -64,12 +65,11 @@ const Following: React.FC<FollowingProps> = ({ open, setClose }) => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          p: 4,
         }}
-        className=" bg-zinc-900 rounded-md sm:w-[600px] w-[95%] max-h-[80vh] min-h-[600px] p-4 py-6 gap-3 flex-col"
+        className=" bg-zinc-900 rounded-md sm:w-[600px] w-[95%] max-h-[80vh] min-h-[600px] sm:p-4 p-2 py-6 gap-3 flex-col"
       >
         <div className="flex justify-between items-center static top-0 w-full">
-          <p className=" text-2xl text-zinc-400">Following</p>
+          <p className=" text-2xl text-zinc-400 mb-2">Following</p>
           <X
             size={22}
             className=" text-zinc-400 hover:text-white cursor-pointer"
@@ -82,49 +82,59 @@ const Following: React.FC<FollowingProps> = ({ open, setClose }) => {
             <Loader2 className=" animate-spin" size={22} />
           </div>
         )}
-        <div className="flex flex-col gap-6 mt-6 h-[70vh]  overflow-auto px-1 scrollbar scrollbar-none ">
-          {users?.map((user) => (
-            <div
-              key={user?._id}
-              className="w-full flex justify-between items-center"
-            >
-              <Link
-                href={`/profile?id=${user?._id}`}
-                onClick={setClose}
-                className="flex gap-2 group items-center"
-              >
-                <div className="md:h-[60px] md:w-[60px] h-[50px] w-[50px] relative cursor-pointer">
-                  {user?.avatar?.url ? (
-                    <Image
-                      src={user?.avatar?.url}
-                      alt={user.name}
-                      fill
-                      className="absolute rounded-full object-cover"
-                    />
-                  ) : (
-                    <Avatar sx={{ height: "100%", width: "100%" }} />
-                  )}
-                </div>
+        <div className="flex flex-col gap-6 mt-6 sm:h-[70vh] h-[80vh]  overflow-auto px-1 scrollbar scrollbar-none ">
+          {Array(20)
+            .fill(0)
+            .map((_, idx) => (
+              <>
+                {users?.map((user) => (
+                  <div
+                    key={user?._id}
+                    className="w-full flex justify-between items-center"
+                  >
+                    <Link
+                      href={`/profile?id=${user?._id}`}
+                      onClick={setClose}
+                      className="flex gap-2 group items-center"
+                    >
+                      <div className="md:h-[60px] md:w-[60px] h-[50px] w-[50px] relative cursor-pointer">
+                        {user?.avatar?.url ? (
+                          <Image
+                            src={user?.avatar?.url}
+                            alt={user.name}
+                            fill
+                            className="absolute rounded-full object-cover"
+                          />
+                        ) : (
+                          <Avatar sx={{ height: "100%", width: "100%" }} />
+                        )}
+                      </div>
 
-                <div className="flex flex-col">
-                  <p className=" group-hover:underline underline-offset-2">
-                    {user?.name}
-                  </p>
-                  <p className=" opacity-75">{user?.username}</p>
-                </div>
-              </Link>
+                      <div className="flex flex-col">
+                        <p className=" group-hover:underline underline-offset-2">
+                          {user?.name}
+                        </p>
+                        <p className=" opacity-75">{user?.username}</p>
+                      </div>
+                    </Link>
 
-              <FollowActionButton
-                id={id}
-                following={following}
-                handleFollowAndUnfollowAction={handleFollowAndUnfollowAction}
-                followingUsers={followingUsers}
-                profile={profile}
-                unfollowing={unfollowing}
-                user={user}
-              />
-            </div>
-          ))}
+                    <div onClick={() => setUserId(user?._id)}>
+                      <FollowActionButton
+                        id={id}
+                        following={following}
+                        handleFollowAndUnfollowAction={
+                          handleFollowAndUnfollowAction
+                        }
+                        followingUsers={followingUsers}
+                        profile={profile}
+                        unfollowing={unfollowing && userId === user?._id}
+                        user={user}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </>
+            ))}
         </div>
       </Box>
     </Modal>

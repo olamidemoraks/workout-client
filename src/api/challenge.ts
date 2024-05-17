@@ -10,10 +10,14 @@ const headers = {
 };
 
 export const frontalChallenges = async () => {
+  const token = getTokenFromLocalStorage();
   try {
     const response = await axios.get(`${baseUrl}/frontal-challenges`, {
       withCredentials: true,
-      headers,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
     return response.data;
   } catch (error: any) {

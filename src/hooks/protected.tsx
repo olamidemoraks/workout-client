@@ -10,7 +10,10 @@ import { io, Socket } from "socket.io-client";
 import { useDispatch } from "react-redux";
 import { getSocket } from "@/redux/feature/socketSlice";
 import OnboardingScreen from "@/components/Common/OnboardingScreen";
-import { getTokenFromLocalStorage } from "@/utils/localstorage";
+import {
+  getTokenFromLocalStorage,
+  setTokenToLocalStorage,
+} from "@/utils/localstorage";
 
 const Protected = ({ children }: PropsWithChildren) => {
   const dispatch = useDispatch();
@@ -18,6 +21,10 @@ const Protected = ({ children }: PropsWithChildren) => {
   const { data } = useSession();
   const { mutate: socialAuth, isLoading: authLoading } = useMutation({
     mutationFn: socialAuthentication,
+    onSuccess: (data) => {
+      setTokenToLocalStorage(data?.token);
+      // router.push("/onboarding");
+    },
   });
   const { mutate: checkUserExist, isLoading: checkingForUser } = useMutation({
     mutationFn: checkUser,
@@ -48,6 +55,12 @@ const Protected = ({ children }: PropsWithChildren) => {
   // add socket to global state
 
   useEffect(() => {
+    if (!getTokenFromLocalStorage()) {
+      redirect("/login");
+    }
+  }, []);
+
+  useEffect(() => {
     if (profile) {
       if (!socket.current) {
         socket.current = io(`${process.env.NEXT_PUBLIC_SOCKET_URI}`);
@@ -56,15 +69,11 @@ const Protected = ({ children }: PropsWithChildren) => {
       dispatch(getSocket({ socket }));
     }
   }, [profile, dispatch]);
-  return (
-    <>
-      {isLoading || authLoading ? (
-        <OnboardingScreen isLoading={isLoading} />
-      ) : (
-        <>{profile ? children : redirect("/login")}</>
-      )}
-    </>
-  );
+
+  if (isLoading) {
+    return <OnboardingScreen isLoading={isLoading} />;
+  }
+  return <>{profile ? children : redirect("/login")}</>;
 };
 
 export default Protected;

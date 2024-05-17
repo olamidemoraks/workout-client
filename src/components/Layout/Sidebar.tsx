@@ -1,9 +1,14 @@
+import { logout } from "@/api/user";
 import { cn } from "@/libs/utils";
-import { deleteTokenFromLocalStorage } from "@/utils/localstorage";
+import {
+  deleteTokenFromLocalStorage,
+  getTokenFromLocalStorage,
+} from "@/utils/localstorage";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { BiDumbbell } from "react-icons/bi";
 import {
   FaAngleDoubleLeft,
@@ -86,6 +91,26 @@ type SideBarProps = {
 const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
   const pathName = usePathname()?.split("/")[1];
   const router = useRouter();
+  const [isLogout, setIsLogout] = useState(false);
+  function logoutGen() {
+    signOut();
+    deleteTokenFromLocalStorage();
+  }
+
+  // function logout() {
+  //   signOut();
+  //   deleteTokenFromLocalStorage();
+  // }
+
+  useEffect(() => {
+    let token: any;
+    if (typeof window !== "undefined") {
+      token = localStorage.getItem("userTK");
+    }
+    if (!token && isLogout) {
+      router.push("/login");
+    }
+  }, [isLogout]);
   return (
     <div
       className={cn(
@@ -208,9 +233,7 @@ const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
 
           <div
             onClick={() => {
-              signOut();
-              deleteTokenFromLocalStorage();
-              router.replace("/login");
+              logoutGen();
             }}
             className="flex group gap-2 items-center justify-center backdrop-blur-md h-[100%] cursor-pointer   w-[100%] p-2  z-10 "
           >

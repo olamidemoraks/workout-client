@@ -1,7 +1,6 @@
 "use client";
 import { userProfile } from "@/api/user";
-import React from "react";
-import toast from "react-hot-toast";
+import { getTokenFromLocalStorage } from "@/utils/localstorage";
 import { useQuery } from "react-query";
 
 const useProfile = () => {
@@ -9,9 +8,6 @@ const useProfile = () => {
     queryFn: userProfile,
     queryKey: "profile",
     refetchOnWindowFocus: false,
-    onError: (data: any) => {
-      // toast.error(String(data?.message));
-    },
   });
 
   return {

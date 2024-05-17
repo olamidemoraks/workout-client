@@ -5,6 +5,7 @@ const useQuotes = () => {
   const selectedQuote = useMemo(() => {
     return quotes[Math.trunc(Math.random() * 20) + 1];
   }, []);
+
   return {
     selectedQuote,
   };

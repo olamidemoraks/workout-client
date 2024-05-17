@@ -4,7 +4,7 @@ import { Loader } from "lucide-react";
 import useQuotes from "@/hooks/useQuotes";
 import Image from "next/image";
 
-const OnboardingScreen = ({ isLoading }: { isLoading: boolean }) => {
+const OnboardingScreen = ({ isLoading = true }: { isLoading?: boolean }) => {
   const { selectedQuote } = useQuotes();
   return (
     <Modal open={isLoading} onClose={() => {}}>

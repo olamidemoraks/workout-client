@@ -1,26 +1,20 @@
-import { Avatar, MenuItem } from "@mui/material";
-import { Edit, Play, Trash2 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import {
-  BiDotsVerticalRounded,
-  BiShareAlt,
-  BiSolidBarChartSquare,
-} from "react-icons/bi";
-import { Menu as MuiMenu } from "@mui/material";
-import DeleteModal from "../Modal/DeleteModal";
-import useProfile from "@/hooks/useProfile";
-import { useRouter } from "next/navigation";
-import { useMutation, useQueryClient } from "react-query";
 import {
   customWorkoutInviteResponse,
   deleteCustomWorkout,
 } from "@/api/custom.workout";
 import { cn } from "@/libs/utils";
-import AddUserToWorkout from "./AddUserToWorkout";
 import { alphabetsColor } from "@/utils/data";
+import { MenuItem, Menu as MuiMenu } from "@mui/material";
+import { Edit, Play, Trash2 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React from "react";
 import toast from "react-hot-toast";
+import { BiDotsVerticalRounded, BiShareAlt } from "react-icons/bi";
+import { useMutation, useQueryClient } from "react-query";
+import DeleteModal from "../Modal/DeleteModal";
+import AddUserToWorkout from "./AddUserToWorkout";
 
 type PersonalizeWorkoutCardProps = {
   workout: ICustomWorkout;
@@ -50,7 +44,7 @@ const PersonalizeWorkoutCard: React.FC<PersonalizeWorkoutCardProps> = ({
           src={`${workout?.image?.url}`}
           alt={workout?.name}
           fill
-          className=" w-full h-full  object-cover rounded-md md:brightness-[.6] brightness-90 group-hover:brightness-90 -z-[2]"
+          className=" w-full h-full  object-cover rounded-md md:brightness-[.6] brightness-90 group-hover:brightness-90 "
         />
         {/* <div className="absolute top-3 right-3 flex gap-2 items-center">
       <small className="font-semibold">Owner</small>

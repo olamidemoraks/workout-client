@@ -11,7 +11,7 @@ import { Loader2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import FollowActionButton from "./FollowActionButton";
 
@@ -20,6 +20,7 @@ type FollowerProps = {
   setClose: () => void;
 };
 const Follower: React.FC<FollowerProps> = ({ open, setClose }) => {
+  const [userId, setUserId] = useState("");
   const { profile, refetch: refetchProfile } = useProfile();
   const searchParams = useSearchParams();
   const id = searchParams?.get("id");
@@ -65,12 +66,11 @@ const Follower: React.FC<FollowerProps> = ({ open, setClose }) => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          p: 4,
         }}
-        className=" bg-zinc-900 rounded-md sm:w-[600px] w-[95%] max-h-[80vh] min-h-[600px] p-4 py-6 gap-3 flex-col"
+        className=" bg-zinc-900 rounded-md sm:w-[600px] w-[95%] max-h-[80vh] min-h-[600px] sm:p-4 p-2 py-6 gap-3 flex-col"
       >
         <div className="flex justify-between items-center static top-0 w-full">
-          <p className=" text-2xl text-zinc-400">Followers</p>
+          <p className=" text-2xl text-zinc-400 mb-2">Followers</p>
           <X
             size={22}
             className=" text-zinc-400 hover:text-white cursor-pointer"
@@ -83,7 +83,7 @@ const Follower: React.FC<FollowerProps> = ({ open, setClose }) => {
             <Loader2 className=" animate-spin" size={22} />
           </div>
         )}
-        <div className="flex flex-col gap-6 mt-6 h-[70vh]  overflow-auto scrollbar scrollbar-none ">
+        <div className="flex flex-col gap-6 mt-6 sm:h-[70vh] h-[80vh]  overflow-auto scrollbar scrollbar-none ">
           {users?.map((user) => (
             <div
               key={user?._id}
@@ -115,15 +115,17 @@ const Follower: React.FC<FollowerProps> = ({ open, setClose }) => {
                 </div>
               </Link>
 
-              <FollowActionButton
-                id={id}
-                following={following}
-                handleFollowAndUnfollowAction={handleFollowAndUnfollowAction}
-                followingUsers={followingUsers}
-                profile={profile}
-                unfollowing={unfollowing}
-                user={user}
-              />
+              <div onClick={() => setUserId(user?._id)}>
+                <FollowActionButton
+                  id={id}
+                  following={following && userId === user?._id}
+                  handleFollowAndUnfollowAction={handleFollowAndUnfollowAction}
+                  followingUsers={followingUsers}
+                  profile={profile}
+                  unfollowing={unfollowing && userId === user?._id}
+                  user={user}
+                />
+              </div>
             </div>
           ))}
         </div>

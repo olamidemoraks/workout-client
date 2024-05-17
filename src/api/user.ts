@@ -121,10 +121,15 @@ export const updateProfileImage = async ({ value }: { value: any }) => {
 };
 
 export const userProfile = async () => {
+  const token = getTokenFromLocalStorage();
+
   try {
     const response = await axios.get(`${baseUrl}/user-info`, {
       withCredentials: true,
-      headers,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
     return response.data;
   } catch (error: any) {
@@ -139,14 +144,17 @@ export const getProfile = async (id: string) => {
     });
     return response.data;
   } catch (error: any) {
-    return new Error(error?.response?.data?.message ?? "Something went wrong");
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
 export const getStreak = async ({ id }: { id: string }) => {
+  const token = getTokenFromLocalStorage();
   try {
     const response = await axios.get(`${baseUrl}/get-streak/${id}`, {
       withCredentials: true,
-      headers,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error: any) {
@@ -214,11 +222,14 @@ export const unfollowUser = async ({ id }: { id: string }) => {
   }
 };
 export const getFollowing = async ({ params }: { params?: any }) => {
+  const token = getTokenFromLocalStorage();
   const query = new URLSearchParams(params ?? {});
   try {
     const response = await axios.get(`${baseUrl}/get-following?${query}`, {
       withCredentials: true,
-      headers,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     return response.data;
@@ -227,12 +238,15 @@ export const getFollowing = async ({ params }: { params?: any }) => {
   }
 };
 export const getFollower = async ({ params }: { params: any }) => {
+  const token = getTokenFromLocalStorage();
   const query = new URLSearchParams(params ?? {});
 
   try {
     const response = await axios.get(`${baseUrl}/get-follower?${query}`, {
       withCredentials: true,
-      headers,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     return response.data;
