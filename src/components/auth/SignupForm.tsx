@@ -6,8 +6,13 @@ import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useMutation } from "react-query";
-import { checkUser, signupUser, socialAuthentication } from "@/api/user";
+import { useMutation, useQueryClient } from "react-query";
+import {
+  checkUser,
+  signupUser,
+  socialAuthentication,
+  userProfile,
+} from "@/api/user";
 import { useRouter } from "next/navigation";
 import { cn } from "@/libs/utils";
 import toast from "react-hot-toast";
@@ -15,45 +20,71 @@ import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import useProfile from "@/hooks/useProfile";
 import Image from "next/image";
+import {
+  getTokenFromLocalStorage,
+  setTokenToLocalStorage,
+} from "@/utils/localstorage";
 
 type SignupFormProps = {};
 
 const SignupForm: React.FC<SignupFormProps> = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [withEmail, setWithEmail] = useState("google"); //google, email, verify
   const [showPassword, setShowPassword] = useState(false);
-
-  const { profile } = useProfile();
+  const [isSignup, setIsSignup] = useState(false);
+  const { profile, refetch } = useProfile();
   const { data } = useSession();
-  const { mutate: socialAuth, isLoading: socialAuthLoading } = useMutation({
-    mutationFn: socialAuthentication,
-  });
+  const { mutateAsync: socialAuth, isLoading: socialAuthLoading } = useMutation(
+    {
+      mutationFn: socialAuthentication,
+    }
+  );
   const { mutate: checkUserExist, isLoading: checkingForUser } = useMutation({
     mutationFn: checkUser,
     onSuccess: (response) => {
       if (data) {
-        if (response.success) {
-          socialAuth({
-            name: data!.user!.name as string,
-            username: (data!.user!.name as string).split(" ")?.[0],
-            email: data!.user!.email as string,
-          });
-
-          router.push("/");
-        } else if (!response.success) {
-          socialAuth({
-            name: data!.user!.name as string,
-            username: (data!.user!.name as string).split(" ")?.[0],
-            email: data!.user!.email as string,
-          });
-          router.push("/configure-profile");
-        }
+        signupWithSocailAuth();
       }
     },
   });
+
+  const signupWithSocailAuth = async () => {
+    await socialAuth({
+      name: data!.user!.name as string,
+      username: `${(data!.user!.name as string).split(" ")?.[0]}${Math.floor(
+        1000 * Math.random() * 9000
+      ).toString()}`,
+      email: data!.user!.email as string,
+    })
+      .then(async (data) => {
+        setTokenToLocalStorage(data?.token);
+        setIsSignup(true);
+        await queryClient.prefetchQuery("profile", userProfile);
+        // router.push("/onboarding");
+      })
+      .catch(() => {
+        setIsSignup(false);
+      })
+      .finally(() => getTokenFromLocalStorage());
+  };
   useEffect(() => {
-    if (profile) {
+    if (isSignup) {
+      const refetchProfile = () => {
+        setTimeout(() => {
+          refetch();
+        }, 2000);
+      };
+
+      refetchProfile();
+    }
+  }, [isSignup, router]);
+
+  useEffect(() => {
+    if (profile && profile.steps === "done") {
       router.replace("/");
+    } else if (profile && profile.steps !== "done") {
+      router.push("/configure-profile");
     } else if (data?.user) {
       checkUserExist({ value: { email: data?.user?.email } });
     }

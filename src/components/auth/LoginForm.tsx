@@ -30,38 +30,19 @@ const LoginForm = () => {
   const [isSignIn, setIsSignIn] = useState(false);
   const router = useRouter();
   const { profile, refetch } = useProfile();
-  console.log({ profile, isSignIn });
   const [showPassword, setShowPassword] = useState(false);
   const { data } = useSession();
   const { mutateAsync: socialAuth, isLoading: authLoading } = useMutation({
     mutationFn: socialAuthentication,
-    onSuccess: (data) => {
-      setTokenToLocalStorage(data?.token);
-      setIsSignIn(true);
-      // router.push("/onboarding");
-    },
   });
   const { mutate: checkUserExist, isLoading: checkingForUser } = useMutation({
     mutationFn: checkUser,
     onSuccess: (response) => {
       if (data) {
         loginWithSocailAuth();
-        if (!response.success) {
-          router.push("/configure-profile");
-        }
       }
     },
   });
-
-  // useEffect(() => {
-  //   let token: any;
-  //   if (typeof window !== "undefined") {
-  //     token = localStorage.getItem("userTK");
-  //   }
-  //   if (!profile && token && isSignIn) {
-  //     window.location.reload();
-  //   }
-  // }, [isSignIn, router, refetch]);
 
   useEffect(() => {
     if (isSignIn) {
@@ -76,8 +57,10 @@ const LoginForm = () => {
   }, [isSignIn, router]);
 
   useEffect(() => {
-    if (profile) {
+    if (profile && profile.steps === "done") {
       router.replace("/");
+    } else if (profile && profile.steps !== "done") {
+      router.push("/configure-profile");
     } else if (data?.user) {
       checkUserExist({ value: { email: data?.user?.email } });
     }
@@ -86,7 +69,9 @@ const LoginForm = () => {
   const loginWithSocailAuth = async () => {
     await socialAuth({
       name: data!.user!.name as string,
-      username: (data!.user!.name as string).split(" ")?.[0],
+      username: `${(data!.user!.name as string).split(" ")?.[0]}${Math.floor(
+        1000 * Math.random() * 9000
+      ).toString()}`,
       email: data!.user!.email as string,
     })
       .then(async (data) => {

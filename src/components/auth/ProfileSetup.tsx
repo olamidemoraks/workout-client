@@ -86,7 +86,7 @@ const ProfileSetup = () => {
 };
 
 const ProgressStep = ({ step = "gender" }: { step: string }) => {
-  // start, gender, age, weight, level, completed
+  // start, gender, age, weight, level, done
   const steps: any = {
     start: 0,
     gender: 1,
