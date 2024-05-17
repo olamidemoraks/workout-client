@@ -19,6 +19,7 @@ const Profile: React.FC<ProfileProps> = () => {
   const { profile } = useProfile();
 
   const id = searchParams?.get("id");
+  console.log({ id });
   const {
     data,
     isLoading: profileLoading,
@@ -26,7 +27,7 @@ const Profile: React.FC<ProfileProps> = () => {
   } = useQuery({
     queryFn: async () => await getProfile(id!),
     queryKey: "user-profile",
-    enabled: !!id,
+    enabled: id == null ? false : true,
     refetchOnWindowFocus: false,
   });
 

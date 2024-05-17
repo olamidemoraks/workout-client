@@ -83,58 +83,54 @@ const Following: React.FC<FollowingProps> = ({ open, setClose }) => {
           </div>
         )}
         <div className="flex flex-col gap-6 mt-6 sm:h-[70vh] h-[80vh]  overflow-auto px-1 scrollbar scrollbar-none ">
-          {Array(20)
-            .fill(0)
-            .map((_, idx) => (
-              <>
-                {users?.map((user) => (
-                  <div
-                    key={user?._id}
-                    className="w-full flex justify-between items-center"
-                  >
-                    <Link
-                      href={`/profile?id=${user?._id}`}
-                      onClick={setClose}
-                      className="flex gap-2 group items-center"
-                    >
-                      <div className="md:h-[60px] md:w-[60px] h-[50px] w-[50px] relative cursor-pointer">
-                        {user?.avatar?.url ? (
-                          <Image
-                            src={user?.avatar?.url}
-                            alt={user.name}
-                            fill
-                            className="absolute rounded-full object-cover"
-                          />
-                        ) : (
-                          <Avatar sx={{ height: "100%", width: "100%" }} />
-                        )}
-                      </div>
-
-                      <div className="flex flex-col">
-                        <p className=" group-hover:underline underline-offset-2">
-                          {user?.name}
-                        </p>
-                        <p className=" opacity-75">{user?.username}</p>
-                      </div>
-                    </Link>
-
-                    <div onClick={() => setUserId(user?._id)}>
-                      <FollowActionButton
-                        id={id}
-                        following={following}
-                        handleFollowAndUnfollowAction={
-                          handleFollowAndUnfollowAction
-                        }
-                        followingUsers={followingUsers}
-                        profile={profile}
-                        unfollowing={unfollowing && userId === user?._id}
-                        user={user}
+          <>
+            {users?.map((user) => (
+              <div
+                key={user?._id}
+                className="w-full flex justify-between items-center"
+              >
+                <Link
+                  href={`/profile?id=${user?._id}`}
+                  onClick={setClose}
+                  className="flex gap-2 group items-center"
+                >
+                  <div className="md:h-[60px] md:w-[60px] h-[50px] w-[50px] relative cursor-pointer">
+                    {user?.avatar?.url ? (
+                      <Image
+                        src={user?.avatar?.url}
+                        alt={user.name}
+                        fill
+                        className="absolute rounded-full object-cover"
                       />
-                    </div>
+                    ) : (
+                      <Avatar sx={{ height: "100%", width: "100%" }} />
+                    )}
                   </div>
-                ))}
-              </>
+
+                  <div className="flex flex-col">
+                    <p className=" group-hover:underline underline-offset-2">
+                      {user?.name}
+                    </p>
+                    <p className=" opacity-75">{user?.username}</p>
+                  </div>
+                </Link>
+
+                <div onClick={() => setUserId(user?._id)}>
+                  <FollowActionButton
+                    id={id}
+                    following={following}
+                    handleFollowAndUnfollowAction={
+                      handleFollowAndUnfollowAction
+                    }
+                    followingUsers={followingUsers}
+                    profile={profile}
+                    unfollowing={unfollowing && userId === user?._id}
+                    user={user}
+                  />
+                </div>
+              </div>
             ))}
+          </>
         </div>
       </Box>
     </Modal>

@@ -14,6 +14,7 @@ import { updateProfile } from "@/api/user";
 import useProfile from "@/hooks/useProfile";
 import { Check, ChevronLeft, Loader2, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 type EditProfileProps = {
   id: string;
@@ -26,6 +27,11 @@ const EditProfile: React.FC<EditProfileProps> = ({ id }) => {
     mutationFn: updateProfile,
     onSuccess: () => {
       queryClient.refetchQueries("profile");
+      toast.success("profile update successful");
+    },
+    onError: (data: any) => {
+      console.log({ data });
+      toast.error(`${data?.message || "Something went wrong"}`);
     },
   });
 
@@ -88,24 +94,24 @@ const EditProfile: React.FC<EditProfileProps> = ({ id }) => {
         >
           <ChevronLeft size={23} />
         </button>
-        <div className="flex items-center justify-between">
-          <p className=" text-lg font-bold">Edit Profile</p>
-          <button
-            type="submit"
-            className=" hover:bg-emerald-500 flex items-center gap-2 rounded-md  p-3 border border-neutral-600"
-          >
-            {updating ? (
-              <Loader2 className="animate-spin" size={20} />
-            ) : (
-              <Check size={23} />
-            )}
-          </button>
-        </div>
         <form
           onSubmit={handleSubmit(handleSignup)}
           className="flex flex-col gap-4 mt-3 w-full"
           autoFocus
         >
+          <div className="flex items-center justify-between">
+            <p className=" text-lg font-bold">Edit Profile</p>
+            <button
+              type="submit"
+              className=" bg-blue-500 flex items-center gap-2 rounded-md  p-3 "
+            >
+              {updating ? (
+                <Loader2 className="animate-spin" size={20} />
+              ) : (
+                <Check size={23} />
+              )}
+            </button>
+          </div>
           <>
             <label htmlFor="name" className=" ">
               Name

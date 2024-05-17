@@ -138,6 +138,7 @@ export const userProfile = async () => {
 };
 export const getProfile = async (id: string) => {
   try {
+    if (id === null) return;
     const response = await axios.get(`${baseUrl}/profile-info/${id}`, {
       withCredentials: true,
       headers,

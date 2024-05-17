@@ -21,7 +21,7 @@ const StreakDays: React.FC<StreakDaysProps> = ({ activities }) => {
             <div
               className={`h-full w-full relative rounded-full border border-neutral-700 flex items-center justify-center ${
                 activities?.includes(date)
-                  ? " bg-pink-500"
+                  ? " bg-[#ff477e]"
                   : date === today.toLocaleDateString()
                   ? "  bg-zinc-700/80"
                   : "bg-transparent"

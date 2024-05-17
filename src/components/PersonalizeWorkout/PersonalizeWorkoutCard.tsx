@@ -44,14 +44,14 @@ const PersonalizeWorkoutCard: React.FC<PersonalizeWorkoutCardProps> = ({
           src={`${workout?.image?.url}`}
           alt={workout?.name}
           fill
-          className=" w-full h-full  object-cover rounded-md md:brightness-[.6] brightness-90 group-hover:brightness-90 "
+          className=" w-full h-full   object-cover rounded-md md:brightness-[.8] brightness-90 group-hover:brightness-90 "
         />
         {/* <div className="absolute top-3 right-3 flex gap-2 items-center">
       <small className="font-semibold">Owner</small>
     </div> */}
         <Link
           href={`/workout/${workout?._id}`}
-          className="flex flex-row items-center justify-center w-full"
+          className="flex flex-row items-center justify-center w-full z-10"
         >
           <div className="h-[35px] w-[35px] group-hover:flex items-center justify-center hidden bg-blue-500 rounded-[13px] transition-colors duration-200 ">
             <Play size={17} fill="#fff" />
@@ -62,13 +62,13 @@ const PersonalizeWorkoutCard: React.FC<PersonalizeWorkoutCardProps> = ({
         <div className="flex gap-3 items-start">
           <Link
             href={`/profile?id=${workout?.creatorId}`}
-            className="relative h-[30px] min-w-[30px] "
+            className="relative h-10 w-10 "
           >
             {workout?.creator?.avatar?.public_id ? (
               <Image
                 src={`${workout?.creator?.avatar?.url}`}
                 fill
-                className="h-full w-full  rounded-full ring-2 ring-emerald-400"
+                className="h-full w-full  rounded-full border border-emerald-400"
                 alt="profile image"
               />
             ) : (

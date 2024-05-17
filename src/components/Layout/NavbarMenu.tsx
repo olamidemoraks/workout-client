@@ -13,6 +13,7 @@ import { signOut } from "next-auth/react";
 import UserStreak from "../Common/UserStreak";
 import { FaUser } from "react-icons/fa6";
 import { FaSignOutAlt } from "react-icons/fa";
+import { usePathname } from "next/navigation";
 
 const chargeColor: { [key: number]: string } = {
   1: "fill-red-500",
@@ -23,6 +24,7 @@ const chargeColor: { [key: number]: string } = {
 };
 export default function NavbarMenu({ profile }: { profile: IUser }) {
   const router = useRouter();
+  const pathname = usePathname();
   const { chargeLeft } = useBatteryCharge();
   const { streak, longestStreak, totalWorkout, isLoading } = useStreak({
     userId: profile?._id,
@@ -58,12 +60,14 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
           </div>
         </Tooltip>
         {profile?.avatar ? (
-          <div className="h-10 w-10 relative">
+          <div className="h-10 w-10 relative ">
             <Image
               src={profile?.avatar.url}
               alt="avatar"
               fill
-              className=" rounded-xl absolute object-cover"
+              className={`${
+                pathname === "/profile" ? "border border-orange-400" : ""
+              } rounded-xl absolute object-cover  border-opacity-70`}
             />
           </div>
         ) : (

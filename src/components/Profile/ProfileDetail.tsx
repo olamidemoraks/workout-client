@@ -9,6 +9,8 @@ import { useMutation, useQueryClient } from "react-query";
 import { updateProfileImage } from "@/api/user";
 import toast from "react-hot-toast";
 import { alphabetsColor } from "@/utils/data";
+import { FaExpand } from "react-icons/fa";
+import ExpandImageModal from "./Modal/ExpandImageModal";
 
 type ProfileDetailProps = {
   profile: IUser;
@@ -19,7 +21,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
   profile,
   personalPage,
 }) => {
-  console.log({ profile });
+  const [expand, setExpand] = useState(false);
   const [openFollowing, setOpenFollowing] = useState<boolean>(false);
   const [openFollowers, setOpenFollowers] = useState<boolean>(false);
   const queryClient = useQueryClient();
@@ -51,6 +53,13 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
   };
   return (
     <>
+      {profile?.avatar?.url && (
+        <ExpandImageModal
+          open={expand}
+          setClose={() => setExpand(false)}
+          image={profile.avatar.url}
+        />
+      )}
       <Following
         open={openFollowing}
         setClose={() => setOpenFollowing(false)}
@@ -83,9 +92,9 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
             className="absolute -bottom-1 right-3 bg-zinc-900/60 hover:bg-zinc-900 h-9 w-9 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition duration-200"
           >
             {isLoading ? (
-              <Loader2 className=" animate-spin" size={17} />
+              <Loader2 className=" animate-spin" size={20} />
             ) : (
-              <Smile size={17} />
+              <Smile size={20} />
             )}
             <input
               id="avatar"
@@ -95,6 +104,15 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
               onChange={handleSelectImage}
             />
           </label>
+        )}
+
+        {profile?.avatar?.url && (
+          <div
+            onClick={() => setExpand(true)}
+            className="absolute -bottom-1 left-3  bg-zinc-900/60 hover:bg-zinc-900 h-9 w-9 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition duration-200"
+          >
+            <FaExpand className="hover:fill-orange-400" />
+          </div>
         )}
       </div>
 
