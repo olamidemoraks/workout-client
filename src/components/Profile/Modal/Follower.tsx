@@ -67,7 +67,7 @@ const Follower: React.FC<FollowerProps> = ({ open, setClose }) => {
           left: "50%",
           transform: "translate(-50%, -50%)",
         }}
-        className=" bg-zinc-900 rounded-md sm:w-[600px] w-[95%] max-h-[70vh] md:max-h-[80vh] min-h-[600px] sm:p-4 p-2 py-6 gap-3 flex-col"
+        className=" bg-zinc-900 rounded-md sm:w-[600px] w-[95%] max-h-[70vh] md:max-h-[80vh] min-h-[500px] sm:p-4 p-2 py-6 gap-3 flex-col"
       >
         <div className="flex justify-between items-center static top-0 w-full">
           <p className=" text-2xl text-zinc-400 mb-2">Followers</p>
