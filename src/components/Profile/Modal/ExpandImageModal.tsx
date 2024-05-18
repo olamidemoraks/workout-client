@@ -23,7 +23,7 @@ const ExpandImageModal: React.FC<ExpandImageModalProps> = ({
           left: "50%",
           transform: "translate(-50%, -50%)",
         }}
-        className="bg-zinc-900 border border-zinc-600 rounded-md flex justify-center  md:w-[700px] sm:w-[600px] w-[95%] md:h-[500px] h-[300px] p-4 gap-3 flex-col"
+        className="bg-zinc-950 border border-zinc-600 rounded-md flex justify-center  md:w-[700px] sm:w-[600px] w-[95%] md:h-[500px] h-[300px] p-4 gap-3 flex-col"
       >
         <div className=" rounded-md flex justify-center items-center  w-full h-full">
           <Image

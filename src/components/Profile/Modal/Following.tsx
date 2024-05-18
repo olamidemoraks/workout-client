@@ -66,7 +66,7 @@ const Following: React.FC<FollowingProps> = ({ open, setClose }) => {
           left: "50%",
           transform: "translate(-50%, -50%)",
         }}
-        className=" bg-zinc-900 rounded-md sm:w-[600px] w-[95%] max-h-[80vh] min-h-[600px] sm:p-4 p-2 py-6 gap-3 flex-col"
+        className=" bg-zinc-900 rounded-md sm:w-[600px] w-[95%] max-h-[70vh] md:max-h-[80vh] min-h-[600px] sm:p-4 p-2 py-6 gap-3 flex-col"
       >
         <div className="flex justify-between items-center static top-0 w-full">
           <p className=" text-2xl text-zinc-400 mb-2">Following</p>
@@ -82,7 +82,7 @@ const Following: React.FC<FollowingProps> = ({ open, setClose }) => {
             <Loader2 className=" animate-spin" size={22} />
           </div>
         )}
-        <div className="flex flex-col gap-6 mt-6 sm:h-[70vh] h-[80vh]  overflow-auto px-1 scrollbar scrollbar-none ">
+        <div className="flex flex-col gap-6 mt-6 h-full  overflow-auto px-1 scrollbar scrollbar-none ">
           <>
             {users?.map((user) => (
               <div
