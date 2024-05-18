@@ -30,7 +30,7 @@ const Workouts = () => {
       {workouts?.map((workout) => (
         <PersonalizeWorkoutCard
           workout={workout}
-          userId={id}
+          userId={profile?._id}
           key={workout._id}
           isProfile
         />
