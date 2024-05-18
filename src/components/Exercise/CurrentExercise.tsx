@@ -341,8 +341,9 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
                               src={
                                 exercises?.[currentIndex - 1]?.image?.url ?? ""
                               }
-                              alt="previous"
+                              alt={exercises?.[currentIndex - 1]?.name}
                               fill
+                              quality={50}
                               className=" object-cover rounded-lg absolute group-hover:opacity-100 opacity-70"
                             />
                           </div>
@@ -366,7 +367,7 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
                                 exercises?.[currentIndex + 1]?.image?.url ??
                                 "/assets/gears.jpg"
                               }
-                              alt="previous"
+                              alt={exercises?.[currentIndex + 1]?.name}
                               fill
                               quality={50}
                               className=" object-cover rounded-lg absolute group-hover:opacity-100 opacity-70"
