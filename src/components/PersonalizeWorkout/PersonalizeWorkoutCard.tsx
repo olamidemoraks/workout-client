@@ -126,6 +126,10 @@ export const Menu = ({ id, owner }: { id: string; owner: boolean }) => {
     mutationFn: deleteCustomWorkout,
     onSuccess: () => {
       queryClient.invalidateQueries("custom-workout");
+      toast.success("Workout deleted");
+    },
+    onError: (data: any) => {
+      toast.error(data?.message || "action failed");
     },
     onSettled: () => {
       setIsOpen(false);
@@ -137,9 +141,10 @@ export const Menu = ({ id, owner }: { id: string; owner: boolean }) => {
       mutationFn: customWorkoutInviteResponse,
       onSuccess: () => {
         queryClient.invalidateQueries("custom-workout");
+        toast.success("Workout removed");
       },
       onError: (data: any) => {
-        toast.error(data?.message);
+        toast.error(data?.message || "action failed");
       },
       onSettled: () => {
         setIsOpen(false);
@@ -270,7 +275,7 @@ export const Menu = ({ id, owner }: { id: string; owner: boolean }) => {
         handleAction={
           owner ? handleDeleteWorkout : handlecustomWorkoutInviteResponse
         }
-        isLoading={isLoading}
+        isLoading={isLoading || sendingRespond}
       />
       <AddUserToWorkout
         id={id}

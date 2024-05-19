@@ -97,11 +97,18 @@ export const checkUser = async ({ value }: { value: any }) => {
 };
 
 export const updateProfile = async ({ value }: { value: any }) => {
+  const token = getTokenFromLocalStorage();
   try {
     const response = await axios.put(
       `${baseUrl}/update-profile`,
       { ...value },
-      { withCredentials: true, headers }
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response.data;
   } catch (error: any) {

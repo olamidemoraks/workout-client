@@ -92,7 +92,7 @@ const Notification: React.FC<IndexProps> = ({ open, setClose }) => {
           <div
             key={notification?._id}
             className={`border-b ${
-              notifications?.length - 1 !== idx
+              notifications?.length - 1 === idx
                 ? "border-zinc-700/50"
                 : "border-transparent"
             }`}

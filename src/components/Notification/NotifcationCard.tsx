@@ -82,7 +82,7 @@ const NotifcationCard: React.FC<NotifcationCardProps> = ({
 
   return (
     <div className="p-2 rounded hover:bg-zinc-700/50 w-full flex flex-col flex-1 justify-between items-center">
-      <div className="flex gap-2 ">
+      <div className="flex gap-2 w-full ">
         <div className="md:h-[60px] md:min-w-[60px] h-[50px] min-w-[50px] relative cursor-pointer">
           {notification?.from?.avatar?.url ? (
             <Image
@@ -110,8 +110,8 @@ const NotifcationCard: React.FC<NotifcationCardProps> = ({
             }}
             className={`flex items-center gap-1 disabled:opacity-50 px-2 p-1 ${
               userFollowed?.includes(notification?.from?._id)
-                ? " hover:bg-gray-600 text-rose-600"
-                : "bg-blue-600/25 border border-blue-900 "
+                ? "  bg-rose-600/25 border border-red-900 rounded"
+                : "bg-blue-600/25 border border-blue-900 rounded"
             } rounded`}
           >
             {userFollowed?.includes(notification?.from?._id) ? (
