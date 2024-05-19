@@ -6,13 +6,17 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { setTokenToLocalStorage } from "../../utils/localstorage";
+import toast from "react-hot-toast";
 
 const VerifyPin = () => {
   const router = useRouter();
   const [pin, setPin] = useState("");
   const { mutate, isLoading } = useMutation({
     mutationFn: verifyCode,
-    onError: () => {},
+    onError: (error: any) => {
+      console.log(error);
+      toast.error(error.message ?? "something went wrong");
+    },
     onSuccess: (data: { token: string }) => {
       localStorage.removeItem("token");
       setTokenToLocalStorage(data.token);
