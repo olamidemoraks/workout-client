@@ -5,6 +5,7 @@ import { useMutation } from "react-query";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { setTokenToLocalStorage } from "../../utils/localstorage";
 
 const VerifyPin = () => {
   const router = useRouter();
@@ -12,8 +13,9 @@ const VerifyPin = () => {
   const { mutate, isLoading } = useMutation({
     mutationFn: verifyCode,
     onError: () => {},
-    onSuccess: () => {
+    onSuccess: (data: { token: string }) => {
       localStorage.removeItem("token");
+      setTokenToLocalStorage(data.token);
       router.push("/configure-profile");
       // navigate to profile setting up
     },
