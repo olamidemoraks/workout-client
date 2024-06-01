@@ -18,7 +18,7 @@ const WorkoutSection: React.FC<WorkoutSectionProps> = ({
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 sm:gap-x-8 gap-y-8">
+      <div className="grid max-[1600px]:grid-cols-4  xl:grid-cols-3  sm:grid-cols-2 grid-cols-1 sm:gap-x-8 gap-y-8">
         {workouts.map((workout) => (
           <WorkoutCard workout={workout} key={workout?._id} />
         ))}

@@ -114,10 +114,12 @@ const Profile: React.FC<ProfileProps> = () => {
           </div>
         </div>
 
-        <div className="w-full bg-zinc-900/30 backdrop-blur-md lg:p-10 md:p-3 p-1 py-4 flex flex-col gap-5 min-h-[240px]">
-          {(search === "report" || search === null) && <Reports />}
+        <div className="w-full bg-zinc-900/30 backdrop-blur-md lg:p-10 md:p-3 p-1 py-4 flex flex-col items-center gap-5 min-h-[240px] h-full">
+                <div className="flex justify-center w-full max-w-[2000px] flex-col gap-10 ">
+                {(search === "report" || search === null) && <Reports />}
           {/* {search === "achievements" && <Achievements />} */}
           {search === "workouts" && <Workouts />}
+                </div>
         </div>
       </div>
     </>
