@@ -17,9 +17,7 @@ const Notification: React.FC<IndexProps> = ({ open, setClose }) => {
   const { profile } = useProfile();
   const dispatch = useDispatch();
   const { socket } = useSelector((state: any) => state.socket);
-  const [audio] = useState<HTMLAudioElement>(
-    new Audio("/audio/notification-sound.mp3")
-  );
+  
   const notifications = data?.notifications as INotification[];
 
   const notificationBar = useRef<HTMLDivElement>(null);
@@ -44,9 +42,7 @@ const Notification: React.FC<IndexProps> = ({ open, setClose }) => {
     };
   }, []);
 
-  const playerNotificationSound = useCallback(() => {
-    audio.play();
-  }, [audio]);
+   
 
   console.log({ socket });
   useEffect(() => {
@@ -56,7 +52,6 @@ const Notification: React.FC<IndexProps> = ({ open, setClose }) => {
           "receive-notification",
           (data: { success: boolean }) => {
             if (data.success) {
-              playerNotificationSound();
               dispatch(receiveNotification({}));
               refetch();
             }
@@ -64,7 +59,7 @@ const Notification: React.FC<IndexProps> = ({ open, setClose }) => {
         );
       }
     }
-  }, [socket, profile, playerNotificationSound, dispatch, refetch]);
+  }, [socket, profile, dispatch, refetch]);
 
   return (
     <div
