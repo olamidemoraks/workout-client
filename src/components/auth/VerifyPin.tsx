@@ -15,7 +15,7 @@ const VerifyPin = () => {
     mutationFn: verifyCode,
     onError: (error: any) => {
       console.log(error);
-      toast.error(error.message ?? "something went wrong");
+      toast.error(error.message ?? "something went wrong!");
     },
     onSuccess: (data: { token: string }) => {
       localStorage.removeItem("token");
