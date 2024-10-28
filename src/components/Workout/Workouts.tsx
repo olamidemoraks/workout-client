@@ -47,12 +47,12 @@ const Workouts = () => {
     );
   }
   return (
-    <div className="md:px-10 px-5 mb-10 flex flex-col gap-10">
-      <p className=" text-2xl font-semibold uppercase">Workouts</p>
+    <div className="md:px-10 px-5 mb-10 flex flex-col gap-10  max-w-[2300px]">
+      
       {workouts?.map((categoryWorkout, idx) => (
         <div
           className={`${
-            idx <= workouts?.length - 1 ? "border-b border-zinc-800" : ""
+            idx == workouts?.length - 1 ?"": "border-b border-zinc-800"
           } pb-8`}
           key={idx}
         >

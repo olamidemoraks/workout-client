@@ -19,7 +19,7 @@ const Home = () => {
       <div className="px-4 pb-6 mb-6 border-b border-zinc-800 md:hidden block">
         <DailyAttendance />
       </div>
-      <div className=" md:border-r border-zinc-800 flex flex-col gap-10 w-full overflow-hidden overflow-x-hidden">
+      <div className=" md:border-r border-zinc-800 h-full flex flex-col gap-10 w-full overflow-hidden overflow-x-hidden">
         <HomeSection
           title="X Days Challenge"
           seeMoreLink="/challenge"
@@ -31,7 +31,7 @@ const Home = () => {
         <HomeSection
           title="Focus Areas"
           seeMoreLink="/workouts"
-          customStyle="pl-4 md:pl-10"
+          customStyle="px-4 md:px-10"
         >
           <div className="  w-full relative flex overflow-x-scroll   scrollbar-thumb-transparent scrollbar-thin scrollbar-track-transparent">
             <ul className="flex flex-row  flex-nowrap gap-4 w-full snap-x">
@@ -43,7 +43,7 @@ const Home = () => {
         <HomeSection
           title="Personalize Workouts"
           seeMoreLink="/profile?tab=workouts"
-          customStyle="pl-4 md:pl-10"
+          customStyle="px-4 md:px-10"
         >
           <div className="  w-full relative flex overflow-x-scroll   scrollbar-thumb-transparent scrollbar-thin scrollbar-track-transparent">
             <ul className="flex flex-row  flex-nowrap gap-4 w-full snap-x">

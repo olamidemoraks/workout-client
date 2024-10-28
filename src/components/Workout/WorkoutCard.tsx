@@ -55,10 +55,10 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
     //     </div>
     //   </div>
     // </Link>
-    <div className="flex flex-col w-full max-w-[500px]" key={workout?._id}>
+    <div className="flex flex-col w-full " key={workout?._id}>
       <div
         className={
-          " cursor-pointer fill-rose-500 group snap-start w-full h-[200px]  relative  p-3 flex flex-col items-center justify-center border  border-zinc-900 rounded-lg  transition duration-200"
+          " cursor-pointer fill-rose-500 group snap-start w-full h-[250px]  relative  p-3 flex flex-col items-center justify-center border  border-zinc-900 rounded-lg  transition duration-200"
         }
       >
         <Image
@@ -72,7 +72,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
   </div> */}
         <Link
           href={`/workouts/preview/${workout._id}`}
-          className="md:hidden flex flex-row items-center justify-center w-full h-full group-hover:flex"
+          className="md:hidden flex flex-row items-center justify-center w-full h-full group-hover:flex "
         >
           <div className="h-[35px] w-[35px] flex items-center justify-center bg-zinc-700/30 backdrop-blur-sm group-hover:bg-blue-500 rounded-[13px] transition-colors duration-200 ">
             <Play size={17} fill="#fff" />

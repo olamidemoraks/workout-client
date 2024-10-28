@@ -19,7 +19,7 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
   workout,
   workoutType,
 }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isResting, setIsResting] = useState(false);
   const [duration, setDuration] = useState(0);
   const [isPlayed, setIsPlayed] = useState(true);
@@ -65,6 +65,7 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
       return;
     }
     setCurrentIndex((prev) => prev + 1);
+    saveCurrentExerciseToLocalStorage(currentIndex + 1)
     playBellSound();
     setIsResting(true);
   }, [currentIndex, exercises?.length, playBellSound]);
@@ -74,8 +75,24 @@ const CurrentExercise: React.FC<CurrentExerciseProps> = ({
       return;
     }
     setCurrentIndex((prev) => prev - 1);
-    setIsResting(true);
+    saveCurrentExerciseToLocalStorage(currentIndex-1)
+    setIsResting(true); 
   };
+
+  const saveCurrentExerciseToLocalStorage = (current:number) => {
+    if(typeof window !== "undefined"){
+      localStorage.setItem("currentExercise", String(current) )
+    }
+  }
+
+  const getCurrentExerciseFromLocalStorage = () => {
+    return typeof window !== "undefined" ? Number(localStorage.getItem("currentExercise")) : 0
+  }
+
+  useEffect(() => {
+    const index = getCurrentExerciseFromLocalStorage()
+      setCurrentIndex(index)
+  }, [])
 
   useEffect(() => {
     setStartTime(new Date(Date.now()));
