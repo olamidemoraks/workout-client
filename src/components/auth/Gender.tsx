@@ -1,7 +1,7 @@
 import { cn } from "@/libs/utils";
-import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
+import { OptionCard, StepLayout } from "./OnboardingControls";
 
 type GenderProps = {
   handleUpdate: (value: any) => void;
@@ -9,104 +9,63 @@ type GenderProps = {
   isLoading: boolean;
 };
 
+const genders = [
+  { value: "male", label: "Male", imageUrl: "/assets/male.png" },
+  { value: "female", label: "Female", imageUrl: "/assets/female.png" },
+];
+
 const Gender: React.FC<GenderProps> = ({
   handleUpdate,
   genderValue,
   isLoading,
 }) => {
-  const [gender, setGender] = useState(genderValue ?? "male");
+  const [gender, setGender] = useState(genderValue ?? "");
 
   return (
-    <div className="flex flex-col items-center pb-4 w-full  ">
-      <div>
-        <h2 className=" md:text-2xl text-xl uppercase text-center font-semibold">
-          What&apos;s your gender?
-        </h2>
-        <p className=" text-center">Let us know you better</p>
-      </div>
+    <StepLayout
+      title="What's your gender?"
+      description="This helps us personalise your workouts."
+      onNext={() => handleUpdate({ gender, steps: "age" })}
+      nextDisabled={!gender}
+      isLoading={isLoading}
+    >
       <div
-        className={cn(
-          "flex w-full justify-between items-center transition duration-[400ms]",
-          {
-            " md:translate-x-[17%] ": gender === "male",
-            " md:-translate-x-[17%]": gender === "female",
-          }
-        )}
+        role="radiogroup"
+        aria-label="Gender"
+        className="grid grid-cols-2 gap-3 sm:gap-4"
       >
-        <div
-          onClick={() => setGender("male")}
-          className={cn(
-            "cursor-pointer relative  sm:w-[300px] w-[200px] transition duration-[400ms] flex flex-col items-center ",
-            {
-              "scale-[.65] -translate-y-[5%]  md:translate-x-[100px]":
-                gender !== "male",
-              "translate-x-[40px] -translate-y-[22px] ": gender === "male",
-            }
-          )}
-        >
-          <Image
-            src={"/assets/male.png"}
-            alt="male"
-            height={400}
-            width={400}
-            className=" object-contain drop-shadow-lg"
-          />
-          <div className="w-[50%] h-[30px] bg-zinc-900 rounded-[100%] -translate-x-[5%] -translate-y-[45px] -z-10 blur-sm opacity-60" />
-          <div
-            className={cn(
-              " absolute -z-10 h-[160px] w-[50%] animate-pulse  bg-blue-700 top-[22%] rounded-[.6rem] -skew-x-6",
-              { "scale-0": gender === "female" }
-            )}
-          />
-        </div>
-        <div
-          onClick={() => setGender("female")}
-          className={cn(
-            "cursor-pointer relative  sm:w-[300px] w-[200px] transition duration-[400ms] flex flex-col items-center",
-            {
-              "scale-[.63] -translate-y-[5%] md:-translate-x-[100px] ":
-                gender !== "female",
-              "-translate-x-[40px]": gender === "female",
-            }
-          )}
-        >
-          <Image
-            src={"/assets/female.png"}
-            alt="female"
-            height={400}
-            width={400}
-            className=" object-contain drop-shadow-lg "
-          />
-          <div className="w-[50%] h-[30px] bg-zinc-900 rounded-[100%] translate-x-[5%] -translate-y-[42px] -z-10 blur-sm opacity-60" />
-          <div
-            className={cn(
-              " absolute -z-10 h-[160px] w-[50%] animate-pulse bg-pink-400 top-[22%] rounded-[.6rem] skew-x-6 ",
-              { "scale-0": gender === "male" }
-            )}
-          />
-        </div>
+        {genders.map(({ value, label, imageUrl }) => {
+          const selected = gender === value;
+          return (
+            <OptionCard
+              key={value}
+              selected={selected}
+              onClick={() => setGender(value)}
+              className="flex flex-col overflow-hidden"
+            >
+              <div className="relative h-56 w-full sm:h-72">
+                <div
+                  className={cn(
+                    "absolute inset-x-8 bottom-6 top-12 rounded-full blur-3xl transition-colors duration-300",
+                    selected ? "bg-emerald-500/30" : "bg-zinc-700/20"
+                  )}
+                />
+                <Image
+                  src={imageUrl}
+                  alt=""
+                  fill
+                  sizes="(max-width: 640px) 45vw, 280px"
+                  className="object-contain object-bottom pt-6"
+                />
+              </div>
+              <span className="w-full border-t border-zinc-800 py-3 text-center font-semibold">
+                {label}
+              </span>
+            </OptionCard>
+          );
+        })}
       </div>
-      <div className=" text-center space-y-4 w-full flex-col items-center flex">
-        <p className=" capitalize font-bold text-xl">{gender}</p>
-        <button
-          type="button"
-          onClick={() => handleUpdate({ gender, steps: "age" })}
-          className=" flex items-center justify-center  px-8 disabled:bg-neutral-600 disabled:cursor-not-allowed bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 w-[200px] sm:min-w-[350px] text-lg font-medium gap-2 "
-        >
-          {isLoading ? (
-            <span className="text-black">
-              Next{" "}
-              <Loader2
-                className=" animate-spin ml-2 inline-block "
-                color="black"
-              />
-            </span>
-          ) : (
-            "Next"
-          )}
-        </button>
-      </div>
-    </div>
+    </StepLayout>
   );
 };
 export default Gender;

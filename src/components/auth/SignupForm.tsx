@@ -1,9 +1,8 @@
 "use client";
-import { ChevronLeft, Eye, EyeOff, Loader2 } from "lucide-react";
+import { AtSign, Lock, Mail, User } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { FcGoogle } from "react-icons/fc";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQueryClient } from "react-query";
@@ -14,24 +13,29 @@ import {
   userProfile,
 } from "@/api/user";
 import { useRouter } from "next/navigation";
-import { cn } from "@/libs/utils";
 import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import useProfile from "@/hooks/useProfile";
-import Image from "next/image";
 import {
   getTokenFromLocalStorage,
   setTokenToLocalStorage,
 } from "@/utils/localstorage";
+import {
+  AuthDivider,
+  AuthHeading,
+  FullScreenLoader,
+  GoogleButton,
+  PasswordField,
+  PrimaryButton,
+  TextField,
+} from "./FormControls";
 
 type SignupFormProps = {};
 
 const SignupForm: React.FC<SignupFormProps> = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const [withEmail, setWithEmail] = useState("google"); //google, email, verify
-  const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const { profile, refetch } = useProfile();
   const { data } = useSession();
@@ -99,7 +103,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
     username: yup.string().required("Please fill your username"),
     password: yup
       .string()
-      .min(6, "Password should be more than 6 characters")
+      .min(6, "Password must be at least 6 characters")
       .required("Please fill your password"),
   });
 
@@ -125,7 +129,6 @@ const SignupForm: React.FC<SignupFormProps> = () => {
       toast.error(value.message);
     },
     onSuccess: (value: any) => {
-      console.log(value);
       if (value.activationToken) {
         localStorage.setItem("token", value.activationToken);
         router.push("/signup/verify-account");
@@ -134,185 +137,91 @@ const SignupForm: React.FC<SignupFormProps> = () => {
   });
 
   const handleSignup = (values: signupTypeReference) => {
-    console.log(values);
     mutate({ value: values });
   };
-
-  let content;
-  switch (withEmail) {
-    case "google":
-      content = (
-        <div className="flex flex-col gap-6 ">
-          <div
-            onClick={() => signIn("google")}
-            className=" flex items-center justify-center sm:px-8 px-2 bg-neutral-200 hover:bg-white cursor-pointer  rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
-          >
-            <FcGoogle />
-            <span className="text-black ">Sign up with Google</span>
-          </div>
-
-          <div className="flex items-center justify-center gap-4 text-zinc-400">
-            <div className="h-[2px] w-full bg-zinc-800" /> or{" "}
-            <div className="h-[2px] w-full bg-zinc-800" />
-          </div>
-
-          <div
-            className=" flex items-center justify-center px-8 border cursor-pointer border-zinc-700  rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
-            onClick={() => setWithEmail("email")}
-          >
-            Continue with email
-          </div>
-
-          <p className=" text-center">
-            Already have an account?{" "}
-            <Link href={"/login"} className=" text-blue-500 font-medium ">
-              {" "}
-              Sign In
-            </Link>
-          </p>
-        </div>
-      );
-      break;
-    case "email":
-      content = (
-        <form
-          onSubmit={handleSubmit(handleSignup)}
-          className="flex flex-col gap-3 relative my-6 "
-        >
-          <div className="flex flex-col gap-3">
-            <label htmlFor="name" className=" text-lg">
-              Name
-            </label>
-            <input
-              {...register("name", { required: true })}
-              placeholder="john doe"
-              className={cn(
-                "bg-transparent focus:outline-none border-[1px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
-                {
-                  "border-red-500 focus:border-red-500": errors.name,
-                }
-              )}
-            />
-            {errors.name && (
-              <p className=" text-red-500 -mt-2">{errors.name.message}</p>
-            )}
-          </div>
-          <div className="flex flex-col gap-3">
-            <label htmlFor="name" className=" text-lg">
-              Username
-            </label>
-            <input
-              {...register("username", { required: true })}
-              placeholder="johndoe"
-              className={cn(
-                "bg-transparent focus:outline-none border-[1px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
-                {
-                  "border-red-500 focus:border-red-500": errors.username,
-                }
-              )}
-            />
-            {errors.username && (
-              <p className=" text-red-500 -mt-2">{errors.username.message}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <label htmlFor="name" className=" text-lg">
-              Email
-            </label>
-            <input
-              type="email"
-              {...register("email", { required: true })}
-              placeholder="me@gmail.com"
-              className={cn(
-                "bg-transparent focus:outline-none border-[1px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
-                {
-                  "border-red-500 focus:border-red-500": errors.email,
-                }
-              )}
-            />
-            {errors.email && (
-              <p className=" text-red-500 -mt-2">{errors.email.message}</p>
-            )}
-          </div>
-          <div className="flex flex-col gap-3 ">
-            <label htmlFor="name" className=" text-lg">
-              Password
-            </label>
-            <div className="relative w-full">
-              <input
-                {...register("password", { required: true })}
-                placeholder="6+ characters"
-                type={showPassword ? "text" : "password"}
-                className={cn(
-                  "bg-transparent w-full focus:outline-none border-[1px] p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]",
-                  {
-                    "border-red-500 focus:border-red-500": errors.password,
-                  }
-                )}
-              />
-              <div
-                className="absolute right-3 top-3 cursor-pointer"
-                onClick={() => setShowPassword((prev) => !prev)}
-              >
-                {showPassword ? <Eye /> : <EyeOff />}
-              </div>
-              {errors.password && (
-                <p className=" text-red-500">{errors.password?.message}</p>
-              )}
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className=" flex items-center justify-center mt-2 px-8 bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
-          >
-            {!isLoading ? (
-              "Create Account"
-            ) : (
-              <>
-                Signing up <Loader2 className=" animate-spin" color="black" />
-              </>
-            )}
-          </button>
-          <p className=" text-center">
-            Already have an account?{" "}
-            <Link href={"/login"} className=" text-blue-500 font-medium ">
-              {" "}
-              Sign In
-            </Link>
-          </p>
-
-          <button
-            onClick={() => setWithEmail("google")}
-            className="text-zinc-400 hover:text-zinc-50 text-center"
-          >
-            Back
-          </button>
-        </form>
-      );
-      break;
-
-    default:
-      break;
-  }
 
   return (
     <>
       {checkingForUser || socialAuthLoading ? (
-        <div className="absolute inset-0 flex items-center justify-center backdrop-blur-sm z-20">
-          <div className=" bg-zinc-800/50 rounded-xl px-5 py-5 flex items-center justify-center flex-col gap-3">
-            <div>
-              <Loader2 className=" animate-spin" size={24} />
-            </div>
-          </div>
-        </div>
+        <FullScreenLoader message="Signing you up with Google…" />
       ) : null}
 
-      <div className="w-full  sm:mt-0 ">
-        <p className="sm:text-2xl text-xl font-bold md:mb-8 mb-4">Sign up</p>
-        {content}
-      </div>
+      <AuthHeading
+        title="Create your account"
+        description="Join MaxUp and start building a workout habit that sticks."
+      />
+
+      <GoogleButton onClick={() => signIn("google")}>
+        Sign up with Google
+      </GoogleButton>
+
+      <AuthDivider>or sign up with email</AuthDivider>
+
+      <form
+        onSubmit={handleSubmit(handleSignup)}
+        noValidate
+        className="flex flex-col gap-5"
+      >
+        <div className="grid gap-5 sm:grid-cols-2 sm:gap-3">
+          <TextField
+            id="name"
+            label="Name"
+            icon={User}
+            autoComplete="name"
+            placeholder="John Doe"
+            error={errors.name?.message}
+            {...register("name", { required: true })}
+          />
+          <TextField
+            id="username"
+            label="Username"
+            icon={AtSign}
+            autoComplete="username"
+            placeholder="johndoe"
+            error={errors.username?.message}
+            {...register("username", { required: true })}
+          />
+        </div>
+        <TextField
+          id="email"
+          label="Email"
+          type="email"
+          icon={Mail}
+          autoComplete="email"
+          placeholder="you@example.com"
+          error={errors.email?.message}
+          {...register("email", { required: true })}
+        />
+        <PasswordField
+          id="password"
+          label="Password"
+          icon={Lock}
+          autoComplete="new-password"
+          placeholder="Create a password"
+          hint="At least 6 characters"
+          error={errors.password?.message}
+          {...register("password", { required: true })}
+        />
+
+        <PrimaryButton
+          type="submit"
+          isLoading={isLoading}
+          loadingText="Creating account…"
+          className="mt-1"
+        >
+          Create account
+        </PrimaryButton>
+      </form>
+
+      <p className="mt-8 text-center text-sm text-zinc-400">
+        Already have an account?{" "}
+        <Link
+          href={"/login"}
+          className="font-semibold text-emerald-400 hover:text-emerald-300"
+        >
+          Log in
+        </Link>
+      </p>
     </>
   );
 };

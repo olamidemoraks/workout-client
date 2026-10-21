@@ -1,77 +1,76 @@
-import { cn } from "@/libs/utils";
 import React, { useState } from "react";
-import { CheckCircle2, Loader2 } from "lucide-react";
 import Image from "next/image";
+import { OptionCard, StepLayout } from "./OnboardingControls";
 
 type GoalsProps = {
   handleUpdate: (value: any) => void;
   isLoading: boolean;
+  goalValue?: string;
+  onBack?: () => void;
 };
 
 const goalList = [
-  { goal: "lose weight", imageUrl: "/assets/weight.png" },
-  { goal: "build muscles", imageUrl: "/assets/muscle.png" },
-  { goal: "keep fit", imageUrl: "/assets/fit.png" },
+  {
+    goal: "lose weight",
+    title: "Lose weight",
+    description: "Burn fat and get leaner",
+    imageUrl: "/assets/weight.png",
+  },
+  {
+    goal: "build muscles",
+    title: "Build muscle",
+    description: "Get stronger and add size",
+    imageUrl: "/assets/muscle.png",
+  },
+  {
+    goal: "keep fit",
+    title: "Keep fit",
+    description: "Stay active and feel good",
+    imageUrl: "/assets/fit.png",
+  },
 ];
-const Goals: React.FC<GoalsProps> = ({ handleUpdate, isLoading }) => {
-  const [goals, setGoals] = useState("");
-  return (
-    <div className="flex flex-col items-center justify-between min-h-[calc(100vh-200px)] w-full">
-      <h2 className=" text-2xl uppercase text-center font-semibold">
-        What are your main <br /> goals?
-      </h2>
 
-      <div className="flex flex-col gap-8 w-full">
-        {goalList.map(({ goal, imageUrl }) => (
-          <div
-            onClick={() => setGoals(goal)}
-            className={cn(
-              "capitalize hover:border-white relative transition-all px-3 py-2 border-4 border-zinc-800 w-full lg:w-[500px] rounded-[.6rem] h-[100px] cursor-pointer flex items-start",
-              {
-                " border-yellow-500 hover:border-yellow-500": goal === goals,
-              }
-            )}
+const Goals: React.FC<GoalsProps> = ({
+  handleUpdate,
+  isLoading,
+  goalValue,
+  onBack,
+}) => {
+  const [goals, setGoals] = useState(goalValue ?? "");
+  return (
+    <StepLayout
+      title="What's your main goal?"
+      description="Pick the one that matters most to you right now."
+      onBack={onBack}
+      onNext={() => handleUpdate({ goals, steps: "level" })}
+      nextDisabled={!goals}
+      isLoading={isLoading}
+    >
+      <div role="radiogroup" aria-label="Main goal" className="flex flex-col gap-3">
+        {goalList.map(({ goal, title, description, imageUrl }) => (
+          <OptionCard
             key={goal}
+            selected={goal === goals}
+            onClick={() => setGoals(goal)}
+            className="flex h-28 items-center gap-4 overflow-hidden pr-12"
           >
-            <p className=" text-lg font-semibold">{goal}</p>
-            <div className="h-[20px] w-[200px] -top-[42px] right-1 z-10 absolute">
+            <div className="relative h-full w-28 shrink-0 bg-gradient-to-br from-zinc-800/80 to-zinc-900 sm:w-32">
               <Image
                 src={imageUrl}
-                alt={goal}
-                height={500}
-                width={500}
-                className=" object-cover "
+                alt=""
+                fill
+                sizes="128px"
+                className="object-cover object-top"
               />
             </div>
-            <CheckCircle2
-              className={cn(" absolute top-2 right-2", {
-                hidden: goal !== goals,
-              })}
-            />
-          </div>
+            <div>
+              <p className="text-lg font-semibold">{title}</p>
+              <p className="mt-1 text-sm text-zinc-400">{description}</p>
+            </div>
+          </OptionCard>
         ))}
       </div>
-
-      <div className=" text-center space-y-4 w-full flex-col items-center flex">
-        <button
-          type="button"
-          onClick={() => handleUpdate({ goals, steps: "level" })}
-          className=" flex items-center justify-center px-8 disabled:bg-neutral-600 disabled:cursor-not-allowed bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 w-[200px] sm:min-w-[350px] text-lg font-medium gap-2 "
-        >
-          {isLoading ? (
-            <span className="text-black">
-              Next{" "}
-              <Loader2
-                className=" animate-spin ml-2 inline-block "
-                color="black"
-              />
-            </span>
-          ) : (
-            "Next"
-          )}
-        </button>
-      </div>
-    </div>
+    </StepLayout>
   );
 };
 export default Goals;

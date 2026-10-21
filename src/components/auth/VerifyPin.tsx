@@ -2,11 +2,13 @@
 import { verifyCode } from "@/api/user";
 import React, { useState } from "react";
 import { useMutation } from "react-query";
-import { Loader2 } from "lucide-react";
+import { MailCheck } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { setTokenToLocalStorage } from "../../utils/localstorage";
 import toast from "react-hot-toast";
+import { AuthHeading, PrimaryButton, inputClassName } from "./FormControls";
+import { cn } from "@/libs/utils";
 
 const VerifyPin = () => {
   const router = useRouter();
@@ -14,90 +16,87 @@ const VerifyPin = () => {
   const { mutate, isLoading } = useMutation({
     mutationFn: verifyCode,
     onError: (error: any) => {
-      console.log(error);
       toast.error(error.message ?? "something went wrong!");
     },
     onSuccess: (data: { token: string }) => {
       localStorage.removeItem("token");
       setTokenToLocalStorage(data.token);
       router.push("/configure-profile");
-      // navigate to profile setting up
     },
   });
 
-  const handleSubmitCode = (e: any) => {
+  const handleSubmitCode = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (
-      typeof window === "undefined" &&
-      localStorage.getItem("token") === null
-    ) {
+    const activationToken = localStorage.getItem("token");
+    if (!activationToken) {
+      toast.error("Your sign-up session has expired. Please sign up again.");
       return;
     }
-    const data = {
-      activation_code: pin,
-      activation_token: localStorage.getItem("token") as string,
-    };
     mutate({
-      activation_code: data.activation_code,
-      activation_token: data.activation_token,
+      activation_code: pin,
+      activation_token: activationToken,
     });
   };
-  return (
-    <div className="flex justify-center flex-col">
-      {/* Security verification
-    email verfifcattion code 
-    enter the verification code sent to your mail */}
-      <div className=" flex flex-col items-center my-3 group -translate-y-8">
-        <Image
-          src={"/assets/logo3.svg"}
-          alt="logo"
-          priority
-          height={100}
-          width={100}
-        />
 
-        <p className=" text-lg font-bold group-hover:tracking-[.25rem] transition-all ease-in-out duration-200 tracking-[.2rem] -mt-2">
-          Ma<span className=" text-[28px]">x</span>up
-        </p>
+  return (
+    <>
+      <div className="mb-6 grid h-14 w-14 place-items-center rounded-2xl bg-emerald-500/10 ring-1 ring-emerald-500/30 max-lg:mx-auto">
+        <MailCheck size={26} className="stroke-emerald-400" />
       </div>
-      <p className=" text-[1.6rem] font-bold mb-4">Security Verification</p>
-      <form onSubmit={handleSubmitCode} className="flex flex-col gap-3">
-        <label htmlFor="name" className=" text-lg">
-          Email verification code
-        </label>
-        <input
-          value={pin}
-          onChange={(e) => setPin(e.target.value)}
-          className="bg-transparent focus:outline-none border-[3px] text-lg text-center p-3 border-zinc-400  focus:border-white rounded-lg h-[50px]"
-          maxLength={6}
-        />
-        <p className=" text-zinc-400 -mt-2">
-          Enter the verification code sent to your mail
-        </p>
-        {/* {!pin && (
-          <p className=" text-primary -mt-2">
-            Please enter the verification code
+
+      <AuthHeading
+        title="Check your email"
+        description="We've sent a verification code to your inbox. Enter it below to activate your account."
+      />
+
+      <form onSubmit={handleSubmitCode} className="flex flex-col gap-5">
+        <div>
+          <label
+            htmlFor="verification-code"
+            className="mb-2 block text-sm font-medium text-zinc-300"
+          >
+            Verification code
+          </label>
+          <input
+            id="verification-code"
+            value={pin}
+            onChange={(e) => setPin(e.target.value.trim())}
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            autoFocus
+            maxLength={6}
+            placeholder="Enter code"
+            aria-describedby="verification-code-hint"
+            className={cn(
+              inputClassName,
+              "h-14 text-center font-mono text-2xl tracking-[0.5em] placeholder:font-sans placeholder:text-base placeholder:tracking-normal"
+            )}
+          />
+          <p id="verification-code-hint" className="mt-2 text-sm text-zinc-500">
+            Can&apos;t find it? Check your spam or promotions folder.
           </p>
-        )} */}
-        <button
-          disabled={!pin ? true : false}
+        </div>
+
+        <PrimaryButton
           type="submit"
-          className=" flex items-center justify-center px-8 disabled:bg-neutral-600 disabled:cursor-not-allowed bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 sm:min-w-[350px] w-full text-lg font-medium gap-2 "
+          disabled={!pin}
+          isLoading={isLoading}
+          loadingText="Verifying…"
         >
-          {isLoading ? (
-            <span className="text-black">
-              Verifying{" "}
-              <Loader2
-                className=" animate-spin ml-2 inline-block "
-                color="black"
-              />
-            </span>
-          ) : (
-            "Verify Code"
-          )}
-        </button>
+          Verify account
+        </PrimaryButton>
       </form>
-    </div>
+
+      <p className="mt-8 text-center text-sm text-zinc-400">
+        Used the wrong email?{" "}
+        <Link
+          href={"/signup"}
+          className="font-semibold text-emerald-400 hover:text-emerald-300"
+        >
+          Sign up again
+        </Link>
+      </p>
+    </>
   );
 };
 

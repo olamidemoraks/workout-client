@@ -1,118 +1,81 @@
 import { cn } from "@/libs/utils";
-import { Zap, Flame, Loader2, Diamond } from "lucide-react";
 import React, { useState } from "react";
+import { OptionCard, StepLayout } from "./OnboardingControls";
 
 type LevelProps = {
   handleUpdate: (value: any) => void;
   isLoading: boolean;
+  levelValue?: number;
+  onBack?: () => void;
 };
 
 const levels = [
-  { name: "Beginner", value: 1 },
-  { name: "Intermediate", value: 2 },
-  { name: "Advance", value: 3 },
+  {
+    name: "Beginner",
+    value: 1,
+    description: "New to training or just getting back into it",
+  },
+  {
+    name: "Intermediate",
+    value: 2,
+    description: "You work out a few times a week",
+  },
+  { name: "Advanced", value: 3, description: "You train hard and often" },
 ];
-const Level: React.FC<LevelProps> = ({ handleUpdate, isLoading }) => {
-  const [level, setLevel] = useState<number>();
-  return (
-    <div className="flex flex-col items-center justify-between min-h-[calc(100vh-200px)] w-full">
-      <div>
-        <h2 className=" text-2xl uppercase text-center font-semibold">
-          How hard can you go?
-        </h2>
-        <p className=" text-center text-neutral-300">
-          Choose a difficult level{" "}
-        </p>
-      </div>
-      <div className="grid sm:grid-cols-3 grid-cols-1  gap-x-4 gap-y-6">
-        {levels.map(({ name, value }) => (
-          <div
-            onClick={() => setLevel(value)}
-            key={value}
-            className={cn(
-              " bg-zinc-900 hover:bg-zinc-800 cursor-pointer w-[160px] h-[160px] rounded-xl flex flex-col items-center justify-center gap-4",
-              {
-                "ring-4 ring-primary  ": value === level && level !== 4,
-                "ring-4 ring-indigo-600  ": value === level && level === 4,
-              }
-            )}
-          >
-            <p className="text-xl capitalize font-bold">{name}</p>
 
-            <div className="flex gap-1 ">
-              {Array(3)
-                .fill(0)
-                .map((_, index) => (
-                  <>
-                    {value !== 4 ? (
-                      <div
-                        className="relative flex items-center justify-center p-[1px]"
-                        key={index}
-                      >
-                        <div
-                          className={cn(
-                            "absolute bg-white/10 h-full w-full rounded-full animate-pulse"
-                          )}
-                        />
-                        <Diamond
-                          className={cn("p-1 fill-white/10", {
-                            "fill-red-600 ": index < value,
-                          })}
-                          size={30}
-                          color={index < value ? "#e75353" : "gray"}
-                        />
-                      </div>
-                    ) : (
-                      <>
-                        {" "}
-                        <div
-                          className="relative flex items-center justify-center p-[1px]"
-                          key={index}
-                        >
-                          <div
-                            className={cn(
-                              "absolute bg-white/10 h-full w-full rounded-full animate-pulse",
-                              {
-                                hidden: value - 1 < index,
-                              }
-                            )}
-                          />
-                          <Zap
-                            className={cn("p-1 fill-white/10", {
-                              "fill-indigo-600 ": index < value,
-                            })}
-                            size={30}
-                            color={index < value ? "#5853e7" : "gray"}
-                          />
-                        </div>
-                      </>
-                    )}
-                  </>
+const barHeights = ["h-3", "h-5", "h-7"];
+
+const Level: React.FC<LevelProps> = ({
+  handleUpdate,
+  isLoading,
+  levelValue,
+  onBack,
+}) => {
+  const [level, setLevel] = useState<number | undefined>(levelValue);
+  return (
+    <StepLayout
+      title="What's your fitness level?"
+      description="Choose the level that best describes you today."
+      onBack={onBack}
+      onNext={() => handleUpdate({ level, steps: "weight" })}
+      nextDisabled={!level}
+      isLoading={isLoading}
+    >
+      <div
+        role="radiogroup"
+        aria-label="Fitness level"
+        className="grid gap-3 sm:grid-cols-3"
+      >
+        {levels.map(({ name, value, description }) => {
+          const selected = value === level;
+          return (
+            <OptionCard
+              key={value}
+              selected={selected}
+              onClick={() => setLevel(value)}
+              className="flex items-center gap-5 p-5 pr-12 sm:min-h-[200px] sm:flex-col sm:items-start sm:pr-5"
+            >
+              <div aria-hidden className="flex h-7 w-8 shrink-0 items-end gap-1">
+                {barHeights.map((height, index) => (
+                  <span
+                    key={height}
+                    className={cn("w-2 rounded-sm transition-colors", height, {
+                      "bg-zinc-700": index >= value,
+                      "bg-zinc-300": index < value && !selected,
+                      "bg-emerald-400": index < value && selected,
+                    })}
+                  />
                 ))}
-            </div>
-          </div>
-        ))}
+              </div>
+              <div className="sm:mt-auto">
+                <p className="text-lg font-semibold">{name}</p>
+                <p className="mt-1 text-sm text-zinc-400">{description}</p>
+              </div>
+            </OptionCard>
+          );
+        })}
       </div>
-      <div className=" text-center space-y-4 w-full flex-col items-center flex">
-        <button
-          type="button"
-          onClick={() => handleUpdate({ level, steps: "weight" })}
-          className=" flex items-center justify-center px-8 disabled:bg-neutral-600 disabled:cursor-not-allowed bg-neutral-200 hover:bg-white cursor-pointer text-black  rounded-full py-3 w-[200px] sm:min-w-[350px] text-lg font-medium gap-2 "
-        >
-          {isLoading ? (
-            <span className="text-black">
-              Next{" "}
-              <Loader2
-                className=" animate-spin ml-2 inline-block "
-                color="black"
-              />
-            </span>
-          ) : (
-            "Next"
-          )}
-        </button>
-      </div>
-    </div>
+    </StepLayout>
   );
 };
 export default Level;

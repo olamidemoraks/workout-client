@@ -1,5 +1,5 @@
 "use client";
-import { updateProfile, userProfile } from "@/api/user";
+import { updateProfile } from "@/api/user";
 import useProfile from "@/hooks/useProfile";
 import { cn } from "@/libs/utils";
 import React, { useEffect, useState } from "react";
@@ -10,8 +10,12 @@ import Goals from "./Goals";
 import Level from "./Level";
 import Weight from "./Weight";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react";
+import BrandMark from "./BrandMark";
+
+// Order of the onboarding steps; the server stores the current one in `user.steps`.
+const STEPS = ["gender", "age", "goal", "level", "weight"];
 
 const ProfileSetup = () => {
   const router = useRouter();
@@ -43,8 +47,12 @@ const ProfileSetup = () => {
     mutate({ value });
   };
 
+  // "start" (or anything unexpected) begins at the first step.
+  const stepIndex = Math.max(STEPS.indexOf(steps), 0);
+  const handleBack = () => setSteps(STEPS[stepIndex - 1]);
+
   let content;
-  switch (steps) {
+  switch (STEPS[stepIndex]) {
     case "gender":
       content = (
         <Gender
@@ -56,67 +64,98 @@ const ProfileSetup = () => {
       break;
     case "age":
       content = (
-        <Age handleUpdate={handleProfileUpdate} isLoading={isLoading} />
+        <Age
+          handleUpdate={handleProfileUpdate}
+          ageValue={profile?.age}
+          onBack={handleBack}
+          isLoading={isLoading}
+        />
       );
       break;
     case "goal":
       content = (
-        <Goals handleUpdate={handleProfileUpdate} isLoading={isLoading} />
+        <Goals
+          handleUpdate={handleProfileUpdate}
+          goalValue={profile?.goals}
+          onBack={handleBack}
+          isLoading={isLoading}
+        />
       );
       break;
     case "level":
       content = (
-        <Level handleUpdate={handleProfileUpdate} isLoading={isLoading} />
+        <Level
+          handleUpdate={handleProfileUpdate}
+          levelValue={profile?.level}
+          onBack={handleBack}
+          isLoading={isLoading}
+        />
       );
       break;
     case "weight":
       content = (
-        <Weight handleUpdate={handleProfileUpdate} isLoading={isLoading} />
+        <Weight
+          handleUpdate={handleProfileUpdate}
+          onBack={handleBack}
+          isLoading={isLoading}
+        />
       );
       break;
     default:
       break;
   }
   return (
-    <div className=" flex flex-col items-center  h-[100vh] pt-5 pb-16 gap-8 ">
-      <ProgressStep step={steps} />
-      <div className=" h-full">{content}</div>
+    <div className="relative flex min-h-screen flex-col bg-zinc-950">
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 overflow-hidden"
+      >
+        <div className="absolute -top-48 left-1/2 h-[480px] w-[760px] -translate-x-1/2 rounded-full bg-emerald-500/10 blur-[140px]" />
+      </div>
+
+      <header className="relative z-10 mx-auto w-full max-w-xl px-4 pt-6 sm:px-0">
+        <div className="flex items-center justify-between">
+          <BrandMark size={64} />
+          <p className="text-sm font-medium text-zinc-400">
+            Step {stepIndex + 1} of {STEPS.length}
+          </p>
+        </div>
+        <ProgressStep current={stepIndex} total={STEPS.length} />
+      </header>
+
+      <main className="relative z-10 flex flex-1 flex-col px-4 pt-10 sm:px-6 sm:pt-14">
+        {profileLoading ? (
+          <div className="flex flex-1 items-center justify-center">
+            <Loader2 size={28} className="animate-spin stroke-emerald-400" />
+          </div>
+        ) : (
+          content
+        )}
+      </main>
     </div>
   );
 };
 
-const ProgressStep = ({ step = "gender" }: { step: string }) => {
-  // start, gender, age, weight, level, done
-  const steps: any = {
-    start: 0,
-    gender: 1,
-    age: 2,
-    goal: 3,
-    level: 4,
-    weight: 5,
-  };
-
+const ProgressStep = ({ current, total }: { current: number; total: number }) => {
   return (
-    <>
-      <div className=" w-full flex justify-center">
-        <Image src={"/assets/logo3.svg"} alt="logo" height={90} width={100} />
-      </div>
-      <div className="flex items-center gap-1">
-        {Array(6)
-          .fill(0)
-          .map((_, index) => (
-            <div
-              className={cn(
-                "h-[4px] md:w-14 sm:w-12 w-7 bg-zinc-700 rounded-full",
-                {
-                  "bg-emerald-400": index < steps[step],
-                }
-              )}
-              key={index}
-            />
-          ))}
-      </div>
-    </>
+    <div
+      role="progressbar"
+      aria-label="Profile setup progress"
+      aria-valuemin={1}
+      aria-valuemax={total}
+      aria-valuenow={current + 1}
+      className="mt-5 flex gap-1.5"
+    >
+      {Array.from({ length: total }, (_, index) => (
+        <div
+          key={index}
+          className={cn(
+            "h-1 flex-1 rounded-full bg-zinc-800 transition-colors duration-300",
+            { "bg-emerald-400": index <= current }
+          )}
+        />
+      ))}
+    </div>
   );
 };
 

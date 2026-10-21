@@ -12,6 +12,8 @@ interface IUser {
   height: string;
   weight: string;
   age: Date;
+  goals?: string;
+  level?: number;
   weightMeasure: "kg" | "lb";
   heightMeasure: "cm" | "ft";
   followers: [string];
