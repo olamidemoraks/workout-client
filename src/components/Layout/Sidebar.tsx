@@ -1,14 +1,8 @@
-import { logout } from "@/api/user";
 import { cn } from "@/libs/utils";
-import {
-  deleteTokenFromLocalStorage,
-  getTokenFromLocalStorage,
-} from "@/utils/localstorage";
-import { signOut } from "next-auth/react";
+import { X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { BiDumbbell } from "react-icons/bi";
 import {
   FaAngleDoubleLeft,
@@ -19,36 +13,27 @@ import {
 import { FaUser } from "react-icons/fa6";
 import { GiBodyBalance } from "react-icons/gi";
 import { IoGrid } from "react-icons/io5";
+import { focusRing } from "../auth/FormControls";
+
+const iconClassName =
+  "opacity-70 group-hover:opacity-100 group-hover:text-emerald-400 transition";
 
 const navData = [
   {
     title: "Home",
-    Icon: (
-      <IoGrid
-        size={21}
-        className=" opacity-70 group-hover:opacity-100 group-hover:text-emerald-400"
-      />
-    ),
+    Icon: <IoGrid size={21} className={iconClassName} />,
     navLink: "",
   },
   {
     title: "Workouts",
-    Icon: (
-      <BiDumbbell
-        size={25}
-        className=" opacity-70 group-hover:opacity-100 group-hover:text-emerald-400"
-      />
-    ),
+    Icon: <BiDumbbell size={24} className={iconClassName} />,
     navLink: "workouts",
+    // Workout and exercise detail pages belong to this section too.
+    alsoActiveOn: ["workout", "exercise"],
   },
   {
     title: "Challenges",
-    Icon: (
-      <GiBodyBalance
-        size={24}
-        className=" opacity-70 group-hover:opacity-100 group-hover:text-emerald-400"
-      />
-    ),
+    Icon: <GiBodyBalance size={23} className={iconClassName} />,
     navLink: "challenge",
   },
   // {
@@ -63,22 +48,12 @@ const navData = [
   // },
   {
     title: "Search",
-    Icon: (
-      <FaSearch
-        size={21}
-        className=" opacity-70 group-hover:opacity-100 group-hover:text-emerald-400"
-      />
-    ),
+    Icon: <FaSearch size={19} className={iconClassName} />,
     navLink: "search",
   },
   {
     title: "Profile",
-    Icon: (
-      <FaUser
-        size={20}
-        className=" opacity-70 group-hover:opacity-100 group-hover:text-emerald-400"
-      />
-    ),
+    Icon: <FaUser size={19} className={iconClassName} />,
     navLink: "profile",
   },
 ];
@@ -86,31 +61,16 @@ const navData = [
 type SideBarProps = {
   setSideDrawer: (value: boolean) => void;
   sideDrawer?: boolean;
+  // Only set when rendered as the mobile drawer from the navbar.
   openMenu?: boolean;
 };
 const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
-  const pathName = usePathname()?.split("/")[1];
-  const router = useRouter();
-  const [isLogout, setIsLogout] = useState(false);
-  function logoutGen() {
-    signOut();
-    deleteTokenFromLocalStorage();
-  }
+  const pathName = usePathname()?.split("/")[1] ?? "";
+  const isMobileDrawer = openMenu !== undefined;
+  const closeMobileDrawer = () => {
+    if (isMobileDrawer) setSideDrawer(false);
+  };
 
-  // function logout() {
-  //   signOut();
-  //   deleteTokenFromLocalStorage();
-  // }
-
-  useEffect(() => {
-    let token: any;
-    if (typeof window !== "undefined") {
-      token = localStorage.getItem("userTK");
-    }
-    if (!token && isLogout) {
-      router.push("/login");
-    }
-  }, [isLogout]);
   return (
     <div
       className={cn(
@@ -121,26 +81,18 @@ const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
         }
       )}
     >
-      {/* <div
-        onClick={() => setSideDrawer(openMenu ? false : true)}
-        className={cn(
-          "fixed sm:top-[5.2rem] top-[2rem]  right-[2rem] p-3 z-[100] cursor-pointer",
-          {
-            hidden: sideDrawer,
-          }
-        )}
-      >
-     
-      </div> */}
-
       <div className="w-full ">
         <Link
           href={"/"}
-          className=" flex flex-col items-center justify-center py-3 group"
+          onClick={closeMobileDrawer}
+          className={cn(
+            " flex flex-col items-center justify-center py-3 group rounded-lg",
+            focusRing
+          )}
         >
           <Image
             src={"/assets/logo3.svg"}
-            alt="logo"
+            alt="MaxUp home"
             height={100}
             width={100}
           />
@@ -151,68 +103,97 @@ const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
           )}
         </Link>
 
-        <div
-          className={cn("w-full sm:flex items-center transition-all hidden", {
-            " justify-end": !sideDrawer,
-            " justify-start": sideDrawer,
-          })}
-        >
-          <div
-            onClick={() => setSideDrawer(!sideDrawer)}
+        {isMobileDrawer ? (
+          <button
+            type="button"
+            onClick={() => setSideDrawer(false)}
+            aria-label="Close menu"
             className={cn(
-              " bg-zinc-900  p-2 w-[70px] cursor-pointer justify-center flex items-center transition-all",
-              {
-                "rounded-l-full": !sideDrawer,
-                " rounded-r-full": sideDrawer,
-              }
+              "absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-lg bg-zinc-900 hover:bg-zinc-800 transition",
+              focusRing
             )}
           >
-            {sideDrawer ? (
-              <FaAngleDoubleRight className=" fill-zinc-300" size={20} />
-            ) : (
-              <FaAngleDoubleLeft className=" fill-zinc-300" size={20} />
-            )}
+            <X size={18} className="stroke-zinc-300" />
+          </button>
+        ) : (
+          <div
+            className={cn("w-full sm:flex items-center transition-all hidden", {
+              " justify-end": !sideDrawer,
+              " justify-start": sideDrawer,
+            })}
+          >
+            <button
+              type="button"
+              onClick={() => setSideDrawer(!sideDrawer)}
+              aria-label={sideDrawer ? "Expand sidebar" : "Collapse sidebar"}
+              aria-expanded={!sideDrawer}
+              title={sideDrawer ? "Expand sidebar" : "Collapse sidebar"}
+              className={cn(
+                " bg-zinc-900 hover:bg-zinc-800 p-2 w-[70px] cursor-pointer justify-center flex items-center transition-all",
+                focusRing,
+                {
+                  "rounded-l-full": !sideDrawer,
+                  " rounded-r-full": sideDrawer,
+                }
+              )}
+            >
+              {sideDrawer ? (
+                <FaAngleDoubleRight className=" fill-zinc-300" size={20} />
+              ) : (
+                <FaAngleDoubleLeft className=" fill-zinc-300" size={20} />
+              )}
+            </button>
           </div>
-        </div>
+        )}
 
-        <div className=" flex flex-col gap-2 mt-5">
-          {navData.map(({ Icon, navLink, title }) => (
-            <>
+        <nav aria-label="Main" className=" flex flex-col gap-2 mt-5">
+          {navData.map(({ Icon, navLink, title, alsoActiveOn }) => {
+            const isActive =
+              navLink === pathName || !!alsoActiveOn?.includes(pathName);
+
+            return (
               <Link
                 href={`/${navLink}`}
                 key={title}
+                onClick={closeMobileDrawer}
+                aria-current={isActive ? "page" : undefined}
+                aria-label={sideDrawer ? title : undefined}
+                title={sideDrawer ? title : undefined}
                 className={cn(
-                  "flex items-center px-5 gap-3 group hover:bg-zinc-900  py-3",
+                  "flex items-center px-5 gap-3 group hover:bg-zinc-900 py-3 border-l-4 border-transparent transition-colors",
+                  focusRing,
                   {
                     " justify-center": sideDrawer,
-                    "bg-zinc-900 border-l-4 border-emerald-500  ":
-                      navLink === pathName,
+                    "bg-zinc-900 border-emerald-500": isActive,
                   }
                 )}
               >
-                <div className="relative group">
+                <div className="relative group h-6 w-6 flex items-center justify-center shrink-0">
                   <div className="z-10 relative">{Icon}</div>
                   <div
                     className={cn(
-                      "h-full bg-gradient-to-r  from-emerald-500 w-full absolute top-0 z-0 blur-sm opacity-0 rounded-md ",
+                      "h-full bg-gradient-to-r  from-emerald-500 w-full absolute top-0 z-0 blur-sm opacity-0 rounded-md transition-opacity",
                       {
-                        "opacity-50": navLink === pathName,
+                        "opacity-50": isActive,
                       }
                     )}
                   />
                 </div>
                 <p
-                  className={cn("text-neutral-400", {
-                    " hidden": sideDrawer,
-                    "text-white": navLink === pathName,
-                  })}
+                  className={cn(
+                    "text-neutral-400 group-hover:text-neutral-200 transition-colors",
+                    {
+                      " hidden": sideDrawer,
+                      "text-white group-hover:text-white": isActive,
+                    }
+                  )}
                 >
                   {title}
                 </p>
               </Link>
-            </>
-          ))}
-        </div>
+            );
+          })}
+        </nav>
       </div>
       <div className=" w-full flex justify-center relative">
         <div
@@ -221,39 +202,30 @@ const Sidebar = ({ setSideDrawer, sideDrawer, openMenu }: SideBarProps) => {
             { "h-[100px]": sideDrawer }
           )}
         >
-          {/* <div className="pointer-events-none absolute -bottom-5  transform-gpu  -z-20 h-[80%] w-[80%] ">
-            <div
-              style={{
-                clipPath:
-                  "polygon(7.1% 44.1%, 100% 10.6%, 97.5% 26.9%, 85.5% 0.1%, 7.1% 44.1%, 100% 10.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 12.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-              }}
-              className="h-[80%] w-[80%] bg-gradient-to-tr from-purple-500 to-green-600 opacity-100 animate-pulse"
-            />
-          </div> */}
-
-          <div
-            onClick={() => {
-              logoutGen();
-            }}
-            className="flex group gap-2 items-center justify-center backdrop-blur-md h-[100%] cursor-pointer   w-[100%] p-2  z-10 "
+          <Link
+            href="/logout"
+            aria-label={sideDrawer ? "Log out" : undefined}
+            title={sideDrawer ? "Log out" : undefined}
+            className={cn(
+              "flex group gap-2 items-center justify-center h-[70%] cursor-pointer w-[100%] p-2 z-10 rounded-xl hover:bg-zinc-900 transition-colors",
+              focusRing
+            )}
           >
-            {/* <GiCutDiamond className="text-2xl  fill-purple-400 transition-colors duration-700 group-hover:fill-emerald-400" /> */}
-            {/* <Image
-              src={"/assets/premium.gif"}
-              alt="purple diamond"
-              height={150}
-              width={150}
-              className="h-[50px] w-[50px] object-cover  mb-7"
-            /> */}
-            <FaSignOutAlt className=" fill-zinc-300" size={22} />
+            <FaSignOutAlt
+              className=" fill-zinc-300 group-hover:fill-red-400 transition-colors"
+              size={22}
+            />
             <p
-              className={cn(" uppercase  ", {
-                hidden: sideDrawer,
-              })}
+              className={cn(
+                " uppercase text-zinc-300 group-hover:text-red-400 transition-colors",
+                {
+                  hidden: sideDrawer,
+                }
+              )}
             >
-              LogOut
-            </p>{" "}
-          </div>
+              Log out
+            </p>
+          </Link>
         </div>
       </div>
     </div>

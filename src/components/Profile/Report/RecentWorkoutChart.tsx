@@ -81,7 +81,8 @@ const RecentWorkoutChart = () => {
             dotBorderWidth={2}
             ariaLabel=""
             colors={{ scheme: "set2" }}
-            blendMode="multiply"
+            fillOpacity={0.35}
+            blendMode="normal"
             motionConfig="wobbly"
             theme={{
               axis: {
@@ -95,7 +96,7 @@ const RecentWorkoutChart = () => {
               },
               grid: {
                 line: {
-                  stroke: "#cacacacf",
+                  stroke: "#3f3f46",
                 },
               },
               tooltip: {

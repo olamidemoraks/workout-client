@@ -1,26 +1,20 @@
 import { Menu } from "@mui/material";
+import { Palette } from "lucide-react";
 import React, { ReactNode, useState } from "react";
 import DailyAttendance from "../Home/DailyAttendance";
-import { FaMasksTheater } from "react-icons/fa6";
+import { focusRing } from "../auth/FormControls";
+import { cn } from "@/libs/utils";
 import ChooseStreakApperance from "./ChooseStreakApperance";
 
 type StreakMenuProps = {
   children: ReactNode;
-  streak: number;
-  longestStreak: number;
-  totalWorkout: number;
 };
 
-const StreakMenu: React.FC<StreakMenuProps> = ({
-  children,
-  streak,
-  longestStreak,
-  totalWorkout,
-}) => {
+const StreakMenu: React.FC<StreakMenuProps> = ({ children }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [openApperance, setOpenApperance] = useState(false);
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -29,15 +23,18 @@ const StreakMenu: React.FC<StreakMenuProps> = ({
 
   return (
     <div>
-      <div
+      <button
+        type="button"
         id="streak-button"
+        aria-label="Show streak details"
         aria-controls={open ? "streak-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
+        className={cn("rounded-xl", focusRing)}
       >
         {children}
-      </div>
+      </button>
       <ChooseStreakApperance
         open={openApperance}
         setClose={() => setOpenApperance(false)}
@@ -49,53 +46,35 @@ const StreakMenu: React.FC<StreakMenuProps> = ({
         onClose={handleClose}
         MenuListProps={{
           "aria-labelledby": "streak-button",
+          sx: { py: 0 },
         }}
         sx={{
           "& .MuiPaper-root": {
-            border: "1px solid #222225",
-            bgcolor: "#1d1d21",
-            minWidth: "250px",
-            maxWidth: "350px",
-            borderRadius: "8px",
+            mt: 1,
+            border: "1px solid #27272a",
+            bgcolor: "#111113",
+            width: "340px",
+            maxWidth: "calc(100vw - 32px)",
+            borderRadius: "16px",
           },
         }}
       >
-        <div className="p-3 flex flex-col">
-          <div className="mb-5 flex items-center justify-between">
-            <div>
-              <p className=" font-bold text-base">{streak}</p>
-              <p className="text-sm text-zinc-400">Current Streak</p>
-            </div>
-            <div>
-              <p className=" font-bold text-base">{longestStreak}</p>
-              <p className="text-sm text-zinc-400">Longest Streak 🏆</p>
-            </div>
-          </div>
-          <div className="mb-5">
-            <DailyAttendance external />
-          </div>
-
-          <div className=" text-center mb-5">
-            <p className="text-sm text-zinc-300 font-semibold ">
-              Total workout days {totalWorkout}
-            </p>
-          </div>
-
-          <div>
-            <div className="h-[1px] w-full bg-zinc-700" />
-
-            <button
-              onClick={() => {
-                handleClose();
-                setOpenApperance(true);
-              }}
-              className="flex w-full gap-2 items-center justify-center mt-4 cursor-pointer hover:bg-zinc-600/75 p-2 rounded-md"
-            >
-              <p className=" text-sm text-zinc-300">Choose streak apperance</p>
-              <FaMasksTheater />{" "}
-            </button>
-          </div>
-        </div>
+        <DailyAttendance embedded>
+          <button
+            type="button"
+            onClick={() => {
+              handleClose();
+              setOpenApperance(true);
+            }}
+            className={cn(
+              "group relative mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-800 py-2.5 text-sm text-zinc-300 transition hover:bg-zinc-800 hover:text-white",
+              focusRing
+            )}
+          >
+            <Palette size={16} aria-hidden className="stroke-zinc-400 group-hover:stroke-white" />
+            Change streak style
+          </button>
+        </DailyAttendance>
       </Menu>
     </div>
   );

@@ -38,6 +38,8 @@ const Profile: React.FC<ProfileProps> = () => {
   const otherProfile = data?.user as IUser;
 
   const search = searchParams?.get("tab");
+  const isReportTab = search === "report" || search === null;
+  const isWorkoutsTab = search === "workouts";
   const handleNavigation = (path: string) => {
     const params = new URLSearchParams(searchParams ?? {});
     if (path) {
@@ -57,26 +59,36 @@ const Profile: React.FC<ProfileProps> = () => {
             profile={id ? otherProfile : profile}
             personalPage={id ? false : true}
           />
-          <div className="w-full border-b border-zinc-900 flex items-center justify-center gap-2 mt-7">
-            <div
+          <div
+            role="tablist"
+            aria-label="Profile sections"
+            className="w-full border-b border-zinc-900 flex items-center justify-center gap-2 mt-7"
+          >
+            <button
+              type="button"
+              role="tab"
+              aria-selected={isReportTab}
+              aria-label="Stats"
               className={cn(
-                " p-3 text-zinc-400 font-semibold tracking-wide  cursor-pointer flex gap-2 w-full sm:w-fit items-center justify-center",
+                "group p-3 text-zinc-400 font-semibold tracking-wide cursor-pointer flex gap-2 w-full sm:w-fit items-center justify-center border-b-[4px] border-b-transparent hover:bg-zinc-900/50 transition-colors",
                 {
-                  "border-b-[4px] border-b-emerald-500 text-white":
-                    search === "report" || search === null,
+                  "border-b-emerald-500 text-white": isReportTab,
                 }
               )}
               onClick={() => handleNavigation("report")}
             >
               <span
-                className={`sm:block hidden ${
-                  search === "report" ? "text-white" : "text-zinc-300"
+                className={`sm:block hidden transition-colors ${
+                  isReportTab ? "text-white" : "text-zinc-400 group-hover:text-zinc-200"
                 }`}
               >
                 Stats
               </span>{" "}
-              <LineChart size={20} />
-            </div>
+              <LineChart
+                size={20}
+                className={isReportTab ? "stroke-emerald-400" : "stroke-zinc-400"}
+              />
+            </button>
 
             {/* achievement */}
             {/* <div
@@ -92,34 +104,40 @@ const Profile: React.FC<ProfileProps> = () => {
               <span className="sm:block hidden">Achievements</span>{" "}
               <Trophy size={15} />
             </div> */}
-            <div
+            <button
+              type="button"
+              role="tab"
+              aria-selected={isWorkoutsTab}
+              aria-label="Workouts"
               className={cn(
-                " p-3 font-semibold tracking-wide text-zinc-400 cursor-pointer flex gap-2 w-full sm:w-fit items-center justify-center",
+                "group p-3 font-semibold tracking-wide text-zinc-400 cursor-pointer flex gap-2 w-full sm:w-fit items-center justify-center border-b-[4px] border-b-transparent hover:bg-zinc-900/50 transition-colors",
                 {
-                  "border-b-[4px] border-b-emerald-500 text-white ":
-                    search === "workouts",
+                  "border-b-emerald-500 text-white": isWorkoutsTab,
                 }
               )}
               onClick={() => handleNavigation("workouts")}
             >
               <span
-                className={`sm:block hidden ${
-                  search === "workouts" ? "text-white" : "text-zinc-300"
+                className={`sm:block hidden transition-colors ${
+                  isWorkoutsTab ? "text-white" : "text-zinc-400 group-hover:text-zinc-200"
                 }`}
               >
                 Workouts
               </span>{" "}
-              <HeartPulse size={20} />
-            </div>
+              <HeartPulse
+                size={20}
+                className={isWorkoutsTab ? "stroke-emerald-400" : "stroke-zinc-400"}
+              />
+            </button>
           </div>
         </div>
 
         <div className="w-full bg-zinc-900/30 backdrop-blur-md lg:p-10 md:p-3 p-1 py-4 flex flex-col items-center gap-5 min-h-[240px] h-full">
-                <div className="flex justify-center w-full max-w-[2000px] flex-col gap-10 ">
-                {(search === "report" || search === null) && <Reports />}
+        <div className="flex justify-center w-full max-w-[2000px] flex-col gap-10 ">
+          {isReportTab && <Reports />}
           {/* {search === "achievements" && <Achievements />} */}
-          {search === "workouts" && <Workouts />}
-                </div>
+          {isWorkoutsTab && <Workouts />}
+        </div>
         </div>
       </div>
     </>

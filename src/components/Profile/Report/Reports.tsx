@@ -18,7 +18,7 @@ const Reports = () => {
       <div className=" gap-6 grid grid-cols-1 lg:grid-cols-2">
         <RecentWorkouts />
         <div className="flex flex-col h-full  ">
-          <p className=" uppercase font-semibold mb-1">Activity</p>
+          <h2 className="text-lg font-semibold mb-1">Activity</h2>
           <div className="flex items-center justify-center   h-full w-full  rounded-md ">
             <RecentWorkoutChart />
           </div>

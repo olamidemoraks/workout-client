@@ -48,7 +48,20 @@ const Workouts = () => {
   }
   return (
     <div className="md:px-10 px-5 mb-10 flex flex-col gap-10  max-w-[2300px]">
-      
+      <div>
+        <h1 className=" text-2xl font-semibold uppercase">Workouts</h1>
+        <p className="mt-1 text-zinc-400">
+          Guided sessions grouped by focus area. Tap a card to see the
+          exercises.
+        </p>
+      </div>
+
+      {workouts?.length === 0 && (
+        <p className="rounded-lg border border-dashed border-zinc-800 p-10 text-center text-zinc-400">
+          No workouts are available yet.
+        </p>
+      )}
+
       {workouts?.map((categoryWorkout, idx) => (
         <div
           className={`${

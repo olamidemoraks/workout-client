@@ -27,14 +27,14 @@ const ReportTotal = () => {
       <div className="flex   flex-row items-center justify-evenly px-5 gap-5">
         <div className="flex flex-col text-center">
           <p className=" text-3xl font-semibold text-green-400">
-            <Countup end={data?.activities?.length} duration={2.75} />
+            <Countup end={data?.activities?.length ?? 0} duration={2.75} />
           </p>
           <p className=" text-neutral-300">Workouts</p>
         </div>
         <div className="h-8 w-[1px] bg-zinc-800" />
         <div className="flex flex-col text-center">
           <p className=" text-3xl font-semibold text-green-400">
-            <Countup end={Math.ceil(totalMin / 60 ?? 0)} duration={2.75} />
+            <Countup end={Math.ceil((totalMin ?? 0) / 60)} duration={2.75} />
           </p>
           <p className=" text-neutral-300">Minutes</p>
         </div>

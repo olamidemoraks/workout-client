@@ -24,11 +24,23 @@ export const frontalChallenges = async () => {
     throw new Error(error?.response?.data?.message ?? "Something went wrong");
   }
 };
+export const allChallenges = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/get-challenges`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message ?? "Something went wrong");
+  }
+};
 export const currentChallenges = async () => {
+  const token = getTokenFromLocalStorage();
   try {
     const response = await axios.get(`${baseUrl}/current-challenges`, {
       withCredentials: true,
-      headers,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
     return response.data;
   } catch (error: any) {

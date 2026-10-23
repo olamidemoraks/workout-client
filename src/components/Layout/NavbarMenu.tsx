@@ -6,7 +6,6 @@ import * as React from "react";
 import { BiNotepad, BiSolidZap } from "react-icons/bi";
 import Tooltip from "@mui/material/Tooltip";
 import useBatteryCharge from "@/hooks/useBatteryCharge";
-import useStreak from "@/hooks/useStreak";
 import { alphabetsColor } from "@/utils/data";
 import { deleteTokenFromLocalStorage } from "@/utils/localstorage";
 import { signOut } from "next-auth/react";
@@ -26,9 +25,6 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
   const router = useRouter();
   const pathname = usePathname();
   const { chargeLeft } = useBatteryCharge();
-  const { streak, longestStreak, totalWorkout, isLoading } = useStreak({
-    userId: profile?._id,
-  });
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -148,12 +144,7 @@ export default function NavbarMenu({ profile }: { profile: IUser }) {
               </div>
             </div>
             <div className="md:hidden bg-zinc-950 p-2 rounded-md  mt-4 flex items-center justify-between">
-              <UserStreak
-                streak={streak ?? 0}
-                isLoading={isLoading}
-                longestStreak={longestStreak}
-                totalWorkout={totalWorkout}
-              />
+              <UserStreak />
               <div className="flex gap-1 items-center  pl-4 pr-3 h-full ">
                 <BiSolidZap
                   className={`${chargeColor[chargeLeft]}`}

@@ -89,8 +89,10 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
         {personalPage && (
           <label
             htmlFor="avatar"
-            className="absolute -bottom-1 right-3 bg-zinc-900/60 hover:bg-zinc-900 h-9 w-9 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition duration-200"
+            title="Change photo"
+            className="absolute -bottom-1 right-3 bg-zinc-900/60 hover:bg-zinc-900 h-9 w-9 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition duration-200 focus-within:ring-2 focus-within:ring-emerald-400"
           >
+            <span className="sr-only">Change profile photo</span>
             {isLoading ? (
               <Loader2 className=" animate-spin" size={20} />
             ) : (
@@ -100,19 +102,22 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
               id="avatar"
               type="file"
               accept=".png, .jpg, .jpeg"
-              hidden
+              className="sr-only"
               onChange={handleSelectImage}
             />
           </label>
         )}
 
         {profile?.avatar?.url && (
-          <div
+          <button
+            type="button"
             onClick={() => setExpand(true)}
-            className="absolute -bottom-1 left-3  bg-zinc-900/60 hover:bg-zinc-900 h-9 w-9 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition duration-200"
+            aria-label="View full photo"
+            title="View full photo"
+            className="group absolute -bottom-1 left-3  bg-zinc-900/60 hover:bg-zinc-900 h-9 w-9 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
           >
-            <FaExpand className="hover:fill-orange-400" />
-          </div>
+            <FaExpand className="group-hover:fill-orange-400 transition-colors" />
+          </button>
         )}
       </div>
 
@@ -128,20 +133,30 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
         {personalPage && (
           <Link
             href={`/profile/${profile?._id}`}
-            className="absolute right-6 top-5 p-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 cursor-pointer"
+            aria-label="Edit profile"
+            title="Edit profile"
+            className="absolute right-6 top-5 p-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
           >
             <Edit2 size={18} />
           </Link>
         )}
       </div>
       <div className="flex   flex-row items-center justify-evenly px-5 md:gap-5 gap-4  mt-3">
-        <div onClick={() => setOpenFollowers(true)} className=" cursor-pointer">
+        <button
+          type="button"
+          onClick={() => setOpenFollowers(true)}
+          className=" cursor-pointer rounded-lg px-3 py-1 hover:bg-zinc-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+        >
           <ProfileUnit text="Followers" unit={profile?.followers?.length} />
-        </div>
+        </button>
         <div className="h-6 w-[1px] bg-zinc-800" />
-        <div onClick={() => setOpenFollowing(true)} className=" cursor-pointer">
+        <button
+          type="button"
+          onClick={() => setOpenFollowing(true)}
+          className=" cursor-pointer rounded-lg px-3 py-1 hover:bg-zinc-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+        >
           <ProfileUnit text="Following" unit={profile?.following?.length} />
-        </div>
+        </button>
       </div>
     </>
   );

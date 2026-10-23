@@ -1,50 +1,55 @@
-import { getDaysOfWeekWithDates } from "@/utils";
-import React, { useMemo } from "react";
-import { FaCaretDown, FaFireFlameCurved } from "react-icons/fa6";
+import { cn } from "@/libs/utils";
+import { WeekDay } from "@/utils";
+import { Flame } from "lucide-react";
+import React from "react";
 
 type StreakDaysProps = {
-  activities: string[];
+  week: (WeekDay & { isActive: boolean })[];
 };
 
-const StreakDays: React.FC<StreakDaysProps> = ({ activities }) => {
-  const weekDates = useMemo(() => {
-    return getDaysOfWeekWithDates();
-  }, []);
-
-  const today = new Date();
-
+const StreakDays: React.FC<StreakDaysProps> = ({ week }) => {
   return (
-    <div className="flex justify-between gap-1">
-      {weekDates.map(({ name, date }) => (
-        <div key={name} className="flex flex-col gap-2 items-center">
-          <div className=" sm:h-[35px] sm:w-[35px] h-[30px] w-[30px]">
-            <div
-              className={`h-full w-full relative rounded-full border border-neutral-700 flex items-center justify-center ${
-                activities?.includes(date)
-                  ? " bg-[#ff477e]"
-                  : date === today.toLocaleDateString()
-                  ? "  bg-zinc-700/80"
-                  : "bg-transparent"
-              }`}
-            >
-              {activities?.includes(date) ? (
-                <>
-                  <FaFireFlameCurved
-                    className=" text-sm fill-zinc-800 "
-                    size="20"
-                  />
-                  {/* <FaCaretDown
-                    className="absolute -top-4 fill-pink-500 opacity-80"
-                    size={16}
-                  /> */}
-                </>
-              ) : null}
-            </div>
-          </div>
-          <p className=" text-xs text-zinc-300">{name.substring(0, 1)}</p>
-        </div>
+    <ol className="grid grid-cols-7 gap-1">
+      {week.map(({ key, label, date, isToday, isFuture, isActive }) => (
+        <li key={key} className="flex flex-col items-center gap-2">
+          <span
+            aria-hidden
+            className={cn("text-[11px] font-medium text-zinc-500", {
+              "text-zinc-100": isToday,
+            })}
+          >
+            {label}
+          </span>
+          <span
+            title={date.toLocaleDateString(undefined, {
+              weekday: "long",
+              month: "short",
+              day: "numeric",
+            })}
+            className={cn(
+              "grid h-9 w-9 place-items-center rounded-full border text-xs font-medium",
+              isActive
+                ? "border-orange-300/40 bg-gradient-to-b from-amber-400 to-orange-500 shadow-[0_0_16px_-4px] shadow-orange-500/70"
+                : isToday
+                ? "border-dashed border-orange-400/70 bg-orange-500/10 text-orange-300"
+                : isFuture
+                ? "border-zinc-800/60 text-zinc-700"
+                : "border-zinc-800 bg-zinc-900 text-zinc-500"
+            )}
+          >
+            {isActive ? (
+              <Flame size={16} aria-hidden className="fill-white stroke-white" />
+            ) : (
+              date.getDate()
+            )}
+            <span className="sr-only">
+              {date.toLocaleDateString(undefined, { weekday: "long" })}:{" "}
+              {isActive ? "workout logged" : isFuture ? "upcoming" : "no workout"}
+            </span>
+          </span>
+        </li>
       ))}
-    </div>
+    </ol>
   );
 };
 export default StreakDays;

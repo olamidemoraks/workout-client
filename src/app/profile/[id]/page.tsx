@@ -10,7 +10,7 @@ type pageProps = {
 const page: React.FC<pageProps> = ({ params }) => {
   return (
     <Layout>
-      <EditProfile id={params.id} />;
+      <EditProfile id={params.id} />
     </Layout>
   );
 };

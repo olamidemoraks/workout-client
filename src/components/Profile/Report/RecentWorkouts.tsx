@@ -1,116 +1,107 @@
 import CustomLoader from "@/components/Common/CustomLoader";
-import Empty from "@/components/Common/Empty";
 import useRecentWorkout from "@/hooks/useRecentWorkout";
-import { alphabetsColor } from "@/utils/data";
+import { formatDuration, toDayKey } from "@/utils";
+import { Clock } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo } from "react";
-import { FaStopwatch } from "react-icons/fa";
+
+const icons: { [key: string]: string } = {
+  abs: "/assets/icons/abs.png",
+  arm: "/assets/icons/arm.png",
+  back: "/assets/icons/back.webp",
+  chest: "/assets/icons/chest.png",
+  legs: "/assets/icons/leg.png",
+  challenge: "/assets/icons/challenge.webp",
+  custom: "/assets/icons/calender.png",
+};
+
+const getIcon = (activity: any) => {
+  if (activity?.workoutType === "challenge") return icons.challenge;
+  if (activity?.workoutType === "default") {
+    const bodyPart = (activity?.workoutName as string)?.split(" ")?.[0]?.toLowerCase();
+    return icons[bodyPart] ?? icons.custom;
+  }
+  return icons.custom;
+};
+
+const formatWhen = (value: string) => {
+  const date = new Date(value);
+  const time = date.toLocaleTimeString(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  if (toDayKey(date) === toDayKey(new Date())) return `Today, ${time}`;
+  if (toDayKey(date) === toDayKey(yesterday)) return `Yesterday, ${time}`;
+  return `${date.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+  })}, ${time}`;
+};
 
 const RecentWorkouts = () => {
   const { data, isLoading } = useRecentWorkout();
   const recentWorkoutActivities: any[] = useMemo(() => {
-    return data?.activities?.slice(0, 5);
+    return data?.activities?.slice(0, 5) ?? [];
   }, [data]);
 
-  const icons: { [key: string]: string } = {
-    abs: "/assets/icons/abs.png",
-    arm: "/assets/icons/arm.png",
-    back: "/assets/icons/back.webp",
-    chest: "/assets/icons/chest.png",
-    legs: "/assets/icons/leg.png",
-    challenge: "/assets/icons/challenge.webp",
-    custom: "/assets/icons/calender.png",
-  };
-
-  if (isLoading) {
-    return <CustomLoader amount={5} height="h-[60px]" weight="w-full" />;
-  }
-
   return (
-    <div className=" flex flex-col gap-4  w-full">
-      <p className=" uppercase font-semibold">Recent activity</p>
+    <section className="flex w-full flex-col gap-4">
+      <h2 className="text-lg font-semibold">Recent activity</h2>
 
-      {(recentWorkoutActivities?.length === 0 || !data?.activities) && (
-        <Empty />
-      )}
-      {recentWorkoutActivities?.length > 0 && (
-        <>
-          {recentWorkoutActivities?.map((activity) => (
-            <div
-              key={activity}
-              className={
-                "relative flex items-center justify-between w-full bg-zinc-900 p-3 px-4 rounded   "
-              }
+      {isLoading ? (
+        <div className="flex flex-col gap-2">
+          <CustomLoader amount={4} height="h-[68px]" weight="w-full" />
+        </div>
+      ) : recentWorkoutActivities.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-zinc-800 p-6 text-center">
+          <p className="font-medium">No workouts yet</p>
+          <p className="mt-1 text-sm text-zinc-400">
+            Finished sessions will show up here.
+          </p>
+          <Link
+            href="/workouts"
+            className="mt-4 inline-block text-sm font-semibold text-emerald-400 hover:text-emerald-300"
+          >
+            Find a workout
+          </Link>
+        </div>
+      ) : (
+        <ul className="flex flex-col gap-2">
+          {recentWorkoutActivities.map((activity) => (
+            <li
+              key={activity?._id}
+              className="flex items-center gap-3 rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-3"
             >
-              <div
-                className={`block sm:hidden absolute left-0 h-full w-[6px] ${
-                  alphabetsColor[
-                    (activity?.workoutType as string)
-                      ?.toUpperCase()
-                      .substring(0, 1)
-                  ]
-                }`}
-              />
-              <div>
-                <p className=" font-semibold capitalize flex items-center">
-                  {activity?.workoutName}
-                </p>
-                <div className="flex items-center text-sm text-neutral-400">
-                  <p className="text-neutral-400">
-                    {new Date(activity?.createdAt).toLocaleString("default", {
-                      month: "short",
-                      day: "2-digit",
-                      year: "numeric",
-                      hour: "numeric",
-                      minute: "numeric",
-                    })}
-                  </p>
-                </div>
-                <p className="text-neutral-400 text-sm gap-1 flex items-center">
-                  <FaStopwatch className=" fill-zinc-400" />
-                  {(activity?.totalTime / 60).toFixed(0) +
-                    ":" +
-                    (activity?.totalTime % 60)}{" "}
-                  min
-                </p>
-              </div>
-              {/* <div className="lg:block md:hidden sm:block hidden">
-                <p
-                  className={` capitalize text-neutral-300 px-2 rounded-xl text-sm ${
-                    alphabetsColor[
-                      (activity?.workoutType as string)
-                        ?.toUpperCase()
-                        .substring(0, 1)
-                    ]
-                  }`}
-                >
-                  {activity?.workoutType}
-                </p>
-              </div> */}
-
-              <div className="h-[40px] rounded min-w-[40px] bg-white/75 flex items-center justify-center relative">
+              <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-lg bg-zinc-200">
                 <Image
-                  src={
-                    icons[
-                      activity?.workoutType === "default"
-                        ? `${(activity?.workoutName as string)
-                            .split(" ")?.[0]
-                            .toLowerCase()}`
-                        : activity?.workoutType === "challenge"
-                        ? "challenge"
-                        : "custom"
-                    ]
-                  }
+                  src={getIcon(activity)}
                   alt=""
                   fill
-                  className=" absolute w-full h-full"
+                  sizes="44px"
+                  className="object-contain p-1"
                 />
               </div>
-            </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-medium capitalize">
+                  {activity?.workoutName}
+                </p>
+                <p className="text-sm text-zinc-500">
+                  {formatWhen(activity?.createdAt)}
+                </p>
+              </div>
+              <span className="flex shrink-0 items-center gap-1 rounded-full bg-zinc-800/80 px-2.5 py-1 text-xs font-medium text-zinc-300">
+                <Clock size={12} aria-hidden className="stroke-zinc-400" />
+                {formatDuration(activity?.totalTime)}
+              </span>
+            </li>
           ))}
-        </>
+        </ul>
       )}
-    </div>
+    </section>
   );
 };
 

@@ -7,7 +7,6 @@ import Battery from "../Common/Battery";
 import UserStreak from "../Common/UserStreak";
 import NavbarMenu from "./NavbarMenu";
 import Sidebar from "./Sidebar";
-import useStreak from "@/hooks/useStreak";
 import Notification from "../Notification/Index";
 import useNotification from "@/hooks/useNotification";
 import { useDispatch } from "react-redux";
@@ -17,9 +16,6 @@ import Link from "next/link";
 
 const Navbar = () => {
   const { profile } = useProfile();
-  const { streak, longestStreak, totalWorkout, isLoading } = useStreak({
-    userId: profile?._id,
-  });
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openNotificationbar, setOpenNotificationbar] = useState(false);
   const { newNotification } = useNotification({ open: openNotificationbar });
@@ -65,12 +61,7 @@ const Navbar = () => {
             />
           </Link>
           <div className="md:block hidden">
-            <UserStreak
-              streak={streak ?? 0}
-              isLoading={isLoading}
-              longestStreak={longestStreak}
-              totalWorkout={totalWorkout}
-            />
+            <UserStreak />
           </div>
         </div>
 

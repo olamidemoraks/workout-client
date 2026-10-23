@@ -15,7 +15,7 @@ const RelatedWorkout: React.FC<RelatedWorkoutProps> = ({ name }) => {
     queryFn: async () => {
       return await freemiumWorkout(name);
     },
-    queryKey: "relatedWorkout",
+    queryKey: ["relatedWorkout", name],
   });
 
   const workouts: IWorkout[] = data?.workouts;
@@ -24,7 +24,7 @@ const RelatedWorkout: React.FC<RelatedWorkoutProps> = ({ name }) => {
     <div className="p-4 md:px-10  w-full h-full">
       <div className=" grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8">
         {isLoading ? (
-          <CustomLoader height="h-[200px]" amount={3} weight="w-full" />
+          <CustomLoader height="h-[250px]" amount={3} weight="w-full" />
         ) : (
           <>
             {workouts?.map((workout) => (
@@ -33,6 +33,11 @@ const RelatedWorkout: React.FC<RelatedWorkoutProps> = ({ name }) => {
           </>
         )}
       </div>
+      {!isLoading && !workouts?.length && (
+        <p className="rounded-lg border border-dashed border-zinc-800 p-10 text-center text-zinc-400">
+          No workouts in this focus area yet.
+        </p>
+      )}
     </div>
   );
 };

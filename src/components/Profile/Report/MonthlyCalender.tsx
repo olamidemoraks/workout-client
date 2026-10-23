@@ -143,13 +143,13 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
       {/* #0d2a1fc9", "#063e24de", "#195B2B", "#227234" */}
       <div className="flex items-center gap-1 justify-between w-full md:pr-12 pl-4 pb-4">
         <div className="flex items-center gap-1 ">
-          <p className=" text-sm pr-1">Less</p>
-          <div className="h-3 w-3 rounded-sm bg-[#1e1e206b]" />
-          <div className="h-3 w-3 rounded-sm bg-[#063d3ede]" />
-          <div className="h-3 w-3 rounded-sm bg-[#195b4c]" />
+          <p className=" text-sm pr-1 text-zinc-400">Less</p>
+          <div className="h-3 w-3 rounded-sm bg-[#1e1e206b] border border-zinc-800" />
+          <div className="h-3 w-3 rounded-sm bg-[#0e4723]" />
+          <div className="h-3 w-3 rounded-sm bg-[#1d6b3a]" />
           <div className="h-3 w-3 rounded-sm bg-[#2f9454]" />
           <div className="h-3 w-3 rounded-sm bg-[#4ADE80]" />
-          <p className=" text-sm pl-1">More</p>
+          <p className=" text-sm pl-1 text-zinc-400">More</p>
         </div>
       </div>
     </div>
