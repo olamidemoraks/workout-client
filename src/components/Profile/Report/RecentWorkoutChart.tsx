@@ -59,12 +59,30 @@ const RecentWorkoutChart = () => {
     return mainFocusPoint;
   }, [data]);
 
-  console.log({ focusPoint });
+  // Only standard muscle-group workouts (abs, legs, ...) count here, so
+  // someone who has only done challenges would see a flat, empty radar.
+  const hasFocusData = focusPoint.some((point: any) => point.value > 0);
+
+  if (isLoading) {
+    return (
+      <div className="h-[400px] w-full p-4">
+        <div className="h-full w-full rounded-lg bg-zinc-900 animate-pulse" />
+      </div>
+    );
+  }
+
   return (
     <div className=" h-full w-full mt-[16px] flex flex-col justify-center items-center">
       <div className={cn("w-[100%] h-[400px]")}>
         {data?.activities?.length === 0 ? (
           <Empty />
+        ) : !hasFocusData ? (
+          <div className="h-full flex flex-col items-center justify-center text-center px-6">
+            <p className="font-medium">No muscle-group workouts yet</p>
+            <p className="text-sm text-zinc-400 mt-1">
+              Abs, arm, back, chest and legs workouts show up here.
+            </p>
+          </div>
         ) : (
           <ResponsiveRadar
             data={focusPoint}

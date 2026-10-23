@@ -36,33 +36,38 @@ const PersonalizeWorkoutCard: React.FC<PersonalizeWorkoutCardProps> = ({
       key={workout?._id}
     >
       <div
-        className={` cursor-pointer group snap-start w-full sm:h-[160px] ${
-          isProfile ? "h-[200px]" : "h-[160px]"
-        }   relative  p-3 flex flex-col items-center justify-center border  border-zinc-900 rounded-lg  transition duration-200`}
+        className={` cursor-pointer group snap-start w-full ${
+          isProfile ? "h-[200px]" : "h-[160px] sm:h-[160px]"
+        } relative overflow-hidden p-3 flex flex-col items-center justify-center border border-zinc-900 hover:border-zinc-700 rounded-lg transition duration-200`}
       >
         <Image
           src={`${workout?.image?.url}`}
-          alt={workout?.name}
+          alt=""
           fill
-          className=" w-full h-full   object-cover rounded-md md:brightness-[.8] brightness-90 group-hover:brightness-90 "
+          sizes="(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 100vw"
+          className=" w-full h-full object-cover rounded-md md:brightness-[.8] brightness-90 group-hover:brightness-90 group-hover:scale-105 transition duration-500"
         />
         {/* <div className="absolute top-3 right-3 flex gap-2 items-center">
       <small className="font-semibold">Owner</small>
     </div> */}
+        {/* The whole image opens the workout; the play badge shows on hover
+            (always on touch screens, which have no hover). */}
         <Link
           href={`/workout/${workout?._id}`}
-          className="flex flex-row items-center justify-center w-full z-10"
+          aria-label={`Open ${workout?.name}`}
+          className="absolute inset-0 z-10 flex flex-row items-center justify-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
         >
-          <div className="h-[35px] w-[35px] group-hover:flex items-center justify-center hidden bg-blue-500 rounded-[13px] transition-colors duration-200 ">
+          <div className="h-[35px] w-[35px] flex items-center justify-center bg-blue-500 rounded-[13px] transition duration-200 md:opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 group-hover:scale-110">
             <Play size={17} fill="#fff" />
           </div>
         </Link>
       </div>
       <div className="h-fit w-full flex justify-between md:mt-3 mt-1">
-        <div className="flex gap-3 items-start">
+        <div className="flex gap-3 items-start min-w-0">
           <Link
             href={`/profile?id=${workout?.creatorId}`}
-            className="relative h-10 w-10 "
+            aria-label={`${workout?.creator?.name ?? "Creator"}'s profile`}
+            className="relative h-10 w-10 shrink-0"
           >
             {workout?.creator?.avatar?.public_id ? (
               <Image
@@ -86,16 +91,26 @@ const PersonalizeWorkoutCard: React.FC<PersonalizeWorkoutCardProps> = ({
               </div>
             )}
           </Link>
-          <div className=" leading-8 max-w-[90%]">
-            <p className="font-semibold w-full text-base  capitalize ">
+          <div className=" leading-6 min-w-0">
+            <p className="font-semibold w-full text-base capitalize truncate">
               {workout?.name}
             </p>
             {userId === workout?.creatorId ? (
-              <p className=" text-emerald-400 text-sm">owner</p>
+              <p className=" text-emerald-400 text-sm">
+                owner
+                <span className="text-zinc-500">
+                  {" "}
+                  · {workout?.exercises?.length ?? 0} exercises
+                </span>
+              </p>
             ) : (
-              <p className="font-semibold text-neutral-300 text-sm  capitalize ">
+              <p className="font-semibold text-neutral-300 text-sm truncate">
                 <span className=" text-purple-400 lowercase">creator</span>{" "}
                 {workout?.creator?.username}
+                <span className="font-normal text-zinc-500">
+                  {" "}
+                  · {workout?.exercises?.length ?? 0} exercises
+                </span>
               </p>
             )}
           </div>

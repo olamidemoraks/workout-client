@@ -8,9 +8,12 @@ const useRecentWorkout = (): { data: any; isLoading: boolean } => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   console.log({ pathname });
+  // Keyed by the viewed user so another profile's activity never replaces
+  // yours (the dashboard and workout battery read this too).
+  const viewedUserId = searchParams?.get("id") ?? "me";
   const { data, isLoading, refetch } = useQuery({
     queryFn: async () => await recentRctivity({ params: searchParams }),
-    queryKey: "recent-activity",
+    queryKey: ["recent-activity", viewedUserId],
     refetchOnWindowFocus: false,
   });
 

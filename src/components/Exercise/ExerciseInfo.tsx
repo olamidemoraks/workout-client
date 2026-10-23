@@ -16,6 +16,10 @@ const ExerciseInfo: React.FC<ExerciseInfoProps> = ({
   open,
   setClose,
 }) => {
+  const focusImages = (exercise?.focus ?? [])
+    .map((title) => focus.find((value) => value.title === title))
+    .filter((value): value is (typeof focus)[number] => !!value);
+
   return (
     <Modal open={open} setClose={setClose}>
       <Box
@@ -24,66 +28,88 @@ const ExerciseInfo: React.FC<ExerciseInfoProps> = ({
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          p: 4,
+          outline: "none",
         }}
-        className=" bg-zinc-900 lg:w-[600px] sm:w-[80%] w-[99%] rounded-md   max-h-[87vh] overflow-y-auto flex p-4 py-6 gap-3 flex-col"
+        className=" bg-zinc-900 border border-zinc-800 lg:w-[600px] sm:w-[80%] w-[96%] rounded-xl max-h-[87vh] overflow-y-auto flex p-5 py-6 gap-3 flex-col"
       >
-        <div className="w-full flex justify-between mb-2">
-          <p className="text-xl">Exercise Info</p>
-          <BiX
-            className=" cursor-pointer text-emerald-500"
-            size={27}
+        <div className="w-full flex justify-between items-center mb-2">
+          <p className="text-xl font-semibold">Exercise Info</p>
+          <button
+            type="button"
             onClick={setClose}
-          />
+            aria-label="Close"
+            className="rounded-lg p-1 hover:bg-zinc-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+          >
+            <BiX className="text-emerald-500" size={27} />
+          </button>
         </div>
-        <div className="grid grid-cols-1 gap-2">
-          <div className="md:w-fit w-full flex md:justify-start justify-center">
-            <Image
-              width={200}
-              height={300}
-              src={exercise?.image.url}
-              alt={exercise?.name}
-            />
-          </div>
-          <div className=" flex flex-col gap-2">
-            <p className=" text-xl">{exercise?.name}</p>
-            <p className=" opacity-75">{exercise?.tips}</p>
+        <div className="grid sm:grid-cols-[200px_1fr] grid-cols-1 gap-4">
+          {exercise?.image?.url && (
+            <div className="md:w-fit w-full flex md:justify-start justify-center">
+              <Image
+                width={200}
+                height={300}
+                src={exercise.image.url}
+                alt={exercise?.name}
+                className="rounded-lg bg-zinc-800"
+              />
+            </div>
+          )}
+          <div className=" flex flex-col gap-3">
+            <p className=" text-xl font-semibold capitalize">{exercise?.name}</p>
+            <div className="flex gap-2 text-sm">
+              <span className="rounded-md bg-zinc-800 px-2 py-1 text-zinc-200">
+                {exercise?.time_base
+                  ? `${exercise?.repetition}s`
+                  : `x${exercise?.repetition} reps`}
+              </span>
+              {exercise?.sets > 1 && (
+                <span className="rounded-md bg-zinc-800 px-2 py-1 text-zinc-200">
+                  {exercise?.sets} sets
+                </span>
+              )}
+              {exercise?.rest > 0 && (
+                <span className="rounded-md bg-zinc-800 px-2 py-1 text-zinc-200">
+                  {exercise?.rest}s rest
+                </span>
+              )}
+            </div>
+            {exercise?.tips && (
+              <p className=" text-zinc-300 leading-relaxed whitespace-pre-line">
+                {exercise.tips}
+              </p>
+            )}
 
             <div className=" flex gap-1 flex-wrap">
               {exercise?.body_part?.split(",")?.map((part, index) => (
                 <p
-                  className="px-1 bg-zinc-700/60 text-emerald-500 rounded capitalize text-sm "
+                  className="px-2 py-0.5 bg-zinc-700/60 text-emerald-500 rounded capitalize text-sm "
                   key={index}
                 >
-                  {part}
+                  {part.trim()}
                 </p>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="mt-3">
-          <p className=" text-lg">Focus Point</p>
-          <div className="w-full flex mt-2 overflow-x-auto">
-            {exercise?.focus?.map((title, index) => (
-              <>
-                {!!focus.find((value) => value.title === title) ? (
-                  <>
-                    <Image
-                      key={index}
-                      width={100}
-                      height={200}
-                      alt={title}
-                      src={`${
-                        focus.find((value) => value.title === title)?.imageUrl
-                      }`}
-                    />
-                  </>
-                ) : null}
-              </>
-            ))}
+        {focusImages.length > 0 && (
+          <div className="mt-3">
+            <p className=" text-lg font-semibold">Focus Point</p>
+            <div className="w-full flex gap-2 mt-2 overflow-x-auto">
+              {focusImages.map((item) => (
+                <Image
+                  key={item.title}
+                  width={100}
+                  height={200}
+                  alt={item.title}
+                  title={item.title}
+                  src={`${item.imageUrl}`}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </Box>
     </Modal>
   );

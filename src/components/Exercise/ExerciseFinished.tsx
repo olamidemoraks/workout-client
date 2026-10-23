@@ -7,7 +7,8 @@ import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
+import toast from "react-hot-toast";
 
 type ExerciseFinishedProps = {
   endTime: Date;
@@ -31,27 +32,54 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
   const { profile } = useProfile();
   const [isKG, setIsKG] = useState(true);
   const [weight, setWeight] = useState<any>();
+  const [weightEdited, setWeightEdited] = useState(false);
+
+  const queryClient = useQueryClient();
+  // Streak queries are cached for a few minutes, so refresh them once a
+  // workout is saved.
+  const refreshStreak = () => {
+    queryClient.invalidateQueries("streak");
+    queryClient.invalidateQueries("activity-days");
+  };
+
+  const onSaveError = (error: any) => {
+    toast.error(error?.message ?? "Couldn't save your workout. Try again.");
+  };
 
   const { mutate, isLoading } = useMutation({
     mutationFn: createActivity,
-    onSettled: () => {
+    onSuccess: () => {
+      refreshStreak();
       router.replace("/profile");
     },
+    onError: onSaveError,
   });
   const { mutate: challegeMutate, isLoading: isLoadingChallenge } = useMutation(
     {
       mutationFn: completedChallenge,
       onSuccess: () => {
+        refreshStreak();
         router.replace("/profile");
       },
+      onError: onSaveError,
     }
   );
+  const isSaving = isLoading || isLoadingChallenge;
 
   const handleEndWorkout = (totalTime: number) => {
+    // Weight is stored in kg (like onboarding and edit profile). Send the
+    // stored value back untouched unless the user changed it, so a kg -> lb
+    // -> kg round trip doesn't create a fake weight change.
+    const weightToSave =
+      weightEdited && Number(weight) > 0
+        ? isKG
+          ? weight
+          : (Number(weight) / 2.205).toFixed(2)
+        : profile?.weight;
     const data = {
       workoutId,
       totalTime,
-      weight,
+      weight: weightToSave,
       workoutType,
       feedback: mood,
     };
@@ -60,7 +88,7 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
         challengeId: workoutId,
         workoutName,
         totalTime,
-        weight,
+        weight: weightToSave,
       });
     } else {
       mutate({ data });
@@ -69,21 +97,36 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
 
   useEffect(() => {
     if (profile) {
-      setWeight(profile?.weight ?? 0);
-      setIsKG(profile?.weightMeasure === "kg" ? true : false);
+      const showInLb = profile?.weightMeasure === "lb";
+      const storedWeight = Number(profile?.weight);
+      setIsKG(!showInLb);
+      setWeight(
+        storedWeight > 0
+          ? showInLb
+            ? (storedWeight * 2.205).toFixed(1)
+            : profile.weight
+          : ""
+      );
     }
   }, [profile]);
 
-  const hours =
-    new Date(endTime.getTime() - startTime.getTime()).getUTCHours() * 60;
-  const minutes =
-    new Date(endTime.getTime() - startTime.getTime()).getUTCMinutes() * 60;
+  // Total workout time in seconds.
+  const totalTime = Math.max(
+    0,
+    Math.round((endTime.getTime() - startTime.getTime()) / 1000)
+  );
+  const hours = Math.floor(totalTime / 3600);
+  const minutes = Math.floor((totalTime % 3600) / 60);
+  const seconds = totalTime % 60;
+  const formattedTime = hours
+    ? `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
+    : `${minutes}:${String(seconds).padStart(2, "0")}`;
 
-  const seconds = new Date(
-    endTime.getTime() - startTime.getTime()
-  ).getUTCSeconds();
-
-  const totalTime = hours + minutes + seconds;
+  const moods = [
+    { value: 1, emoji: "🥴", label: "Too hard" },
+    { value: 2, emoji: "🙂", label: "Just right" },
+    { value: 3, emoji: "😄", label: "Too easy" },
+  ];
   return (
     <div className=" w-full flex flex-col  items-center justify-center">
       <div className="lg:w-[60%] w-full ">
@@ -97,7 +140,7 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
           />
           <div className="absolute sm:w-[50%] w-[70%] top-0  px-5 py-5">
             <p className=" md:text-4xl text-2xl font-semibold">
-              Nice you&apos;ve completed your exercise!
+              Nice, you&apos;ve completed your workout!
             </p>
             <p className=" md:text-lg text-base mt-3">{workoutName}</p>
           </div>
@@ -105,71 +148,53 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
         <div className=" relative w-full  flex justify-center -mt-[30px] z-20">
           <div className=" bg-zinc-900 p-3 w-[70%] rounded-md flex items-center justify-evenly">
             <div className=" text-center">
-              <small>Exercise</small>
-              <p className="sm:text-3xl text-xl font-semibold ">
+              <small className="text-zinc-400">
+                {exerciseLength === 1 ? "Exercise" : "Exercises"}
+              </small>
+              <p className="sm:text-3xl text-xl font-semibold tabular-nums">
                 {exerciseLength}
               </p>
             </div>
-            <div className=" h-[70%] w-[1px] bg-zinc-800" />
+            <div className=" h-10 w-[1px] bg-zinc-800" />
             <div className=" text-center">
-              <small>Time</small>
-              <p className="sm:text-3xl text-xl font-semibold ">
-                {new Date(endTime.getTime() - startTime.getTime()).getUTCHours()
-                  ? new Date(
-                      endTime.getTime() - startTime.getTime()
-                    ).getUTCHours() + ":"
-                  : "" +
-                    new Date(
-                      endTime.getTime() - startTime.getTime()
-                    ).getUTCMinutes() +
-                    ":" +
-                    new Date(endTime.getTime() - startTime.getTime())
-                      .getUTCSeconds()
-                      .toString()
-                      .padStart(2, "0")}
+              <small className="text-zinc-400">Time</small>
+              <p className="sm:text-3xl text-xl font-semibold tabular-nums">
+                {formattedTime}
               </p>
             </div>
           </div>
         </div>
 
         <div className="flex flex-col bg-zinc-900 mt-5 rounded-lg p-3 px-5 gap-3 text-center mx-3">
-          <p className="text-lg">How do you feel?</p>
+          <p id="mood-label" className="text-lg">How do you feel?</p>
           <p className=" text-sm tracking-wide text-neutral-300">
-            your feedback will help us provide more suitable workout for you
+            Your feedback helps us suggest workouts that suit you.
           </p>
-          <div className="flex justify-evenly items-center w-full mt-2">
-            <div
-              className={cn(
-                "flex flex-col text-center cursor-pointer hover:bg-zinc-800 mx-2 py-2 rounded-md w-full",
-                { "bg-zinc-800": mood === 1 }
-              )}
-              onClick={() => setMood(1)}
-            >
-              <p className="text-3xl">🥴</p>{" "}
-              <p className=" sm:text-base text-sm">Too hard</p>
-            </div>
-            <div className=" h-[40px] w-[1px] bg-zinc-800" />
-            <div
-              className={cn(
-                "flex flex-col text-center cursor-pointer hover:bg-zinc-800 mx-2 py-2 rounded-md w-full",
-                { "bg-zinc-800": mood === 2 }
-              )}
-              onClick={() => setMood(2)}
-            >
-              <p className="text-3xl">🙂</p>{" "}
-              <p className=" sm:text-base text-sm">Just right</p>
-            </div>
-            <div className=" h-[40px] w-[1px] bg-zinc-800" />
-            <div
-              className={cn(
-                "flex flex-col text-center cursor-pointer hover:bg-zinc-800 mx-2 py-2 rounded-md w-full",
-                { "bg-zinc-800": mood === 3 }
-              )}
-              onClick={() => setMood(3)}
-            >
-              <p className="text-3xl">😄</p>{" "}
-              <p className=" sm:text-base text-sm">Too easy</p>
-            </div>
+          <div
+            role="radiogroup"
+            aria-labelledby="mood-label"
+            className="flex justify-evenly items-center w-full mt-2"
+          >
+            {moods.map((option, index) => (
+              <React.Fragment key={option.value}>
+                {index > 0 && <div className=" h-[40px] w-[1px] bg-zinc-800" />}
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked={mood === option.value}
+                  onClick={() => setMood(option.value)}
+                  className={cn(
+                    "flex flex-col items-center text-center cursor-pointer hover:bg-zinc-800 mx-2 py-2 rounded-md w-full border border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400",
+                    { "bg-zinc-800 border-emerald-500/60": mood === option.value }
+                  )}
+                >
+                  <span className="text-3xl" aria-hidden>
+                    {option.emoji}
+                  </span>
+                  <span className=" sm:text-base text-sm">{option.label}</span>
+                </button>
+              </React.Fragment>
+            ))}
           </div>
           <div className="w-full flex flex-col justify-start items-start gap-2 my-4  ">
             <label htmlFor="weight" className=" font-semibold">
@@ -178,7 +203,8 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
             <div className="flex gap-1 w-full">
               <input
                 type="text"
-                className="pb-2 focus:outline-none border-b border-zinc-400 w-full  bg-transparent"
+                inputMode="decimal"
+                className="pb-2 focus:outline-none border-b border-zinc-400 focus:border-emerald-500 transition-colors w-full  bg-transparent"
                 id="weight"
                 placeholder={isKG ? "KG" : "LB"}
                 value={weight}
@@ -187,14 +213,21 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
                     return;
                   }
                   setWeight(e.target.value);
+                  setWeightEdited(true);
                 }}
               />
-              <div className="flex gap-2 border border-blue-700 rounded-lg  items-center">
-                <div
+              <div
+                role="group"
+                aria-label="Weight unit"
+                className="flex gap-2 border border-blue-700 rounded-lg  items-center"
+              >
+                <button
+                  type="button"
+                  aria-pressed={isKG}
                   className={cn(
-                    " px-2 transition duration-200 cursor-pointer",
+                    " px-2 transition duration-200 cursor-pointer h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400",
                     {
-                      " bg-blue-700 h-full rounded-lg": isKG,
+                      " bg-blue-700": isKG,
                     }
                   )}
                   onClick={() => {
@@ -208,13 +241,15 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
                   }}
                 >
                   KG
-                </div>
+                </button>
 
-                <div
+                <button
+                  type="button"
+                  aria-pressed={!isKG}
                   className={cn(
-                    " px-2 transition duration-200 cursor-pointer",
+                    " px-2 transition duration-200 cursor-pointer h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400",
                     {
-                      " bg-blue-700 h-full rounded-lg": !isKG,
+                      " bg-blue-700": !isKG,
                     }
                   )}
                   onClick={() => {
@@ -228,7 +263,7 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
                   }}
                 >
                   LB
-                </div>
+                </button>
               </div>
             </div>
           </div>
@@ -236,13 +271,17 @@ const ExerciseFinished: React.FC<ExerciseFinishedProps> = ({
 
         <div className="w-full items-center justify-center flex mt-12 px-5">
           <button
-            className="sm:w-[70%] w-full  p-2  bg-emerald-500  text-white rounded-lg flex items-center justify-center gap-5"
+            className="sm:w-[70%] w-full p-3 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-70 disabled:cursor-not-allowed text-white font-semibold rounded-lg flex items-center justify-center gap-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
             onClick={() => handleEndWorkout(totalTime)}
+            disabled={isSaving}
           >
-            Next{" "}
-            {isLoading || isLoadingChallenge ? (
-              <Loader2 className=" animate-spin" size={18} />
-            ) : null}
+            {isSaving ? (
+              <>
+                Saving <Loader2 className=" animate-spin" size={18} />
+              </>
+            ) : (
+              "Save workout"
+            )}
           </button>
         </div>
       </div>

@@ -14,7 +14,7 @@ const MonthlyCalender = ({ isDashboard = false }: IMonthlyCalender) => {
   const searchParams = useSearchParams();
   const { data, isLoading, refetch } = useQuery({
     queryFn: async () => await activityReport({ params: searchParams }),
-    queryKey: "activity-reports",
+    queryKey: ["activity-reports", searchParams?.get("id") ?? "me"],
     refetchOnWindowFocus: false,
   });
 

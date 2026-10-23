@@ -6,15 +6,29 @@ import { Edit2, Loader2, Smile } from "lucide-react";
 import ProfileUnit from "./ProfileUnit";
 import Link from "next/link";
 import { useMutation, useQueryClient } from "react-query";
-import { updateProfileImage } from "@/api/user";
+import { followUser, unfollowUser, updateProfileImage } from "@/api/user";
 import toast from "react-hot-toast";
 import { alphabetsColor } from "@/utils/data";
 import { FaExpand } from "react-icons/fa";
 import ExpandImageModal from "./Modal/ExpandImageModal";
+import useProfile from "@/hooks/useProfile";
+import { useSelector } from "react-redux";
 
 type ProfileDetailProps = {
   profile: IUser;
   personalPage: boolean;
+};
+
+// Same labels as the onboarding Level and Goals steps.
+const levelNames: { [key: number]: string } = {
+  1: "Beginner",
+  2: "Intermediate",
+  3: "Advanced",
+};
+const goalLabels: { [key: string]: string } = {
+  "lose weight": "Lose weight",
+  "build muscles": "Build muscle",
+  "keep fit": "Keep fit",
 };
 
 const ProfileDetail: React.FC<ProfileDetailProps> = ({
@@ -25,6 +39,40 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
   const [openFollowing, setOpenFollowing] = useState<boolean>(false);
   const [openFollowers, setOpenFollowers] = useState<boolean>(false);
   const queryClient = useQueryClient();
+
+  // Follow / unfollow when viewing someone else's profile.
+  const { profile: me, refetch: refetchMe } = useProfile();
+  const { socket } = useSelector((state: any) => state.socket);
+  const isFollowing = !!me?.following?.includes(profile?._id);
+  const onFollowChange = () => {
+    refetchMe();
+    // Refresh the viewed profile so its follower count updates.
+    queryClient.invalidateQueries("user-profile");
+  };
+  const onFollowError = (error: any) => {
+    toast.error(error?.message ?? "Something went wrong");
+  };
+  const { mutate: follow, isLoading: following } = useMutation({
+    mutationFn: followUser,
+    onSuccess: () => {
+      onFollowChange();
+      socket?.current?.emit("send-notification", [profile?._id]);
+    },
+    onError: onFollowError,
+  });
+  const { mutate: unfollow, isLoading: unfollowing } = useMutation({
+    mutationFn: unfollowUser,
+    onSuccess: onFollowChange,
+    onError: onFollowError,
+  });
+  const followBusy = following || unfollowing;
+  const handleFollow = () => {
+    if (isFollowing) unfollow({ id: profile?._id });
+    else follow({ id: profile?._id });
+  };
+
+  const levelName = profile?.level ? levelNames[profile.level] : undefined;
+  const goalLabel = profile?.goals ? goalLabels[profile.goals] : undefined;
   const { mutate, isLoading } = useMutation({
     mutationFn: updateProfileImage,
     onError: () => {
@@ -127,7 +175,23 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
           <p className=" text-xl  font-semibold capitalize">
             {profile?.name ?? "-"}
           </p>
-          <p className="text-lg  font-semibold">@{profile?.username ?? "-"}</p>
+          <p className="text-lg  font-semibold text-zinc-300">
+            @{profile?.username ?? "-"}
+          </p>
+          {(levelName || goalLabel) && (
+            <div className="flex flex-wrap justify-center gap-2 mt-2">
+              {levelName && (
+                <span className="rounded-full border border-zinc-800 bg-zinc-900 px-3 py-0.5 text-xs font-medium text-emerald-400">
+                  {levelName}
+                </span>
+              )}
+              {goalLabel && (
+                <span className="rounded-full border border-zinc-800 bg-zinc-900 px-3 py-0.5 text-xs font-medium text-zinc-300">
+                  Goal: {goalLabel}
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {personalPage && (
@@ -158,6 +222,27 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
           <ProfileUnit text="Following" unit={profile?.following?.length} />
         </button>
       </div>
+      {!personalPage && profile?._id && (
+        <button
+          type="button"
+          onClick={handleFollow}
+          disabled={followBusy}
+          aria-pressed={isFollowing}
+          className={`mt-4 min-w-[120px] flex items-center justify-center gap-2 px-5 py-2 text-sm font-semibold rounded-lg transition-colors disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
+            isFollowing
+              ? "bg-zinc-800 hover:bg-zinc-700"
+              : "bg-blue-600 hover:bg-blue-500"
+          }`}
+        >
+          {followBusy ? (
+            <Loader2 className="animate-spin" size={16} />
+          ) : isFollowing ? (
+            "Unfollow"
+          ) : (
+            "Follow"
+          )}
+        </button>
+      )}
     </>
   );
 };

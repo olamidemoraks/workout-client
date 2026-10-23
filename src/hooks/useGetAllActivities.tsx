@@ -8,7 +8,7 @@ const useGetAllActivities = (): { data: any; isLoading: boolean } => {
   const searchParams = useSearchParams();
   const { data, isLoading, refetch } = useQuery({
     queryFn: async () => await allActivities({ params: searchParams }),
-    queryKey: "all-activities",
+    queryKey: ["all-activities", searchParams?.get("id") ?? "me"],
     refetchOnWindowFocus: false,
   });
 

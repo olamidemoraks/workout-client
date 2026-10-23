@@ -22,6 +22,8 @@ const useBatteryCharge = () => {
   }, [data]);
   return {
     chargeLeft,
+    // chargeLeft reads as 0 until today's activities load.
+    isLoading,
   };
 };
 

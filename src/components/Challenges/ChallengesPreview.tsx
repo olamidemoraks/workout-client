@@ -16,7 +16,7 @@ const ChallengesPreview: React.FC<ChallengesPreviewProps> = ({ id }) => {
   const router = useRouter();
   const { data, isLoading } = useQuery({
     queryFn: async () => await startChallenge(id),
-    queryKey: "challengeExercise",
+    queryKey: ["challengeExercise", id],
   });
 
   const workout: IWorkout = data?.workout as IWorkout;

@@ -9,7 +9,7 @@ import {
 import { useMemo } from "react";
 import { useQuery } from "react-query";
 import useProfile from "./useProfile";
-import useStreak from "./useStreak";
+import useStreak, { STREAK_STALE_TIME } from "./useStreak";
 
 type Activity = { createdAt: string; totalTime: number };
 
@@ -28,6 +28,7 @@ const useStreakSummary = () => {
     queryFn: async () => await allActivities({ params: {} }),
     queryKey: "activity-days",
     refetchOnWindowFocus: false,
+    staleTime: STREAK_STALE_TIME,
   });
 
   return useMemo(() => {

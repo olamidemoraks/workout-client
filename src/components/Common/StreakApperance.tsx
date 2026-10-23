@@ -16,18 +16,19 @@ const getTier = (streak: number) =>
   streak >= 8 ? "blazing" : streak >= 6 ? "hot" : "warm";
 
 const tierStyles = {
+  // Animated WebP versions of the original GIFs, sized for the 32px badge.
   warm: {
-    gif: "/assets/streak3.gif",
+    gif: "/assets/streak3.webp",
     label: "text-sky-300",
     segment: "bg-gradient-to-t from-sky-500 to-cyan-300",
   },
   hot: {
-    gif: "/assets/spark1.gif",
+    gif: "/assets/spark1.webp",
     label: "text-orange-300",
     segment: "bg-gradient-to-t from-orange-600 to-amber-400",
   },
   blazing: {
-    gif: "/assets/spark2.gif",
+    gif: "/assets/spark2.webp",
     label: "text-red-300",
     segment: "bg-gradient-to-t from-red-600 to-orange-400",
   },

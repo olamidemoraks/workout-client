@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import React from "react";
 
 type FollowActionButtonProps = {
@@ -16,49 +17,32 @@ const FollowActionButton: React.FC<FollowActionButtonProps> = ({
   followingUsers,
   user,
   handleFollowAndUnfollowAction,
-  id,
   profile,
 }) => {
+  if (profile?._id === user?._id) {
+    return <span className="text-sm text-zinc-500 px-2">You</span>;
+  }
+
+  const isFollowing = !!followingUsers?.includes(user?._id);
+  const isPending = following || unfollowing;
+
   return (
-    <>
-      {profile?._id === user?._id ? null : id && id != profile._id ? (
-        <button
-          onClick={() =>
-            handleFollowAndUnfollowAction(
-              user?._id,
-              followingUsers?.includes(user?._id)
-            )
-          }
-          disabled={
-            following || unfollowing || followingUsers?.includes(user?._id)
-              ? true
-              : false
-          }
-          className={` disabled:opacity-50 px-2  p-1 ${
-            followingUsers?.includes(user?._id)
-              ? "bg-transparent"
-              : "bg-blue-500"
-          } rounded`}
-        >
-          {followingUsers?.includes(user?._id) ? <>following</> : <>follow</>}
-          {(following || unfollowing) && "ing..."}
-        </button>
+    <button
+      type="button"
+      onClick={() => handleFollowAndUnfollowAction(user?._id, isFollowing)}
+      disabled={isPending}
+      className={`shrink-0 min-w-[92px] flex items-center justify-center disabled:opacity-60 px-3 py-1.5 text-sm font-semibold rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
+        isFollowing ? "bg-zinc-800 hover:bg-zinc-700" : "bg-blue-600 hover:bg-blue-500"
+      }`}
+    >
+      {isPending ? (
+        <Loader2 className="animate-spin" size={16} />
+      ) : isFollowing ? (
+        "Unfollow"
       ) : (
-        <button
-          onClick={() =>
-            handleFollowAndUnfollowAction(
-              user?._id,
-              followingUsers?.includes(user?._id)
-            )
-          }
-          disabled={following || unfollowing ? true : false}
-          className={` disabled:opacity-50 px-2 p-1 bg-blue-600 rounded`}
-        >
-          {followingUsers?.includes(user?._id) ? <>unfollow</> : <>follow</>}
-          {(following || unfollowing) && "ing..."}
-        </button>
+        "Follow"
       )}
-    </>
+    </button>
   );
 };
 export default FollowActionButton;

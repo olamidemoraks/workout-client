@@ -2,6 +2,7 @@ import useProfile from "@/hooks/useProfile";
 import { cn } from "@/libs/utils";
 import { Bell } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { BiMenu, BiSolidBell } from "react-icons/bi";
 import Battery from "../Common/Battery";
 import UserStreak from "../Common/UserStreak";
@@ -22,23 +23,34 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const wasMenuOpen = useRef(false);
+  // The drawer is portalled to <body>: this nav's backdrop-blur makes it the
+  // containing block for fixed children, which would clip a full-screen
+  // backdrop to the navbar's height.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
+  // Esc closes the menu.
   useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        // Clicked outside the element, do something
-        setOpenSidebar(false);
-      }
+    if (!openSidebar) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpenSidebar(false);
     };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [openSidebar]);
 
-    // Add event listener when the component mounts
-    document.addEventListener("mousedown", handleClickOutside);
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  // Move focus into the drawer when it opens and back to the menu button
+  // when it closes.
+  useEffect(() => {
+    if (openSidebar) {
+      sidebarRef.current?.querySelector<HTMLElement>("a, button")?.focus();
+    } else if (wasMenuOpen.current) {
+      menuButtonRef.current?.focus();
+    }
+    wasMenuOpen.current = openSidebar;
+  }, [openSidebar]);
 
   const handleNoficationBar = () => {
     setOpenNotificationbar(true);
@@ -83,23 +95,49 @@ const Navbar = () => {
           </div>
 
           <div className="flex gap-2 items-center  relative  max-[280px]:w-full">
-            <BiMenu
+            <button
+              ref={menuButtonRef}
+              type="button"
               onClick={() => setOpenSidebar((prev) => !prev)}
-              className=" fill-zinc-200  hover:bg-zinc-900 rounded-full transition duration-300 cursor-pointer block md:hidden"
-              size={30}
-            />
-
-            <div
-              ref={sidebarRef}
-              className={cn(
-                "fixed top-0 left-0 z-50  transition duration-200 delay-100 md:hidden flex bg-black w-full",
-                {
-                  "translate-x-0": openSidebar,
-                }
-              )}
+              aria-label="Open menu"
+              aria-expanded={openSidebar}
+              aria-controls="mobile-menu"
+              className="md:hidden block rounded-full hover:bg-zinc-900 transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
             >
-              <Sidebar setSideDrawer={setOpenSidebar} openMenu={openSidebar} />
-            </div>
+              <BiMenu className=" fill-zinc-200" size={30} />
+            </button>
+
+            {mounted &&
+              createPortal(
+                <div className="md:hidden">
+                  <div
+                    aria-hidden
+                    onClick={() => setOpenSidebar(false)}
+                    className={cn(
+                      "fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm transition-opacity duration-300",
+                      openSidebar ? "opacity-100" : "pointer-events-none opacity-0"
+                    )}
+                  />
+                  <div
+                    ref={sidebarRef}
+                    id="mobile-menu"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Menu"
+                    className={cn(
+                      "fixed top-0 left-0 z-[100] transition-[visibility] duration-300",
+                      // Hidden drawer links shouldn't be reachable with Tab.
+                      { invisible: !openSidebar }
+                    )}
+                  >
+                    <Sidebar
+                      setSideDrawer={setOpenSidebar}
+                      openMenu={openSidebar}
+                    />
+                  </div>
+                </div>,
+                document.body
+              )}
           </div>
           <Notification
             open={openNotificationbar}

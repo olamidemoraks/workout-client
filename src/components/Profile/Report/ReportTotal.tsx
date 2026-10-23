@@ -1,45 +1,71 @@
 import useGetAllActivities from "@/hooks/useGetAllActivities";
-import { useSearchParams } from "next/navigation";
+import { toDayKey } from "@/utils";
+import { CalendarCheck, Dumbbell, Gauge, Timer } from "lucide-react";
 import React, { useMemo } from "react";
 import CustomLoader from "../../Common/CustomLoader";
 import Countup from "react-countup";
 
 const ReportTotal = () => {
   const { data, isLoading } = useGetAllActivities();
-  const totalMin = useMemo(() => {
-    return data?.activities?.reduce(
-      (accumalator: number, currentValue: { totalTime: any }) => {
-        const totalTime = currentValue.totalTime;
-        accumalator += totalTime;
-        return accumalator;
-      },
+
+  const stats = useMemo(() => {
+    const activities: { totalTime: number; createdAt: string }[] =
+      data?.activities ?? [];
+    // totalTime is stored in seconds.
+    const totalSeconds = activities.reduce(
+      (total, activity) => total + (activity?.totalTime ?? 0),
       0
     );
+    const workouts = activities.length;
+    const activeDays = new Set(
+      activities.map((activity) => toDayKey(activity.createdAt))
+    ).size;
+
+    return [
+      { label: "Workouts", value: workouts, Icon: Dumbbell },
+      { label: "Minutes", value: Math.ceil(totalSeconds / 60), Icon: Timer },
+      { label: "Active days", value: activeDays, Icon: CalendarCheck },
+      {
+        label: "Avg. session",
+        value: workouts ? Math.round(totalSeconds / 60 / workouts) : 0,
+        suffix: " min",
+        Icon: Gauge,
+      },
+    ];
   }, [data]);
 
   if (isLoading) {
     return (
-      <CustomLoader height="h-full" weight="lg:w-[500px] w-full" amount={1} />
+      <CustomLoader height="h-[230px]" weight="lg:w-[420px] w-full shrink-0" amount={1} />
     );
   }
   return (
-    <div className=" rounded-md flex flex-col items-center justify-center  px-5 h-full   lg:w-[500px] w-full gap-5 lg:py-2 py-5 lg:mt-0 mt-8">
-      <div className="flex   flex-row items-center justify-evenly px-5 gap-5">
-        <div className="flex flex-col text-center">
-          <p className=" text-3xl font-semibold text-green-400">
-            <Countup end={data?.activities?.length ?? 0} duration={2.75} />
+    <section
+      aria-label="Workout totals"
+      className="rounded-xl border border-zinc-800 bg-zinc-950/40 lg:w-[420px] w-full shrink-0 grid grid-cols-2 overflow-hidden"
+    >
+      {stats.map(({ label, value, suffix, Icon }, index) => (
+        <div
+          key={label}
+          className={`flex flex-col items-center justify-center text-center gap-1 p-5 border-zinc-800 ${
+            index % 2 === 0 ? "border-r" : ""
+          } ${index < 2 ? "border-b" : ""}`}
+        >
+          <Icon size={18} aria-hidden className="stroke-zinc-500 mb-1" />
+          <p className=" text-3xl font-semibold text-green-400 tabular-nums">
+            {/* Countup renders its own <span>, which the global white text
+                rule would otherwise colour. */}
+            <Countup
+              end={value}
+              duration={2}
+              suffix={suffix}
+              className="text-green-400"
+            />
           </p>
-          <p className=" text-neutral-300">Workouts</p>
+          <p className=" text-neutral-300 text-sm">{label}</p>
         </div>
-        <div className="h-8 w-[1px] bg-zinc-800" />
-        <div className="flex flex-col text-center">
-          <p className=" text-3xl font-semibold text-green-400">
-            <Countup end={Math.ceil((totalMin ?? 0) / 60)} duration={2.75} />
-          </p>
-          <p className=" text-neutral-300">Minutes</p>
-        </div>
-      </div>
-    </div>
+      ))}
+    </section>
   );
 };
 

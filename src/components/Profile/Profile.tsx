@@ -4,7 +4,7 @@ import useProfile from "@/hooks/useProfile";
 import { cn } from "@/libs/utils";
 import { HeartPulse, LineChart } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 import { useQuery } from "react-query";
 import ProfileDetail from "./ProfileDetail";
 import Reports from "./Report/Reports";
@@ -19,21 +19,14 @@ const Profile: React.FC<ProfileProps> = () => {
   const { profile } = useProfile();
 
   const id = searchParams?.get("id");
-  console.log({ id });
-  const {
-    data,
-    isLoading: profileLoading,
-    refetch,
-  } = useQuery({
+  // Viewing your own id is the same as viewing your own profile.
+  const viewingOther = !!id && id !== profile?._id;
+  const { data, isLoading: profileLoading } = useQuery({
     queryFn: async () => await getProfile(id!),
-    queryKey: "user-profile",
-    enabled: id == null ? false : true,
+    queryKey: ["user-profile", id],
+    enabled: viewingOther,
     refetchOnWindowFocus: false,
   });
-
-  useEffect(() => {
-    refetch();
-  }, [searchParams]);
 
   const otherProfile = data?.user as IUser;
 
@@ -55,10 +48,25 @@ const Profile: React.FC<ProfileProps> = () => {
     <>
       <div className="mx-auto flex flex-col w-full items-center relative ">
         <div className="flex items-center justify-center w-full flex-col">
-          <ProfileDetail
-            profile={id ? otherProfile : profile}
-            personalPage={id ? false : true}
-          />
+          {viewingOther && profileLoading ? (
+            <div className="flex flex-col items-center gap-3 m-5">
+              <div className="md:h-[220px] md:w-[220px] h-[180px] w-[180px] rounded-full bg-zinc-900 animate-pulse" />
+              <div className="h-6 w-40 rounded bg-zinc-900 animate-pulse" />
+              <div className="h-5 w-28 rounded bg-zinc-900 animate-pulse" />
+            </div>
+          ) : viewingOther && !otherProfile ? (
+            <div className="py-16 text-center">
+              <p className="text-lg font-semibold">User not found</p>
+              <p className="text-zinc-400 mt-1">
+                This profile may have been removed.
+              </p>
+            </div>
+          ) : (
+            <ProfileDetail
+              profile={viewingOther ? otherProfile : profile}
+              personalPage={!viewingOther}
+            />
+          )}
           <div
             role="tablist"
             aria-label="Profile sections"

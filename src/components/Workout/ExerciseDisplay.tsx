@@ -23,7 +23,7 @@ type ExerciseDisplayProps = {
 const ExerciseDisplay: React.FC<ExerciseDisplayProps> = ({ id }) => {
   const { data, isLoading } = useQuery({
     queryFn: async () => await getWorkout(id),
-    queryKey: "workoutPreview",
+    queryKey: ["workoutPreview", id],
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
@@ -31,7 +31,7 @@ const ExerciseDisplay: React.FC<ExerciseDisplayProps> = ({ id }) => {
   const workout: IWorkout = data?.workout;
   if (isLoading) {
     return (
-      <div className="w-full flex justify-center items-center">
+      <div className="w-full flex justify-center items-center h-[50vh]">
         <Loader2 className=" text-3xl text-white animate-spin" />
       </div>
     );

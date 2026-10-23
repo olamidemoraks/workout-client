@@ -23,7 +23,7 @@ const Following: React.FC<FollowingProps> = ({ open, setClose }) => {
 
   const { isLoading, data, refetch } = useQuery({
     queryFn: async () => await getFollowing({ params: searchParams }),
-    queryKey: "following",
+    queryKey: ["following", id ?? "me"],
     enabled: open,
   });
 
@@ -66,15 +66,25 @@ const Following: React.FC<FollowingProps> = ({ open, setClose }) => {
           left: "50%",
           transform: "translate(-50%, -50%)",
         }}
-        className=" bg-zinc-900 rounded-md sm:w-[600px] w-[95%] max-h-[70vh] md:max-h-[80vh] min-h-[500px] sm:p-4 p-2 py-6 gap-3 flex-col"
+        className=" bg-zinc-900 border border-zinc-800 rounded-xl sm:w-[600px] w-[95%] max-h-[70vh] md:max-h-[80vh] min-h-[300px] sm:p-5 p-3 py-6 gap-3 flex flex-col outline-none"
       >
-        <div className="flex justify-between items-center static top-0 w-full">
-          <p className=" text-2xl text-zinc-400 mb-2">Following</p>
-          <X
-            size={22}
-            className=" text-zinc-400 hover:text-white cursor-pointer"
+        <div className="flex justify-between items-center w-full">
+          <p className=" text-2xl text-zinc-300 font-semibold">
+            Following{" "}
+            {users && (
+              <span className="text-base font-normal text-zinc-500">
+                {users.length}
+              </span>
+            )}
+          </p>
+          <button
+            type="button"
             onClick={setClose}
-          />
+            aria-label="Close"
+            className="rounded-lg p-1.5 hover:bg-zinc-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+          >
+            <X size={22} className="stroke-zinc-400" />
+          </button>
         </div>
 
         {isLoading && (
@@ -82,23 +92,28 @@ const Following: React.FC<FollowingProps> = ({ open, setClose }) => {
             <Loader2 className=" animate-spin" size={22} />
           </div>
         )}
-        <div className="flex flex-col gap-6 mt-6 h-full  overflow-auto px-1 scrollbar scrollbar-none ">
+        {!isLoading && users?.length === 0 && (
+          <p className="text-center text-zinc-400 py-16">
+            Not following anyone yet.
+          </p>
+        )}
+        <div className="flex flex-col gap-1 mt-2 flex-1 min-h-0 overflow-auto px-1 scrollbar scrollbar-none ">
           <>
             {users?.map((user) => (
               <div
                 key={user?._id}
-                className="w-full flex justify-between items-center"
+                className="w-full flex justify-between items-center gap-3 rounded-lg p-2 hover:bg-zinc-800/60 transition-colors"
               >
                 <Link
                   href={`/profile?id=${user?._id}`}
                   onClick={setClose}
-                  className="flex gap-2 group items-center"
+                  className="flex gap-3 group items-center min-w-0"
                 >
-                  <div className="md:h-[60px] md:w-[60px] h-[50px] w-[50px] relative cursor-pointer">
+                  <div className="md:h-[60px] md:w-[60px] h-[50px] w-[50px] relative cursor-pointer shrink-0">
                     {user?.avatar?.url ? (
                       <Image
                         src={user?.avatar?.url}
-                        alt={user.name}
+                        alt=""
                         fill
                         className="absolute rounded-full object-cover"
                       />
@@ -107,18 +122,18 @@ const Following: React.FC<FollowingProps> = ({ open, setClose }) => {
                     )}
                   </div>
 
-                  <div className="flex flex-col">
-                    <p className=" group-hover:underline underline-offset-2">
+                  <div className="flex flex-col min-w-0">
+                    <p className=" group-hover:underline underline-offset-2 truncate capitalize">
                       {user?.name}
                     </p>
-                    <p className=" opacity-75">{user?.username}</p>
+                    <p className=" text-zinc-400 truncate">@{user?.username}</p>
                   </div>
                 </Link>
 
                 <div onClick={() => setUserId(user?._id)}>
                   <FollowActionButton
                     id={id}
-                    following={following}
+                    following={following && userId === user?._id}
                     handleFollowAndUnfollowAction={
                       handleFollowAndUnfollowAction
                     }

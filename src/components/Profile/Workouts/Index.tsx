@@ -4,8 +4,6 @@ import Empty from "@/components/Common/Empty";
 import { BiPlus } from "react-icons/bi";
 import PersonalizeWorkoutCard from "@/components/PersonalizeWorkout/PersonalizeWorkoutCard";
 import useProfile from "@/hooks/useProfile";
-import { Play } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React from "react";
@@ -29,7 +27,7 @@ const Workouts = () => {
 
   if (isLoading) {
     return (
-      <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 px-4 w-full gap-8">
+      <div className="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 px-4 w-full gap-8">
         <CustomLoader amount={3} height="h-[200px]" weight="w-full" />
       </div>
     );
@@ -57,15 +55,41 @@ const Workouts = () => {
       </div>
     );
   return (
-    <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 px-4 w-full  gap-8  min-h-[60vh]">
-      {workouts?.map((workout) => (
-        <PersonalizeWorkoutCard
-          workout={workout}
-          userId={profile?._id}
-          key={workout._id}
-          isProfile
-        />
-      ))}
+    <div className="px-4 w-full flex flex-col gap-6 min-h-[60vh]">
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h2 className="text-lg font-semibold">
+            {isOwnProfile ? "Your workouts" : "Personal workouts"}{" "}
+            <span className="text-sm font-normal text-zinc-500">
+              {workouts.length}
+            </span>
+          </h2>
+          <p className="text-sm text-zinc-400">
+            {isOwnProfile
+              ? "Workouts you built or were invited to"
+              : "Custom workouts on this profile"}
+          </p>
+        </div>
+        {isOwnProfile && (
+          <Link
+            href="/workouts/create"
+            className="flex shrink-0 items-center gap-1.5 rounded-full bg-zinc-800 border border-zinc-700 px-4 py-2 text-sm font-semibold hover:bg-zinc-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+          >
+            <BiPlus size={18} />
+            Create
+          </Link>
+        )}
+      </div>
+      <div className="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8">
+        {workouts?.map((workout) => (
+          <PersonalizeWorkoutCard
+            workout={workout}
+            userId={profile?._id}
+            key={workout._id}
+            isProfile
+          />
+        ))}
+      </div>
     </div>
   );
 };

@@ -15,29 +15,30 @@ type ExerciseProps = {
 const Exercise: React.FC<ExerciseProps> = ({ id }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const type = searchParams?.get("type") as
+  const type = (searchParams?.get("type") ?? "default") as
     | "default"
     | "challenge"
-    | "customize"
-    | undefined;
+    | "customize";
 
+  // Keys include the id so a second workout never starts with the previous
+  // workout's cached exercises.
   const { data, isLoading } = useQuery({
     queryFn: async () => await getWorkout(id),
-    queryKey: "default exercise",
+    queryKey: ["default exercise", id],
     refetchOnWindowFocus: false,
     enabled: type === "default" && !!id,
   });
 
   const { data: challengeData, isLoading: challengeLoading } = useQuery({
     queryFn: async () => await startChallenge(id),
-    queryKey: "challege exercise",
+    queryKey: ["challege exercise", id],
     refetchOnWindowFocus: false,
     enabled: type === "challenge" && !!id,
   });
 
   const { data: customizeData, isLoading: customizeLoading } = useQuery({
     queryFn: async () => await getCustomWorkout({ id }),
-    queryKey: "customize exercise",
+    queryKey: ["customize exercise", id],
     refetchOnWindowFocus: false,
     enabled: type === "customize" && !!id,
   });
@@ -52,7 +53,7 @@ const Exercise: React.FC<ExerciseProps> = ({ id }) => {
 
   if (isLoading || challengeLoading || customizeLoading) {
     return (
-      <div className="w-full flex justify-center items-center">
+      <div className="w-full flex justify-center items-center h-[50vh]">
         <Loader2 className=" text-3xl text-white animate-spin" />
       </div>
     );
@@ -81,12 +82,15 @@ const Exercise: React.FC<ExerciseProps> = ({ id }) => {
   }
   return (
     <div className="flex sm:flex-row flex-col gap-2  justify-center w-full">
-      <div
+      <button
+        type="button"
         onClick={() => router.back()}
-        className="sm:ml-2 ml-1 bg-zinc-900 rounded-lg h-[40px] w-[40px] flex items-center justify-center cursor-pointer hover:bg-emerald-700"
+        aria-label="Leave workout"
+        title="Leave workout"
+        className="sm:ml-2 ml-1 bg-zinc-900 rounded-lg h-[40px] w-[40px] shrink-0 flex items-center justify-center cursor-pointer hover:bg-emerald-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
       >
         <ArrowLeft />
-      </div>
+      </button>
       {workoutUI}
     </div>
   );

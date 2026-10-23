@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SessionProvider } from "next-auth/react";
 
@@ -10,7 +10,8 @@ type ReactQueryProviderProps = {
 const ReactQueryProvider: React.FC<ReactQueryProviderProps> = ({
   children,
 }) => {
-  const client = new QueryClient();
+  // Created once; a new client on every render would drop the whole cache.
+  const [client] = useState(() => new QueryClient());
   return (
     <SessionProvider>
       <QueryClientProvider client={client}>{children}</QueryClientProvider>

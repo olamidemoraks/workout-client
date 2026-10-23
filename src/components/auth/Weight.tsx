@@ -9,7 +9,7 @@ type WeightProps = {
   onBack?: () => void;
 };
 
-const cmToFeetInches = (cm: number) => {
+export const cmToFeetInches = (cm: number) => {
   const totalInches = cm / 2.54;
   let feet = Math.floor(totalInches / 12);
   let inches = Math.round(totalInches - feet * 12);
@@ -20,7 +20,7 @@ const cmToFeetInches = (cm: number) => {
   return { feet, inches };
 };
 
-const feetInchesToCm = (feet: number, inches: number) =>
+export const feetInchesToCm = (feet: number, inches: number) =>
   (feet * 12 + inches) * 2.54;
 
 const unitSuffix = (unit: string) => (
