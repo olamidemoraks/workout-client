@@ -102,3 +102,25 @@ interface INotification {
   status: "read" | "unread";
   workoutId?: string;
 }
+
+interface IProgramExercise {
+  _id: string;
+  name: string;
+  sets: number;
+  // Free text: "10", "8-12", "30s".
+  reps: string;
+  // 0-based set indexes ticked today.
+  completedSets: number[];
+}
+
+// A user's own gym program (e.g. "Push day"), ticked off set by set.
+interface IProgram {
+  _id: string;
+  userId: string;
+  name: string;
+  exercises: IProgramExercise[];
+  // Local day (YYYY-MM-DD) the ticks belong to.
+  progressDate: string;
+  createdAt: string;
+  updatedAt: string;
+}

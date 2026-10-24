@@ -74,6 +74,34 @@ export function getChallengeProgress({
   };
 }
 
+// Today's progress on a gym program, counted in sets.
+export function getProgramProgress(program?: IProgram) {
+  const exercises = program?.exercises ?? [];
+  const totalSets = exercises.reduce((total, exercise) => total + exercise.sets, 0);
+  const doneSets = exercises.reduce(
+    (total, exercise) => total + (exercise.completedSets?.length ?? 0),
+    0
+  );
+  const exercisesDone = exercises.filter(
+    (exercise) => (exercise.completedSets?.length ?? 0) >= exercise.sets
+  ).length;
+
+  return {
+    totalSets,
+    doneSets,
+    exercisesDone,
+    percent: totalSets ? Math.round((doneSets / totalSets) * 100) : 0,
+    isComplete: totalSets > 0 && doneSets >= totalSets,
+  };
+}
+
+// "10" -> "10 reps", "8-12" -> "8-12 reps"; anything else ("30s", "AMRAP")
+// is shown as written.
+export function formatReps(reps: string): string {
+  const value = reps.trim();
+  return /^\d+(\s*[-–]\s*\d+)?$/.test(value) ? `${value} reps` : value;
+}
+
 export function formatDuration(totalSeconds: number): string {
   const minutes = Math.floor((totalSeconds ?? 0) / 60);
   if (minutes >= 60) {

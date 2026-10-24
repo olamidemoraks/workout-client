@@ -12,7 +12,7 @@ import {
   FaSearch,
   FaSignOutAlt,
 } from "react-icons/fa";
-import { FaUser } from "react-icons/fa6";
+import { FaListCheck, FaUser } from "react-icons/fa6";
 import { GiBodyBalance } from "react-icons/gi";
 import { IoGrid } from "react-icons/io5";
 import { focusRing } from "../auth/FormControls";
@@ -37,6 +37,11 @@ const navData = [
     title: "Challenges",
     Icon: <GiBodyBalance size={23} className={iconClassName} />,
     navLink: "challenge",
+  },
+  {
+    title: "Programs",
+    Icon: <FaListCheck size={20} className={iconClassName} />,
+    navLink: "programs",
   },
   // {
   //   title: "Explore",
